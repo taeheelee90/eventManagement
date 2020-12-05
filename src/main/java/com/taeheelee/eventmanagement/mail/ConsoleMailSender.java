@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement;
+package com.taeheelee.eventmanagement.mail;
 
 import java.io.InputStream;
 
