@@ -1,5 +1,9 @@
 package com.taeheelee.eventmanagement.account;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,9 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.taeheelee.eventmanagement.Account.AccountRepository;
+import com.taeheelee.eventmanagement.domain.Account;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -57,8 +59,10 @@ public class AccountControllerTest {
 				.param("password", "12345678").with(csrf())).andExpect(status().is3xxRedirection()) // Status 302
 				.andExpect(view().name("redirect:/"));
 
-		// Check save to repository
-		assertTrue(accountRepository.existsByEmail("my@email.com"));
+		// Check save and PW encode
+		Account account = accountRepository.findByEmail("my@email.com");
+		assertNotNull(account);
+		assertNotEquals(account.getPassword(),"12345678");
 
 		// Check email generate token sent
 		then(javaMailSender).should().send(any(SimpleMailMessage.class));
