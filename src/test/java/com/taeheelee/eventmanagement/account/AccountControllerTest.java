@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -61,6 +61,7 @@ public class AccountControllerTest {
 				.password("12345678")
 				.nickname("testname")
 				.build();
+				
 		
 		Account newAccount = accountRepository.save(account);
 		newAccount.generateEmailCheckToken();
@@ -72,7 +73,8 @@ public class AccountControllerTest {
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("numberOfUser"))
                 .andExpect(model().attributeExists("nickname"))
-                .andExpect(view().name("account/checked-email"));;
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(authenticated().withUsername("testname"));;
                 
 				
      }
@@ -96,7 +98,8 @@ public class AccountControllerTest {
 				.with(csrf()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("account/sign-up.html"))
-				.andExpect(unauthenticated());
+				.andExpect(unauthenticated())
+				.andExpect(unauthenticated());;
 
 	}
 
@@ -109,7 +112,8 @@ public class AccountControllerTest {
 				.param("password", "12345678")
 				.with(csrf()))
 				.andExpect(status().is3xxRedirection()) // Status 302
-				.andExpect(view().name("redirect:/"));
+				.andExpect(view().name("redirect:/"))
+				.andExpect(authenticated().withUsername("testname1"));;
 
 		// Check save and PW encode
 		Account account = accountRepository.findByEmail("my@email.com");

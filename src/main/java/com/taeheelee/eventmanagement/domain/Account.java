@@ -73,6 +73,10 @@ public class Account {
 		this.setJoinedAt(LocalDateTime.now());
 		
 	}
+
+	public boolean isValidtoken(String token) {
+		return this.emailCheckToken.equals(token);
+	}
 	
 
 }
