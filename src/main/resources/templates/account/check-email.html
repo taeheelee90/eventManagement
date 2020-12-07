@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+
+<div th:replace="fragments.html :: main-nav"></div>
+ 
+ <div class="py-5 text-center" th:if="${error}">
+  	   <p class="lead">Event Management Email Confirmation</p>
+   	   <div class="alert alert-danger" role="alert" th:text="${error}">  </div> 
+   	   <p class="lead" th:text="${email}">email</p>
+  </div>
+ 
+  <div class="py-5 text-center" th:if="${error == null}">
+    <p class="lead"> Event Management Email Confirmation</p>
+  	<h2>
+  	Please confirm email verification to complete sign up process</span> 
+  	</h2>
+  	
+  	<div>
+  		<p class="lead" th:text="${email}">email</p>
+  		<a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">Resend email</a>
+  	</div>
+ </div>
+ 
+ 
+  <div th:replace="fragments.html :: footer"></div>
+ </body>
+ </html>
