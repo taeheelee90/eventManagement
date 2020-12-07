@@ -22,6 +22,7 @@ import com.taeheelee.eventmanagement.domain.Account;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
 
@@ -29,7 +30,7 @@ public class AccountService implements UserDetailsService {
 	private final JavaMailSender javaMailSender;
 	private final PasswordEncoder passWordEncoder;
 
-	@Transactional
+	
 	public Account processNewAccount(@Valid SignUpForm signUpForm) {
 		Account newAccount = saveNewAccount(signUpForm);
 		newAccount.generateEmailCheckToken();
@@ -65,6 +66,7 @@ public class AccountService implements UserDetailsService {
 	        SecurityContextHolder.getContext().setAuthentication(token);
 	    }
 
+	@Transactional (readOnly = true)
 	@Override
 	public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
 
@@ -79,6 +81,12 @@ public class AccountService implements UserDetailsService {
 		}
 		
 		return new UserAccount(account);
+	}
+
+	public void completeSignUp(Account account) {
+		account.completeSignUp();
+		login(account);
+		
 	}
 
 }
