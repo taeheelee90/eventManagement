@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.settings.Profile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -87,6 +88,14 @@ public class AccountService implements UserDetailsService {
 		account.completeSignUp();
 		login(account);
 		
+	}
+
+	public void updateProfile(Account account, Profile profile) {
+		account.setBio(profile.getBio());
+		account.setUrl(profile.getUrl());
+		account.setOccupation(profile.getOccupation());
+		account.setLocation(profile.getLocation());
+		accountRepository.save(account);
 	}
 
 }

@@ -11,27 +11,20 @@
 	<div class="container">
 	
 		<div class="row mt-5 justify-content-center">
-			
-			<!-- Profile Image -->
-			<div class="col-2">
-				<svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
-                <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                     th:src="${account.profileImage}"
-                     width="125" height="125"/>
-            </div>
-			
-			<!-- Bio  -->
-			<div class="col-8">
-               
-			</div>			
-		</div>
 		
-		<div class="row mt-3 justify-content-center">
             <div class="col-2">
                 <div th:replace="fragments.html :: settings-menu (currentMenu = 'profile')"></div>
             </div>
+            
             <div class="col-8">
+            	<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+            		<span th:text="${message}">Updated</span>
+            		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            	</div>            
+            
+            
             	<div class="row">
             		<h2 class="col-sm-12" th:text="${account.nickname}">Nickname</h2>     
             	</div>

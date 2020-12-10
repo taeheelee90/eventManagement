@@ -3,8 +3,10 @@ package com.taeheelee.eventmanagement.settings;
 import com.taeheelee.eventmanagement.domain.Account;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
 
 	private String bio;
