@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments.html :: head"></head>
+
+<body class="bg-light">
+
+	<div th:replace="fragments.html :: main-nav"></div>
+
+	<div class="container">
+	
+		<div class="row mt-5 justify-content-center">
+			
+			<!-- Profile Image -->
+			<div class="col-2">
+				<svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+                <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
+                     th:src="${account.profileImage}"
+                     width="125" height="125"/>
+            </div>
+			
+			<!-- Bio  -->
+			<div class="col-8">
+               
+			</div>			
+		</div>
+		
+		<div class="row mt-3 justify-content-center">
+            <div class="col-2">
+                <div th:replace="fragments.html :: settings-menu (currentMenu = 'profile')"></div>
+            </div>
+            <div class="col-8">
+            	<div class="row">
+            		<h2 class="col-sm-12" th:text="${account.nickname}">Nickname</h2>     
+            	</div>
+            	
+            	<div class="row mt-3">
+            		<form class="col-sm-6" action="#" th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
+            			
+            			<div class="form-group">
+            				<label for="bio">Bio</label>
+            				<input id="bio" type="text" th:filed="*{bio}" class="form-control" placeholder="Please introduce yourself" aria-describedby="bioHelp" required>
+            				<small id="bioHelp" class="form-text text-qmuted"> Less than 35 characters.</small>
+            				<small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">Too long.</small>
+            			
+            			</div>
+            			
+            			            			
+            			<div class="form-group">
+            				<label for="url">Web site</label>
+            				<input id="url" type="text" th:filed="*{url}" class="form-control" placeholder="Blog, YouTube, Portfolio, LinkedIn, etc." aria-describedby="urlHelp" required>
+            				<small id="urlHelp" class="form-text text-qmuted"> Any web site describes yourself.</small>
+            				<small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">Invalid format.</small>
+            			
+            			</div>
+            			
+            			<div class="form-group">
+            				<label for="occupation">Occupation</label>
+            				<input id="occupation" type="text" th:filed="*{occupation}" class="form-control" placeholder="What do you do?" aria-describedby="occupationHelp" required>
+            				<small id="occupationHelp" class="form-text text-qmuted"> Programmer? Student? Project Manager?</small>
+            				<small class="form-text text-danger" th:if="${#fields.hasErrors('occupation')}" th:errors="*{occupation}">Invalid format.</small>
+            			
+            			</div>
+            			
+            			<div class="form-group">
+            				<label for="location">Location</label>
+            				<input id="location" type="text" th:filed="*{location}" class="form-control" placeholder="Where are you?" aria-describedby="locationHelp" required>
+            				<small id="locationHelp" class="form-text text-qmuted"> Working/living/interested city/country.</small>
+            				<small class="form-text text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Invalid format.</small>
+            			
+            			</div>     
+            			
+            			
+            			<div class="form-group">
+            				<button class="btn btn-primary btn-block" type="submit" aria-describedby ="submitHelp">Edit</button>
+            			</div>     		
+            		            		
+            		</form>            	
+            	</div>
+       			
+            </div>
+        </div>
+    </div>
+		
+		<div th:replace="fragments.html :: footer"></div>
+	</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

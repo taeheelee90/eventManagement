@@ -72,7 +72,7 @@
                             <span th:if="${isOwner && !account.emailVerified}" class="col-9">
                                 <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">Please confirm verification email to complete sign up process.</a>
                             </span>
-                            <span th:text="${#temporals.format(account.joinedAt, 'yyyy-mm-dd')}" class="col-9"></span>
+                            <span th:text="${#temporals.format(account.joinedAt, 'yyyy-MM-dd')}" class="col-9"></span>
                         </p>
                         <div th:if="${isOwner}">
                             <a class="btn btn-outline-primary" href="#" th:href="@{/settings/profile}">Edit Profile<a>
