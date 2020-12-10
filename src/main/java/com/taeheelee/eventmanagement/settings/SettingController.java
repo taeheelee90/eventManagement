@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.taeheelee.eventmanagement.Account.AccountService;
 import com.taeheelee.eventmanagement.Account.CurrentUser;
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.settings.Profile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +36,6 @@ public class SettingController {
 	@PostMapping(SETTINGS_PROFILE_URL)
 	public String updateProfile(@CurrentUser Account account, @Valid Profile profile, Errors errors, Model model,
 			RedirectAttributes attributes) {
-
 		if (errors.hasErrors()) {
 			model.addAttribute(account);
 

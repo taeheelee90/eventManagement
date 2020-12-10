@@ -1,86 +1,83 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments.html :: head"></head>
-
 <body class="bg-light">
-
-	<div th:replace="fragments.html :: main-nav"></div>
-
-	<div class="container">
-	
-		<div class="row mt-5 justify-content-center">
-		
+    <div th:replace="fragments.html :: main-nav"></div>
+    <div class="container">
+        <div class="row mt-5 justify-content-center">
             <div class="col-2">
-                <div th:replace="fragments.html :: settings-menu (currentMenu = 'profile')"></div>
+                <div th:replace="fragments.html :: settings-menu(currentMenu='profile')"></div>
             </div>
-            
             <div class="col-8">
-            	<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-            		<span th:text="${message}">Updated</span>
-            		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                    <span th:text="${message}">Message</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-            	</div>            
-            
-            
-            	<div class="row">
-            		<h2 class="col-sm-12" th:text="${account.nickname}">Nickname</h2>     
-            	</div>
-       
-                	        
-            	
-            	<div class="row mt-3">
-            		<form class="col-sm-6" action="#" th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
-            			
-            			<div class="form-group">
-            				<label for="bio">Bio</label>
-            				<input id="bio" type="text" th:filed="*{bio}" class="form-control" placeholder="Please introduce yourself" aria-describedby="bioHelp" required>
-            				<small id="bioHelp" class="form-text text-qmuted"> Less than 35 characters.</small>
-            				<small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">Too long.</small>
-            			
-            			</div>
-            			
-            			            			
-            			<div class="form-group">
-            				<label for="url">Web site</label>
-            				<input id="url" type="text" th:filed="*{url}" class="form-control" placeholder="Blog, YouTube, Portfolio, LinkedIn, etc." aria-describedby="urlHelp" required>
-            				<small id="urlHelp" class="form-text text-qmuted"> Any web site describes yourself.</small>
-            				<small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">Invalid format.</small>
-            			
-            			</div>
-            			
-            			<div class="form-group">
-            				<label for="occupation">Occupation</label>
-            				<input id="occupation" type="text" th:filed="*{occupation}" class="form-control" placeholder="What do you do?" aria-describedby="occupationHelp" required>
-            				<small id="occupationHelp" class="form-text text-qmuted"> Programmer? Student? Project Manager?</small>
-            				<small class="form-text text-danger" th:if="${#fields.hasErrors('occupation')}" th:errors="*{occupation}">Invalid format.</small>
-            			
-            			</div>
-            			
-            			<div class="form-group">
-            				<label for="location">Location</label>
-            				<input id="location" type="text" th:filed="*{location}" class="form-control" placeholder="Where are you?" aria-describedby="locationHelp" required>
-            				<small id="locationHelp" class="form-text text-qmuted"> Working/living/interested city/country.</small>
-            				<small class="form-text text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Invalid format.</small>
-            			
-            			</div>     
-            			
-            			<div class="form-group">
-            				<input id="profileImage" type="hidden" th:filed="*{profileImage}" class="form-control"/>
-            			</div>
-            			
-            			<div class="form-group">
-            				<button class="btn btn-primary btn-block" type="submit" aria-describedby ="submitHelp">Edit</button>
-            			</div>     		
-            		            		
-            		</form>            	
-            	
-            	    <div class="col-sm-6">
+                </div>
+                <div class="row">
+                    <h2 class="col-sm-12" th:text="${account.nickname}">Nickname</h2>
+                </div>
+                <div class="row mt-3">
+                    <form class="col-sm-6" action="#"
+                          th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <input id="bio" type="text" th:field="*{bio}" class="form-control"
+                                   placeholder="Short description about yourself." aria-describedby="bioHelp" required>
+                            <small id="bioHelp" class="form-text text-muted">
+                                Less than 35 characters.
+                            </small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">
+                            	Invalid bio.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="url">Web site</label>
+                            <input id="url" type="url" th:field="*{url}" class="form-control"
+                                   placeholder="http://eventmanagement.com" aria-describedby="urlHelp" required>
+                            <small id="urlHelp" class="form-text text-muted">
+                               Blog, Portfolio, LinedIn, etc.
+                            </small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">
+                               	Invalid url.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="occupation">Occupation</label>
+                            <input id="occupation" type="text" th:field="*{occupation}" class="form-control"
+                                   placeholder="What do you do?" aria-describedby="occupationHelp" required>
+                            <small id="occupationHelp" class="form-text text-muted">
+                               	Invalid format.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input id="location" type="text" th:field="*{location}" class="form-control"
+                                   placeholder="Where are you?"
+                                   aria-describedby="locationdHelp" required>
+                            <small id="locationdHelp" class="form-text text-muted">
+                                	Working, living or interested city or country.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="profileImage" type="hidden" th:field="*{profileImage}" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block" type="submit"
+                                    aria-describedby="submitHelp">Edit Profile</button>
+                        </div>
+                    </form>
+                    <div class="col-sm-6">
                         <div class="card text-center">
                             <div class="card-header">
-                                	Profile Image
+                             	Profile Image
                             </div>
                             <div id="current-profile-image" class="mt-3">
                                 <svg th:if="${#strings.isEmpty(profile.profileImage)}" class="rounded"
@@ -93,30 +90,23 @@
                             <div class="card-body">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="profile-image-file">
-                                    <label class="custom-file-label" for="profile-image-file">Change Profile Image</label>
+                                    <label class="custom-file-label" for="profile-image-file">Change profile image</label>
                                 </div>
                                 <div id="new-profile-image-control" class="mt-3">
                                     <button class="btn btn-outline-primary btn-block" id="cut-button">Crop</button>
                                     <button class="btn btn-outline-success btn-block" id="confirm-button">Confirm</button>
-                                    <button class="btn btn-outline-warning btn-block" id="reset-button">Cancel</button>
+                                    <button class="btn btn-outline-warning btn-block" id="reset-button">Reset</button>
                                 </div>
                                 <div id="cropped-new-profile-image" class="mt-3"></div>
                             </div>
-            	
-            	</div>
-            	
-            	
-            	</div>
-       			
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-		
-		<div th:replace="fragments.html :: footer"></div>
-	</div>
-	
-	
-	  <script src="/node_modules/cropper/dist/cropper.min.js"></script>
+    <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+    <script src="/node_modules/cropper/dist/cropper.min.js"></script>
     <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
     <script type="application/javascript">
         $(function() {
@@ -139,22 +129,27 @@
                     const reader = new FileReader();
                     reader.onload = e => {
                         if (e.target.result) {
-                        	 let img = document.createElement("img");
-                             img.id = 'new-profile';
-                             img.src = e.target.result;
-                             img.setAttribute('width', '100%');
+                            if (!e.target.result.startsWith("data:image")) {
+                                alert("�씠誘몄� �뙆�씪�쓣 �꽑�깮�븯�꽭�슂.");
+                                return;
+                            }
 
-                             $newProfileImage.html(img);
-                             $newProfileImage.show();
-                             $currentProfileImage.hide();
+                            let img = document.createElement("img");
+                            img.id = 'new-profile';
+                            img.src = e.target.result;
+                            img.setAttribute('width', '100%');
 
-                             let $newImage = $(img);
-                             $newImage.cropper({aspectRatio: 1});
-                             cropper = $newImage.data('cropper');
+                            $newProfileImage.html(img);
+                            $newProfileImage.show();
+                            $currentProfileImage.hide();
 
-                             $cutBtn.show();
-                             $confirmBtn.hide();
-                             $resetBtn.show();                           
+                            let $newImage = $(img);
+                            $newImage.cropper({aspectRatio: 1});
+                            cropper = $newImage.data('cropper');
+
+                            $cutBtn.show();
+                            $confirmBtn.hide();
+                            $resetBtn.show();
                         }
                     };
 
@@ -174,6 +169,12 @@
 
             $cutBtn.click(function () {
                 let dataUrl = cropper.getCroppedCanvas().toDataURL();
+
+                if (dataUrl.length > 1000 * 1024) {
+                    alert("�씠誘몄� �뙆�씪�씠 �꼫臾� �겱�땲�떎. 1024000 蹂대떎 �옉�� �뙆�씪�쓣 �궗�슜�븯�꽭�슂. �쁽�옱 �씠誘몄� �궗�씠利� " + dataUrl.length);
+                    return;
+                }
+
                 let newImage = document.createElement("img");
                 newImage.id = "cropped-new-profile-image";
                 newImage.src = dataUrl;
@@ -193,21 +194,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

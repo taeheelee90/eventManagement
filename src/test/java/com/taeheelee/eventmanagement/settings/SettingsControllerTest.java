@@ -59,8 +59,8 @@ public class SettingsControllerTest {
 				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl(SettingController.SETTINGS_PROFILE_URL))
 				.andExpect(flash().attributeExists("message"));
 
-		Account keesun = accountRepository.findByNickname("testUser");
-		assertEquals(bio, keesun.getBio());
+		Account testUser = accountRepository.findByNickname("testUser");
+		assertEquals(bio, testUser.getBio());
 	}
 	
 	@WithAccount("testUser")
