@@ -1,5 +1,7 @@
 package com.taeheelee.eventmanagement.settings;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.taeheelee.eventmanagement.domain.Account;
 
 import lombok.Data;
@@ -9,12 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Profile {
 
+	@Length (max = 35)
 	private String bio;
 	
+	@Length (max = 50)
 	private String url;
 	
+	@Length (max = 50)
 	private String occupation;
 	
+	@Length (max = 50)
 	private String location;
 	
 	public Profile (Account account) {
