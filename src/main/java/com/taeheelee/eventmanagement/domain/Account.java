@@ -56,15 +56,15 @@ public class Account {
 	
 	private boolean eventCreatedByEmail;
 	
-	private boolean eventCreatedByWeb;
+	private boolean eventCreatedByWeb = true;
 	
 	private boolean eventEnrollmentByEmail;
 	
-	private boolean eventEnrollmentByWeb;
+	private boolean eventEnrollmentByWeb = true;
 	
 	private boolean eventUpdateByEmail;
 	
-	private boolean eventUpdateByWeb;
+	private boolean eventUpdateByWeb = true;
 
 	public void generateEmailCheckToken() {
 		this.emailCheckToken = UUID.randomUUID().toString();

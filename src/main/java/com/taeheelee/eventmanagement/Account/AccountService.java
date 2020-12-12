@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.settings.Notifications;
 import com.taeheelee.eventmanagement.settings.PasswordForm;
 import com.taeheelee.eventmanagement.settings.Profile;
 
@@ -114,6 +115,17 @@ public class AccountService implements UserDetailsService {
 
 	public void updatePassword(Account account, String newPassword) {
 		account.setPassword(passWordEncoder.encode(newPassword));
+		accountRepository.save(account);
+		
+	}
+
+	public void updateNotifications(Account account, @Valid Notifications notifications) {
+		account.setEventCreatedByEmail(notifications.isEventCreatedByEmail());
+		account.setEventCreatedByWeb(notifications.isEventCreatedByWeb());
+		account.setEventEnrollmentByEmail(notifications.isEventEnrollmentResultByEmail());
+		account.setEventEnrollmentByWeb(notifications.isEventEnrollmentResultByWeb());
+		account.setEventUpdateByEmail(notifications.isEventUpdatedByEmail());
+		account.setEventUpdateByWeb(notifications.isEventUpdatedByWeb());
 		accountRepository.save(account);
 		
 	}

@@ -122,9 +122,19 @@ public class SettingsControllerTest {
                 .with(csrf()))
                 .andExpect(status().isOk())
 				.andExpect(model().attributeExists("account"))
-				.andExpect(model().attributeExists("passwordForm"));
-
-		
+				.andExpect(model().attributeExists("passwordForm"));		
 	}
+	
+	@WithAccount("testUser")
+	@DisplayName("Show Edit Notification Form")
+	@Test
+	void updateNotificationForm() throws Exception {
+		
+		mockMvc.perform(get(SettingController.SETTINGS_NOTIFICATIONS_URL))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeExists("account"))
+        .andExpect(model().attributeExists("notifications"));
+	}
+	
 	
 }
