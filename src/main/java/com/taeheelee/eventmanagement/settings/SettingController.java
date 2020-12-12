@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.taeheelee.eventmanagement.Account.AccountRepository;
 import com.taeheelee.eventmanagement.Account.AccountService;
 import com.taeheelee.eventmanagement.Account.CurrentUser;
 import com.taeheelee.eventmanagement.domain.Account;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class SettingController {
 
 	private final AccountService accountService;
+	private final AccountRepository accountRepository;
 	private final ModelMapper modelMapper;
 	private final NicknameFormValidator nicknameFormValidator;
 
@@ -127,13 +129,14 @@ public class SettingController {
 	public String updateNickname(@CurrentUser Account account, @Valid NicknameForm nicknameForm, Errors errors,
 			Model model, RedirectAttributes attributes) {
 
-		if(errors.hasErrors()) {
+		if (errors.hasErrors()) {
 			model.addAttribute(account);
 			return SETTINGS_ACCOUNT_VIEW_NAME;
 		}
-		
+
 		accountService.updateNickname(account, nicknameForm);
 		attributes.addFlashAttribute("message", "Updated Nickname.");
 		return "redirect:" + SETTINGS_ACCOUNT_URL;
 	}
+
 }

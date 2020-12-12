@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+    <nav th:replace="fragments.html :: main-nav"></nav>
+
+    <div class="container">
+        <div class="py-5 text-center" th:if="${error}">
+            <p class="lead">Event Management Login</p>
+            <div  class="alert alert-danger" role="alert" th:text="${error}">
+                Email Login Failed.
+            </div>
+        </div>
+
+        <div class="py-5 text-center" th:if="${error == null}">
+            <p class="lead">Event Management Login</p>
+            <h2>Successfully logged in to event management. Please <a th:href="@{/settings/password}">change password</a>.</h2>
+        </div>
+    </div>
+</body>
+</html>

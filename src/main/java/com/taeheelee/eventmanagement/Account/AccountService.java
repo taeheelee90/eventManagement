@@ -114,12 +114,23 @@ public class AccountService implements UserDetailsService {
 	public void updateNotifications(Account account, @Valid Notifications notifications) {
 		modelMapper.map(notifications, account);
 		accountRepository.save(account);
-		
+	
 	}
 
 	public void updateNickname(Account account, @Valid NicknameForm nicknameForm) {
 		modelMapper.map(nicknameForm, account);
 		accountRepository.save(account);
 		login(account);
+	}
+
+	public void sendLoginLink(Account account) {
+		account.generateEmailCheckToken();
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(account.getEmail());
+		mailMessage.setSubject("Event Management: Login Link");
+		mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() +
+                "&email=" + account.getEmail());
+		
+		javaMailSender.send(mailMessage);
 	}
 }
