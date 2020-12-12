@@ -79,4 +79,17 @@ public class SettingsControllerTest {
         Account testUser = accountRepository.findByNickname("testUser");
         assertNull(testUser.getBio());
 	}
+	
+	
+	@WithAccount("testUser")
+	@DisplayName("Show Edit Password Form")
+	@Test
+	void updatePasswordForm() throws Exception {
+		
+		mockMvc.perform(get(SettingController.SETTINGS_PASSWORD_URL))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeExists("account"))
+        .andExpect(model().attributeExists("passwordForm"));
+	}
+	
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.settings.PasswordForm;
 import com.taeheelee.eventmanagement.settings.Profile;
 
 import lombok.RequiredArgsConstructor;
@@ -103,5 +104,17 @@ public class AccountService implements UserDetailsService {
 			throw new IllegalArgumentException("Can not find " + nickname);
 		}
 		return account;
+	}
+
+	public void updatePassword(Account account, @Valid PasswordForm passwordForm) {
+		account.setPassword(passwordForm.getNewPassword());
+		accountRepository.save(account);
+		
+	}
+
+	public void updatePassword(Account account, String newPassword) {
+		account.setPassword(passWordEncoder.encode(newPassword));
+		accountRepository.save(account);
+		
 	}
 }

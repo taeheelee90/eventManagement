@@ -130,7 +130,7 @@
                     reader.onload = e => {
                         if (e.target.result) {
                             if (!e.target.result.startsWith("data:image")) {
-                                alert("�씠誘몄� �뙆�씪�쓣 �꽑�깮�븯�꽭�슂.");
+                                alert("Invalid format");
                                 return;
                             }
 
@@ -171,7 +171,7 @@
                 let dataUrl = cropper.getCroppedCanvas().toDataURL();
 
                 if (dataUrl.length > 1000 * 1024) {
-                    alert("�씠誘몄� �뙆�씪�씠 �꼫臾� �겱�땲�떎. 1024000 蹂대떎 �옉�� �뙆�씪�쓣 �궗�슜�븯�꽭�슂. �쁽�옱 �씠誘몄� �궗�씠利� " + dataUrl.length);
+                    alert("Invalid size. " + dataUrl.length);
                     return;
                 }
 
