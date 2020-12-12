@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.settings;
+package com.taeheelee.eventmanagement.settings.form;
 
 import org.hibernate.validator.constraints.Length;
 

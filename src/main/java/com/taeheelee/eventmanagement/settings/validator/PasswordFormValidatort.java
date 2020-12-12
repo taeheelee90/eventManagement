@@ -1,7 +1,9 @@
-package com.taeheelee.eventmanagement.settings;
+package com.taeheelee.eventmanagement.settings.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import com.taeheelee.eventmanagement.settings.form.PasswordForm;
 
 public class PasswordFormValidatort implements Validator {
 

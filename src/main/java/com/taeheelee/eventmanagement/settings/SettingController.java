@@ -15,6 +15,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.taeheelee.eventmanagement.Account.AccountService;
 import com.taeheelee.eventmanagement.Account.CurrentUser;
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.settings.form.NicknameForm;
+import com.taeheelee.eventmanagement.settings.form.Notifications;
+import com.taeheelee.eventmanagement.settings.form.PasswordForm;
+import com.taeheelee.eventmanagement.settings.form.Profile;
+import com.taeheelee.eventmanagement.settings.validator.NicknameFormValidator;
+import com.taeheelee.eventmanagement.settings.validator.PasswordFormValidatort;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,9 +28,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SettingController {
 
+	private final AccountService accountService;
+	private final ModelMapper modelMapper;
+	private final NicknameFormValidator nicknameFormValidator;
+
 	@InitBinder("passwordForm")
-	public void initBinder(WebDataBinder webDataBinder) {
+	public void pwFormInitBinder(WebDataBinder webDataBinder) {
 		webDataBinder.addValidators(new PasswordFormValidatort());
+	}
+
+	@InitBinder("nicknameForm")
+	public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
+		webDataBinder.addValidators(nicknameFormValidator);
 	}
 
 	static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
@@ -36,8 +51,8 @@ public class SettingController {
 	static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
 	static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
 
-	private final AccountService accountService;
-	private final ModelMapper modelMapper;
+	static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
+	static final String SETTINGS_ACCOUNT_URL = "/settings/account";
 
 	@GetMapping(SETTINGS_PROFILE_URL)
 	public String profileUpdateForm(@CurrentUser Account account, Model model) {
@@ -89,16 +104,36 @@ public class SettingController {
 	@PostMapping(SETTINGS_NOTIFICATIONS_URL)
 	public String updateNotifications(@CurrentUser Account account, @Valid Notifications notifications, Errors errors,
 			Model model, RedirectAttributes attributes) {
-		
-		if(errors.hasErrors()) {
+
+		if (errors.hasErrors()) {
 			model.addAttribute(account);
 			return SETTINGS_NOTIFICATIONS_VIEW_NAME;
 		}
-		
+
 		accountService.updateNotifications(account, notifications);
 		attributes.addFlashAttribute("message", "Updated Notifications.");
 		return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
-		
+
 	}
 
+	@GetMapping(SETTINGS_ACCOUNT_URL)
+	public String updateNicknameForm(@CurrentUser Account account, Model model) {
+		model.addAttribute(account);
+		model.addAttribute(modelMapper.map(account, NicknameForm.class));
+		return SETTINGS_ACCOUNT_VIEW_NAME;
+	}
+
+	@PostMapping(SETTINGS_ACCOUNT_URL)
+	public String updateNickname(@CurrentUser Account account, @Valid NicknameForm nicknameForm, Errors errors,
+			Model model, RedirectAttributes attributes) {
+
+		if(errors.hasErrors()) {
+			model.addAttribute(account);
+			return SETTINGS_ACCOUNT_VIEW_NAME;
+		}
+		
+		accountService.updateNickname(account, nicknameForm);
+		attributes.addFlashAttribute("message", "Updated Nickname.");
+		return "redirect:" + SETTINGS_ACCOUNT_URL;
+	}
 }

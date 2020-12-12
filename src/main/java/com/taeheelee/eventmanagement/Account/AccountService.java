@@ -18,9 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.domain.Account;
-import com.taeheelee.eventmanagement.settings.Notifications;
-import com.taeheelee.eventmanagement.settings.PasswordForm;
-import com.taeheelee.eventmanagement.settings.Profile;
+import com.taeheelee.eventmanagement.settings.form.NicknameForm;
+import com.taeheelee.eventmanagement.settings.form.Notifications;
+import com.taeheelee.eventmanagement.settings.form.PasswordForm;
+import com.taeheelee.eventmanagement.settings.form.Profile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -104,12 +105,6 @@ public class AccountService implements UserDetailsService {
 		return account;
 	}
 
-	public void updatePassword(Account account, @Valid PasswordForm passwordForm) {
-		account.setPassword(passwordForm.getNewPassword());
-		accountRepository.save(account);
-		
-	}
-
 	public void updatePassword(Account account, String newPassword) {
 		account.setPassword(passWordEncoder.encode(newPassword));
 		accountRepository.save(account);
@@ -120,5 +115,11 @@ public class AccountService implements UserDetailsService {
 		modelMapper.map(notifications, account);
 		accountRepository.save(account);
 		
+	}
+
+	public void updateNickname(Account account, @Valid NicknameForm nicknameForm) {
+		modelMapper.map(nicknameForm, account);
+		accountRepository.save(account);
+		login(account);
 	}
 }
