@@ -104,10 +104,10 @@ public class AccountController {
 			return "account/email-login";
 		}
 		
-		/*if(!account.canSendConfirmEmail()) {
+		if(!account.canSendConfirmEmail()) {
 			model.addAttribute("error", "Please try 1 hour later.");
 			return "account/email-login";
-		}*/
+		}
 		
 		accountService.sendLoginLink(account);
 		attributes.addFlashAttribute("message", "Sent login link to email.");

@@ -26,7 +26,7 @@ public class SignUpFormValidator implements Validator {
 	        }
 
 	        if (accountRepository.existsByNickname(signUpForm.getNickname())) {
-	            errors.rejectValue("nickname", "invalid.nickname", new Object[]{signUpForm.getEmail()}, "Nickname is already in use.");
+	            errors.rejectValue("nickname", "invalid.nickname", new Object[]{signUpForm.getNickname()}, "Nickname is already in use.");
 	        }
 	}
 	

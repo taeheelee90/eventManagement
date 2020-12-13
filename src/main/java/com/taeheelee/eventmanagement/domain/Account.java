@@ -1,6 +1,7 @@
 package com.taeheelee.eventmanagement.domain;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Basic;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,6 +68,9 @@ public class Account {
 	
 	private boolean eventUpdateByWeb = true;
 
+	@ManyToMany
+	private Set<Tag> tags;
+	
 	public void generateEmailCheckToken() {
 		this.emailCheckToken = UUID.randomUUID().toString();
 		this.emailCheckTokenGeneratedAt = LocalDateTime.now();
