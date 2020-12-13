@@ -17,10 +17,10 @@
                 <div class="row">
                    <div class="col-12">
                         <div class="alert alert-info" role="alert">
-			               Type your interest and press enter or comma (,).
+			               Type your interest and press enter or comma. You will get notification when related events are created.
                         </div>
-                        <div id="whitelist" th:text="${whitelist}" hidden></div>
-                        <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
+                        <!-- th:value="${#strings.listJoin(tags, ',')}" -->
+                        <input id="tags" type="text" name="tags" 
                                class="tagify-outside" aria-describedby="tagHelp"/>
                     </div>
                    
@@ -29,9 +29,20 @@
         </div>
     </div>
 	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+	
+	<script type="application/javascript" th:inline="javascript">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+	</script>
+		
+	
 	<script type="application/javascript">
     $(function() {
-        var studyPath = "[(${study.path})]";
         function tagRequest(url, tagTitle) {
             $.ajax({
                 dataType: "json",
@@ -41,7 +52,7 @@
                 },
                 contentType: "application/json; charset=utf-8",
                 method: "POST",
-                url: "/study/" + studyPath + "/settings/tags" + url,
+                url: "/settings/tags" + url,
                 data: JSON.stringify({'tagTitle': tagTitle})
             }).done(function (data, status) {
                 console.log("${data} and status is ${status}");
@@ -58,8 +69,7 @@
 
         var tagInput = document.querySelector("#tags");
         var tagify = new Tagify(tagInput, {
-            pattern: /^.{0,20}$/,
-            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+            pattern: /^.{0,20}$/,      
             dropdown : {
                 enabled: 1, // suggest tags after a single character input
             } // map tags

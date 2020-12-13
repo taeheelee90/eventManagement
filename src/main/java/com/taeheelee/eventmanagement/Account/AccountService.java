@@ -1,6 +1,7 @@
 package com.taeheelee.eventmanagement.Account;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -18,9 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.domain.Tag;
 import com.taeheelee.eventmanagement.settings.form.NicknameForm;
 import com.taeheelee.eventmanagement.settings.form.Notifications;
-import com.taeheelee.eventmanagement.settings.form.PasswordForm;
 import com.taeheelee.eventmanagement.settings.form.Profile;
 
 import lombok.RequiredArgsConstructor;
@@ -132,5 +133,11 @@ public class AccountService implements UserDetailsService {
                 "&email=" + account.getEmail());
 		
 		javaMailSender.send(mailMessage);
+	}
+
+	public void addTag(Account account, Tag tag) {
+		Optional<Account> byId = accountRepository.findById(account.getId());
+		byId.ifPresent(a -> a.getTags().add(tag));
+		
 	}
 }
