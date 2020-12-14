@@ -249,4 +249,25 @@ public class SettingsControllerTest {
 		assertTrue(account.getZones().contains(zone));
 		
 	}
+	
+	@WithAccount("testUser")
+	@DisplayName("Remove zone from account")
+	@Test
+	void removeZone() throws Exception {
+		Account account = accountRepository.findByNickname("testUser");
+		Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
+		accountService.addZone(account, zone);
+		
+		ZoneForm zoneForm = new ZoneForm();
+		zoneForm.setZoneName(testZone.toString());
+		
+		mockMvc.perform(post(SettingController.SETTINGS_ZONES_URL + "/remove")
+				.contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+	
+		assertFalse(account.getZones().contains(zone));
+		
+	}
 }
