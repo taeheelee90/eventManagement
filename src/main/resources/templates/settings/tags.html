@@ -19,8 +19,8 @@
                         <div class="alert alert-info" role="alert">
 			               Type your interest and press enter or comma. You will get notification when related events are created.
                         </div>
-                        <!-- th:value="${#strings.listJoin(tags, ',')}" -->
-                        <input id="tags" type="text" name="tags" 
+                        
+                        <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}" 
                                class="tagify-outside" aria-describedby="tagHelp"/>
                     </div>
                    
@@ -42,8 +42,8 @@
 		
 	
 	<script type="application/javascript">
-    $(function() {
-        function tagRequest(url, tagTitle) {
+   	  $(function() {
+        function tagRequest(url, title) {
             $.ajax({
                 dataType: "json",
                 autocomplete: {
@@ -53,7 +53,7 @@
                 contentType: "application/json; charset=utf-8",
                 method: "POST",
                 url: "/settings/tags" + url,
-                data: JSON.stringify({'tagTitle': tagTitle})
+                data: JSON.stringify({'title': title})
             }).done(function (data, status) {
                 console.log("${data} and status is ${status}");
             });

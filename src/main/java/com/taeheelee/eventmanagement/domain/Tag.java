@@ -21,6 +21,6 @@ public class Tag {
 	@Id @GeneratedValue
 	private Long id;
 	
-	//@Column(unique =true, nullable=false)
+	@Column(unique =true, nullable=false)
 	private String title;
 }
