@@ -20,7 +20,8 @@
 			               Type your interest and press enter or comma. You will get notification when related events are created.
                         </div>
                         
-                        <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}" 
+                        <div id="whitelist" th:text="${whiteList}" hidden></div>
+                        <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
                                class="tagify-outside" aria-describedby="tagHelp"/>
                     </div>
                    
@@ -69,7 +70,8 @@
 
         var tagInput = document.querySelector("#tags");
         var tagify = new Tagify(tagInput, {
-            pattern: /^.{0,20}$/,      
+            pattern: /^.{0,20}$/,
+            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
             dropdown : {
                 enabled: 1, // suggest tags after a single character input
             } // map tags
