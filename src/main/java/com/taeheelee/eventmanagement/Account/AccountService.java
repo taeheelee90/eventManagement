@@ -21,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.domain.Account;
 import com.taeheelee.eventmanagement.domain.Tag;
+import com.taeheelee.eventmanagement.domain.Zone;
 import com.taeheelee.eventmanagement.settings.form.NicknameForm;
 import com.taeheelee.eventmanagement.settings.form.Notifications;
 import com.taeheelee.eventmanagement.settings.form.Profile;
+import com.taeheelee.eventmanagement.zone.ZoneRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class AccountService implements UserDetailsService {
 
 	private final AccountRepository accountRepository;
+	private final ZoneRepository zoneRepository;
 	private final JavaMailSender javaMailSender;
 	private final PasswordEncoder passWordEncoder;
 	private final ModelMapper modelMapper;
@@ -147,6 +150,23 @@ public class AccountService implements UserDetailsService {
 	public void removeTag(Account account, Tag tag) {
 		Optional<Account> byId = accountRepository.findById(account.getId());
 		byId.ifPresent(a -> a.getTags().remove(tag));
+		
+	}
+
+	public Set<Zone> getZones(Account account) {
+		Optional<Account> byId = accountRepository.findById(account.getId());
+		return byId.orElseThrow().getZones();
+	}
+
+	public void addZone(Account account, Zone zone) {
+		Optional<Account> byId = accountRepository.findById(account.getId());
+		byId.ifPresent(a -> a.getZones().add(zone));
+		
+	}
+
+	public void removeZone(Account account, Zone zone) {
+		Optional<Account> byId = accountRepository.findById(account.getId());
+		byId.ifPresent(a -> a.getZones().remove(zone));
 		
 	}
 }
