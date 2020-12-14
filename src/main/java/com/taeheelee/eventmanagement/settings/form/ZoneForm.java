@@ -10,7 +10,7 @@ public class ZoneForm {
     private String zoneName;
 
     public String getCityName() {
-        return zoneName.substring(0, zoneName.indexOf("("));
+        return zoneName.substring(0, zoneName.indexOf("/"));
     }
 
     public String getProvinceName() {
@@ -19,7 +19,9 @@ public class ZoneForm {
 
   
     public Zone getZone() {
-        return Zone.builder().city(this.getCityName())               
-                .province(this.getProvinceName()).build();
+        return Zone.builder()
+        		.city(this.getCityName())               
+                .province(this.getProvinceName())
+                .build();
     }
 }

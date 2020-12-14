@@ -9,8 +9,8 @@
             <div class="col-2">
                 <div th:replace="fragments.html :: settings-menu(currentMenu='zones')"></div>
             </div>
-            <div class="col-8">
-                
+            
+            <div class="col-8">               
                 <div class="row">
                     <h2 class="col-12">Your Location</h2>
                 </div>
@@ -44,7 +44,7 @@
                 },
                 contentType: "application/json; charset=utf-8",
                 method: "POST",
-                url: "/settings/tags" + url,
+                url: "/settings/zones" + url,
                 data: JSON.stringify({'zoneName': zoneName})
             }).done(function (data, status) {
                 console.log("${data} and status is ${status}");

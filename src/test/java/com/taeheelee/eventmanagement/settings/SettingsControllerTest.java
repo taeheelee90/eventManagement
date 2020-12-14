@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,11 @@ import com.taeheelee.eventmanagement.Account.AccountRepository;
 import com.taeheelee.eventmanagement.Account.AccountService;
 import com.taeheelee.eventmanagement.domain.Account;
 import com.taeheelee.eventmanagement.domain.Tag;
+import com.taeheelee.eventmanagement.domain.Zone;
 import com.taeheelee.eventmanagement.settings.form.TagForm;
+import com.taeheelee.eventmanagement.settings.form.ZoneForm;
 import com.taeheelee.eventmanagement.tag.TagRepository;
+import com.taeheelee.eventmanagement.zone.ZoneRepository;
 
 @Transactional
 @SpringBootTest
@@ -42,13 +46,22 @@ public class SettingsControllerTest {
 	@Autowired MockMvc mockMvc;
 	@Autowired AccountRepository accountRepository;
 	@Autowired TagRepository tagRepository;
+	@Autowired ZoneRepository zoneRepository;
 	@Autowired AccountService accountService;
 	@Autowired PasswordEncoder passwordEncoder;
 	@Autowired ObjectMapper objectMapper;
 	
+	private Zone testZone = Zone.builder().city("testC").province("testP").build();
+	
+	@BeforeEach
+	void beforeEach() {
+		zoneRepository.save(testZone);
+	}
+	
 	@AfterEach
 	void afterEach() {
 		accountRepository.deleteAll();
+		zoneRepository.deleteAll();
 	}
 
 	@WithAccount("testUser")
@@ -205,4 +218,35 @@ public class SettingsControllerTest {
 		
 	}
 	
+	@WithAccount("testUser")
+	@DisplayName("Show Edit Zones Form")
+	@Test
+	void updateZoneForm() throws Exception {
+		mockMvc.perform(get(SettingController.SETTINGS_ZONES_URL))
+				.andExpect(view().name(SettingController.SETTINGS_ZONES_VIEW_NAME))
+				.andExpect(model().attributeExists("account"))
+				.andExpect(model().attributeExists("whiteList"))
+				.andExpect(model().attributeExists("zones"));
+	}
+	
+	
+	@WithAccount("testUser")
+	@DisplayName("Add new zone to account")
+	@Test
+	void addZone() throws Exception {
+		ZoneForm zoneForm = new ZoneForm();
+		zoneForm.setZoneName(testZone.toString());
+		
+		mockMvc.perform(post(SettingController.SETTINGS_ZONES_URL + "/add")
+				.contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+	
+		
+		Account account = accountRepository.findByNickname("testUser");
+		Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
+		assertTrue(account.getZones().contains(zone));
+		
+	}
 }
