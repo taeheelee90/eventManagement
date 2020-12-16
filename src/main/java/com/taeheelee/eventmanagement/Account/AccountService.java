@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.taeheelee.eventmanagement.domain.Account;
 import com.taeheelee.eventmanagement.domain.Tag;
 import com.taeheelee.eventmanagement.domain.Zone;
+import com.taeheelee.eventmanagement.mail.EmailMessage;
+import com.taeheelee.eventmanagement.mail.EmailService;
 import com.taeheelee.eventmanagement.settings.form.NicknameForm;
 import com.taeheelee.eventmanagement.settings.form.Notifications;
 import com.taeheelee.eventmanagement.settings.form.Profile;
@@ -36,7 +37,7 @@ public class AccountService implements UserDetailsService {
 
 	private final AccountRepository accountRepository;
 	private final ZoneRepository zoneRepository;
-	private final JavaMailSender javaMailSender;
+	private final EmailService emailService;
 	private final PasswordEncoder passWordEncoder;
 	private final ModelMapper modelMapper;
 
@@ -54,13 +55,14 @@ public class AccountService implements UserDetailsService {
 	}
 
 	public void sendSignUpConfirmEmail(Account newAccount) {
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(newAccount.getEmail());
-		mailMessage.setSubject("[Verification] Welcome to Event Managment.");
-		mailMessage.setText(
-				"/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
-
-		javaMailSender.send(mailMessage);
+		
+		EmailMessage emailMessage = EmailMessage.builder()
+									.to(newAccount.getEmail())
+									.subject("[Verification] Welcome to Event Managment.")
+									.message("/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail())
+									.build();
+		
+		emailService.sendEmail(emailMessage);
 	}
 
 	public void login(Account account) {
@@ -125,14 +127,15 @@ public class AccountService implements UserDetailsService {
 	}
 
 	public void sendLoginLink(Account account) {
-		account.generateEmailCheckToken();
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(account.getEmail());
-		mailMessage.setSubject("Event Management: Login Link");
-		mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() +
-                "&email=" + account.getEmail());
 		
-		javaMailSender.send(mailMessage);
+		EmailMessage emailMessage = EmailMessage.builder()
+									.to(account.getEmail())
+									.subject("Event Management: Login Link")
+									.message("/login-by-email?token=" + account.getEmailCheckToken() +
+                "&email=" + account.getEmail())
+									.build();
+		
+		emailService.sendEmail(emailMessage);
 	}
 
 	public void addTag(Account account, Tag tag) {

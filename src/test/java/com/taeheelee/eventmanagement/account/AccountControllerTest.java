@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -18,13 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.Account.AccountRepository;
 import com.taeheelee.eventmanagement.domain.Account;
+import com.taeheelee.eventmanagement.mail.EmailMessage;
+import com.taeheelee.eventmanagement.mail.EmailService;
 
 @Transactional
 @SpringBootTest
@@ -36,7 +37,7 @@ public class AccountControllerTest {
 	@Autowired
 	private AccountRepository accountRepository;
 	@MockBean
-	JavaMailSender javaMailSender;
+	EmailService emailService;
 	
 	@DisplayName("email confirmation - invalid")
 	@Test
@@ -122,7 +123,7 @@ public class AccountControllerTest {
 		assertNotNull(account.getEmailCheckToken());
 
 		// Check email generate token sent
-		then(javaMailSender).should().send(any(SimpleMailMessage.class));
+		then(emailService).should().sendEmail(any(EmailMessage.class));
 	}
 
 }
