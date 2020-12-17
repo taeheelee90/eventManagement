@@ -8,7 +8,7 @@ import com.taeheelee.eventmanagement.domain.Event;
 @Transactional (readOnly = true)
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-	boolean exsistsByPath(String path);
+	boolean existsByPath(String path);
 
 
 

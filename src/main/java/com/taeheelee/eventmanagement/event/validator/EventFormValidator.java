@@ -8,9 +8,11 @@ import org.springframework.validation.Validator;
 import com.taeheelee.eventmanagement.event.EventRepository;
 import com.taeheelee.eventmanagement.event.Form.EventForm;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
-@RequiredConstructor
+@RequiredArgsConstructor
 public class EventFormValidator implements Validator {
 	
 	private final EventRepository eventRepository;
@@ -23,7 +25,7 @@ public class EventFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		EventForm eventForm = (EventForm) target;
-		if(eventRepository.exsistsByPath(eventForm.getPath())) {
+		if(eventRepository.existsByPath(eventForm.getPath())) {
 			errors.rejectValue("path","wrong.path", "Path is already in use.");
 		}
 		
