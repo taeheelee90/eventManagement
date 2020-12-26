@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.taeheelee.eventmanagement.Account.CurrentUser;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventController {
 
+	private final EventRepository eventRepository;
 	private final EventService eventService;
 	private final ModelMapper modelMapper;
 	private final EventFormValidator eventFormValidator;
@@ -44,11 +46,26 @@ public class EventController {
 	@PostMapping("/new-event")
 	public String newEventSubmit(@CurrentUser Account account, @Valid EventForm eventForm, Errors errors, Model model) {
 		if(errors.hasErrors()) {
+			model.addAttribute(account);
 			return "event/form";
 		}
 		
 		Event newEvent = eventService.createNewEvent(modelMapper.map(eventForm, Event.class), account);
 		
 		return "redirect:/event/" + newEvent.getPath();
+	}
+	
+	@GetMapping("/event/{path}")
+	public String viewEvent(@CurrentUser Account account, @PathVariable String path, Model model) {
+		model.addAttribute(account);
+		model.addAttribute(eventRepository.findByPath(path));
+		return "event/view";
+	}
+	
+	@GetMapping("/event/{path}/members")
+	public String viewMembers (@CurrentUser Account account, @PathVariable String path, Model model) {
+		model.addAttribute(account);
+		model.addAttribute(eventRepository.findByPath(path));
+		return "event/members";
 	}
 }
