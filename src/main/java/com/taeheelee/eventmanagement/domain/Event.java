@@ -24,12 +24,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@NamedEntityGraph(name="Event.withAll", attributeNodes = {
-		@NamedAttributeNode("tags"),
-		@NamedAttributeNode("zones"),
-		@NamedAttributeNode("managers"),
-		@NamedAttributeNode("members")})
+@NamedEntityGraph(name = "Event.withAll", attributeNodes = { @NamedAttributeNode("tags"), @NamedAttributeNode("zones"),
+		@NamedAttributeNode("managers"), @NamedAttributeNode("members") })
 @Entity
 @Getter
 @Setter
@@ -93,13 +89,17 @@ public class Event {
 		return this.isPublished() && this.isRecruiting() && !this.members.contains(account)
 				&& !this.managers.contains(account);
 	}
-	
+
 	public boolean isMember(UserAccount userAccount) {
 		return this.members.contains(userAccount.getAccount());
 	}
-	
+
 	public boolean isManager(UserAccount userAccount) {
 		return this.managers.contains(userAccount.getAccount());
+	}
+
+	public boolean isMagedBy(Account account) {
+		return this.getManagers().contains(account);
 	}
 
 }

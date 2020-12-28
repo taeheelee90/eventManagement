@@ -57,15 +57,17 @@ public class EventController {
 	
 	@GetMapping("/event/{path}")
 	public String viewEvent(@CurrentUser Account account, @PathVariable String path, Model model) {
+		Event event = eventService.getEvent(path);
 		model.addAttribute(account);
-		model.addAttribute(eventRepository.findByPath(path));
+		model.addAttribute(event);
 		return "event/view";
 	}
 	
 	@GetMapping("/event/{path}/members")
 	public String viewMembers (@CurrentUser Account account, @PathVariable String path, Model model) {
+		Event event = eventService.getEvent(path);
 		model.addAttribute(account);
-		model.addAttribute(eventRepository.findByPath(path));
+		model.addAttribute(event);
 		return "event/members";
 	}
 }

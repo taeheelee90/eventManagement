@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body>
+    <nav th:replace="fragments.html :: main-nav"></nav>
+    <div th:replace="fragments.html :: event-banner"></div>
+    <div class="container">
+        <div th:replace="fragments.html :: event-information"></div>
+        <div th:replace="fragments.html :: event-nav(eventMenu='settings')"></div>
+        <div class="row mt-3 justify-content-center">
+            <div class="col-2">
+                <div th:replace="fragments.html :: event-settings-menu(currentMenu='description')"></div>
+            </div>
+            <div class="col-8">
+                <div th:replace="fragments.html :: msg"></div>
+                <form class="needs-validation" th:action="@{'/event/' + ${event.getPath()} + '/settings/description'}"
+                      th:object="${eventDescriptionForm}" method="post" novalidate>
+                    <div class="form-group">
+                        <label for="shortDescription">Short Description</label>
+                        <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"
+                                  placeholder="Please enter short description." aria-describedby="shortDescriptionHelp" required maxlength="100">
+                        </textarea>
+                        <small id="shortDescriptionHelp" class="form-text text-muted">
+                            Short description should be less than 100 characters. 
+                        </small>
+                        <small class="invalid-feedback">Please enter short description.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">ShortDescription Error</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullDescription">Full Description</label>
+                        <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="editor form-control"
+                                  placeholder="Please enter full description." aria-describedby="fullDescriptionHelp" required></textarea>
+                        <small id="fullDescriptionHelp" class="form-text text-muted">
+                          	Full description can include any details about the event.
+                        </small>
+                        <small class="invalid-feedback">Please enter full description.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">FullDescription Error</small>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit"
+                                aria-describedby="submitHelp">Update Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div th:replace="fragments.html :: footer"></div>
+    </div>
+    <script th:replace="fragments.html :: tooltip"></script>
+    <script th:replace="fragments.html :: form-validation"></script>
+    <script th:replace="fragments.html :: editor-script"></script>
+</body>
+</html>

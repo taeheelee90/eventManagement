@@ -126,6 +126,15 @@
 		th:href="@{/settings/account}">Account</a>
 </div>
 
+<!-- Message -->
+<div th:fragment="msg" th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+    <span th:text="${message}">Complete</span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
 
 <!-- Footer -->
 <footer th:fragment="footer">
@@ -250,6 +259,22 @@ Event
 </div>
 
 
+<!-- Event Settings Menu -->
+<div th:fragment="event-settings-menu (currentMenu)" class="list-group">
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
+       href="#" th:href="@{'/study/' + ${event.path} + '/settings/description'}">Description</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'image'}? active"
+       href="#" th:href="@{'/study/' + ${event.path} + '/settings/banner'}">Banner Image</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active"
+       href="#" th:href="@{'/study/' + ${event.path} + '/settings/tags'}">Tags</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
+       href="#" th:href="@{'/study/' + ${event.path} + '/settings/zones'}">Zones</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'study'}? active"
+       href="#" th:href="@{'/study/' + ${event.path} + '/settings/study'}">Event</a>
+</div>
+
+
+
 <!-- Event Members -->
 <div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
     <ul class="list-unstyled col-10">
@@ -310,5 +335,34 @@ Event
 	
 
 </script>
+
+
+<!-- Settings: Tooltip -->
+<script type="application/javascript" th:fragment="tooltip">
+		
+		
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+	
+</script>
+
+
+<!-- Settings: editor -->
+
+<div th:fragment="editor-script">
+    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            $('.editor').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+                placeholder: 'Please enter details of the event.',
+                tabsize: 2,
+                height: 300
+            });
+        });
+    </script>
+</div>
 
 </html>
