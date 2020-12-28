@@ -30,6 +30,7 @@ import lombok.Setter;
 		@NamedAttributeNode("managers") })
 @NamedEntityGraph(name = "Event.withZonesAndManagers", attributeNodes = { @NamedAttributeNode("zones"),
 		@NamedAttributeNode("managers") })
+@NamedEntityGraph(name = "Event.withManagers", attributeNodes = { @NamedAttributeNode("managers") })
 @Entity
 @Getter
 @Setter
@@ -74,9 +75,9 @@ public class Event {
 
 	private LocalDateTime closedDateTime;
 
-	private LocalDateTime recruitingUpdatedDateTime;
+	private LocalDateTime registrationUpdatedDateTime;
 
-	private boolean recruiting;
+	private boolean registration;
 
 	private boolean published;
 
@@ -90,7 +91,7 @@ public class Event {
 
 	public boolean isJoinable(UserAccount userAccount) {
 		Account account = userAccount.getAccount();
-		return this.isPublished() && this.isRecruiting() && !this.members.contains(account)
+		return this.isPublished() && this.isRegistration() && !this.members.contains(account)
 				&& !this.managers.contains(account);
 	}
 
@@ -105,5 +106,48 @@ public class Event {
 	public boolean isMagedBy(Account account) {
 		return this.getManagers().contains(account);
 	}
+
+	public void publish() {
+		if(!this.closed && !this.published) {
+			this.published = true;
+			this.publishedDateTime = LocalDateTime.now();
+		} else {
+			throw new RuntimeException ("Can not publish this event.");
+		}
+		
+	}
+	
+	public void close() {
+		if (this.published && !this.closed) {
+			this.closed = true;
+			this.closedDateTime = LocalDateTime.now();
+		} else {
+			throw new RuntimeException ("Can not close this event.");
+		}
+	}
+
+	public boolean canUpdateRegistration() {
+		return this.published && this.registrationUpdatedDateTime == null || this.registrationUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
+	}
+
+	public void startRegistration() {
+		if(canUpdateRegistration()) {
+			this.registration = true;
+			this.registrationUpdatedDateTime = LocalDateTime.now();
+		} else {
+			throw new RuntimeException ("Can not start registration.");
+		}		
+	}
+
+	public void stopRegistration() {
+		if(canUpdateRegistration()) {
+			this.registration = false;
+			this.registrationUpdatedDateTime = LocalDateTime.now();
+		} else {
+			throw new RuntimeException("Can not stop registration now.");
+		}
+	}
+	
+
 
 }

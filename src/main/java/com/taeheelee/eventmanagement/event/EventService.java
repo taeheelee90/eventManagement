@@ -45,20 +45,6 @@ public class EventService {
 		return event;
 	}
 
-	private void checkIfManager(Account account, Event event) {
-		if (!event.isMagedBy(account)) {
-			throw new AccessDeniedException("This is only allowed for manager.");
-		}
-
-	}
-
-	private void checkIfExistingEvent(String path, Event event) {
-		if (event == null) {
-			throw new IllegalArgumentException(path + " does not exist.");
-		}
-
-	}
-
 	public void updateEventDescription(Event event, @Valid EventDescriptionForm eventDescriptionForm) {
 		modelMapper.map(eventDescriptionForm, event);
 		// appEventPublisher.publishEvent(new EventUpdate(event, "Updated Event
@@ -112,5 +98,43 @@ public class EventService {
 		return event;
 	}
 
+	private void checkIfManager(Account account, Event event) {
+		if (!event.isMagedBy(account)) {
+			throw new AccessDeniedException("This is only allowed for manager.");
+		}
+
+	}
+
+	private void checkIfExistingEvent(String path, Event event) {
+		if (event == null) {
+			throw new IllegalArgumentException(path + " does not exist.");
+		}
+
+	}
+
+	public Event getEventToUpdateStatus(Account account, String path) {
+		Event event = eventRepository.findEventWithManagersByPath(path);
+		checkIfExistingEvent(path, event);
+		checkIfManager(account, event);
+		return event;
+	}
+
+	public void publish(Event event) {
+		event.publish();
+
+	}
+
+	public void close(Event event) {
+		event.close();
+	}
+
+	public void startRegistration(Event event) {
+		event.startRegistration();
+	}
+
+	public void stopRegistration(Event event) {
+		event.stopRegistration();
+
+	}
 
 }
