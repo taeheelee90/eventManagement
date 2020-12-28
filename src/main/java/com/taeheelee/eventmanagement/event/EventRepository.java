@@ -14,4 +14,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 	@EntityGraph(value = "Event.withAll", type = EntityGraph.EntityGraphType.LOAD)
 	Event findByPath(String path);
 
+	@EntityGraph(value = "Event.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+	Event findEventWithTagsByPath(String path);
+
+	@EntityGraph(value = "Event.withZonesAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+	Event findEventWithZonesByPath(String path);
+
 }

@@ -4,34 +4,100 @@
 
 <!-- header -->
 <head th:fragment="head">
-<meta charset="UTF-8">
-<title>Event Management</title>
+ <meta charset="UTF-8">
+    <title>Event Management</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
+    <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+    <style>
+        .container {
+            max-width: 100%;
+        }
 
-<link rel="stylesheet"
-	href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
-<link rel="stylesheet"
-	href="/node_modules/font-awesome/css/font-awesome.min.css" />
-<link rel="stylesheet"
-	href="/node_modules/@yaireo/tagify/dist/tagify.css">
-<link rel="stylesheet"
-	href="/node_modules/summernote/dist/summernote-bs4.min.css">
+        .tagify-outside{
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
 
-<script src="/node_modules/jquery/dist/jquery.min.js"></script>
-<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+        #study-logo {
+            height: 200px;
+            width: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
 
+        #study-logo img {
+            height: auto;
+            width: 100%;
+            overflow: hidden;
+        }
 
-<style>
-.container {
-	max-width: 100%;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
 
-.tagify-outside {
-	border: 0;
-	padding: 0;
-	margin: 0;
-}
-</style>
+        body,
+        input,
+        button,
+        select,
+        optgroup,
+        textarea,
+        .tooltip,
+        .popover {
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        table th {
+            font-weight: lighter;
+        }
+
+        mark {
+            padding: 0;
+            background: transparent;
+            background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
+            background-position: right bottom;
+            background-size: 200% 100%;
+            transition: all .5s ease;
+            color: #fff;
+        }
+
+        mark.animate {
+            background-position: left bottom;
+            color: #000;
+        }
+
+        .jumbotron {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            margin-bottom: 0;
+            background-color: #fff;
+        }
+        @media (min-width: 768px) {
+            .jumbotron {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+
+        .jumbotron p:last-child {
+            margin-bottom: 0;
+        }
+
+        .jumbotron h1 {
+            font-weight: 300;
+        }
+
+        .jumbotron .container {
+            max-width: 40rem;
+        }
+    </style>
 </head>
 
 <!-- navbar -->
@@ -225,7 +291,7 @@ Event
 					class="font-weight-light text-monospace badge badge-primary mr-3">
 					<a th:href="@{'/search/zone/' + ${zone.id}}"
 					class="text-decoration-none text-white"> <i class="fa fa-globe"></i>
-						<span th:text="${zone.localNameOfCity}">City</span>
+						<span th:text="${zone.city}">City</span>
 				</a>
 				</span>
 			</p>
@@ -262,15 +328,15 @@ Event
 <!-- Event Settings Menu -->
 <div th:fragment="event-settings-menu (currentMenu)" class="list-group">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
-       href="#" th:href="@{'/study/' + ${event.path} + '/settings/description'}">Description</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'image'}? active"
-       href="#" th:href="@{'/study/' + ${event.path} + '/settings/banner'}">Banner Image</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/description'}">Description</a>
+    <!-- <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'image'}? active"
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/banner'}">Banner Image</a> -->
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active"
-       href="#" th:href="@{'/study/' + ${event.path} + '/settings/tags'}">Tags</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/tags'}">Tags</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
-       href="#" th:href="@{'/study/' + ${event.path} + '/settings/zones'}">Zones</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/zones'}">Zones</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'study'}? active"
-       href="#" th:href="@{'/study/' + ${event.path} + '/settings/study'}">Event</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/event'}">Event</a>
 </div>
 
 
@@ -361,6 +427,105 @@ Event
                 tabsize: 2,
                 height: 300
             });
+        });
+    </script>
+</div>
+
+
+<!-- update Tags -->
+<div th:fragment="update-tags (baseUrl)">
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script type="application/javascript" >
+        $(function() {
+            function tagRequest(url, tagTitle) {
+                $.ajax({
+                    dataType: "json",
+                    autocomplete: {
+                        enabled: true,
+                        rightKey: true,
+                    },
+                    contentType: "application/json; charset=utf-8",
+                    method: "POST",
+                    url: "[(${baseUrl})]" + url,
+                    data: JSON.stringify({'title': title})
+                }).done(function (data, status) {
+                    console.log("${data} and status is ${status}");
+                });
+            }
+
+            function onAdd(e) {
+                tagRequest("/add", e.detail.data.value);
+            }
+
+            function onRemove(e) {
+                tagRequest("/remove", e.detail.data.value);
+            }
+
+            var tagInput = document.querySelector("#tags");
+            var tagify = new Tagify(tagInput, {
+                pattern: /^.{0,20}$/,
+                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+                dropdown : {
+                    enabled: 1, // suggest tags after a single character input
+                } // map tags
+            });
+            tagify.on("add", onAdd);
+            tagify.on("remove", onRemove);
+            // add a class to Tagify's input element
+            tagify.DOM.input.classList.add('form-control');
+            // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+            tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+        });
+   </script>
+</div>
+
+<!-- update zones -->
+<div th:fragment="update-zones (baseUrl)">
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            function tagRequest(url, zoneName) {
+                $.ajax({
+                    dataType: "json",
+                    autocomplete: {
+                        enabled: true,
+                        rightKey: true,
+                    },
+                    contentType: "application/json; charset=utf-8",
+                    method: "POST",
+                    url: "[(${baseUrl})]" + url,
+                    data: JSON.stringify({'zoneName': zoneName})
+                }).done(function (data, status) {
+                    console.log("${data} and status is ${status}");
+                });
+            }
+
+            function onAdd(e) {
+                tagRequest("/add", e.detail.data.value);
+            }
+
+            function onRemove(e) {
+                tagRequest("/remove", e.detail.data.value);
+            }
+
+            var tagInput = document.querySelector("#tags");
+
+            var tagify = new Tagify(tagInput, {
+                enforceWhitelist: true,
+                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+                dropdown : {
+                    enabled: 1, // suggest tags after a single character input
+                    position: "text",
+                } // map tags
+            });
+
+            tagify.on("add", onAdd);
+            tagify.on("remove", onRemove);
+
+            // add a class to Tagify's input element
+            tagify.DOM.input.classList.add('form-control');
+            // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+            tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
         });
     </script>
 </div>

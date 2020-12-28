@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,7 +36,9 @@ import com.taeheelee.eventmanagement.settings.form.ZoneForm;
 import com.taeheelee.eventmanagement.settings.validator.NicknameFormValidator;
 import com.taeheelee.eventmanagement.settings.validator.PasswordFormValidatort;
 import com.taeheelee.eventmanagement.tag.TagRepository;
+import com.taeheelee.eventmanagement.tag.TagService;
 import com.taeheelee.eventmanagement.zone.ZoneRepository;
+import com.taeheelee.eventmanagement.zone.ZoneService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +47,8 @@ import lombok.RequiredArgsConstructor;
 public class SettingController {
 	
 	private final AccountService accountService;
+	private final TagService tagService;
+	private final ZoneService zoneService;
 	private final AccountRepository accountRepository;
 	private final ModelMapper modelMapper;
 	private final NicknameFormValidator nicknameFormValidator;
@@ -180,13 +183,7 @@ public class SettingController {
 	@PostMapping(SETTINGS_TAGS_URL + "/add")
 	@ResponseBody
 	public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
-		String title = tagForm.getTitle();
-
-		Tag tag = tagRepository.findByTitle(title);
-		if (tag == null) {
-			tag = tagRepository.save(Tag.builder().title(title).build());
-		}
-
+		Tag tag = tagService.findOrCreateNew(tagForm.getTitle());
 		accountService.addTag(account, tag);
 		return ResponseEntity.ok().build();
 	}

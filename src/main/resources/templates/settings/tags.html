@@ -29,19 +29,9 @@
             </div>
         </div>
     </div>
-	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
-	
-	<script type="application/javascript" th:inline="javascript">
-    $(function() {
-        var csrfToken = /*[[${_csrf.token}]]*/ null;
-        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(csrfHeader, csrfToken);
-        });
-    });
-	</script>
-		
-	
+    
+    <script th:replace="fragments.html :: ajax-csrf"></script>
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
 	<script type="application/javascript">
    	  $(function() {
         function tagRequest(url, title) {
