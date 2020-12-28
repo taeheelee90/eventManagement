@@ -237,10 +237,42 @@ public class EventSettingController {
 		return "redirect:/event/" + getPath(path) + "/settings/event";
 	}
 	
+	@PostMapping("/event/path")
+	public String updateEventPath(@CurrentUser Account account, @PathVariable String path, String newPath, Model model, RedirectAttributes attributes) {
+		Event event = eventService.getEventToUpdateStatus(account, path);
+		if(!eventService.isValidPath(newPath)) {
+			model.addAttribute(account);
+			model.addAttribute(event);
+			model.addAttribute("eventPathError", "Can not use tihs path.");
+			return "event/settings/event";
+		}
+		
+		eventService.updateEventPath(event, newPath);
+		attributes.addFlashAttribute("message", "Updated event path.");
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
+	}
 	
+	@PostMapping("/event/title")
+	public String updateEventTitle(@CurrentUser Account account, @PathVariable String path, String newTitle, Model model, RedirectAttributes attributes) {
+		Event event = eventService.getEventToUpdateStatus(account, path);
+		if(!eventService.isValidTitle(newTitle)) {
+			model.addAttribute(account);
+			model.addAttribute(event);
+			model.addAttribute("eventTitleError", "Please enter title again.");
+			return "event/settings/event";
+		}
 	
+		eventService.updateEventTitle(event, newTitle);
+		attributes.addFlashAttribute("message", "Updated event title.");
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
+	}
 	
-	
+	@PostMapping("/event/remove")
+	public String removeEvent (@CurrentUser Account account, @PathVariable String path, Model model) {
+		Event event = eventService.getEventToUpdateStatus(account, path);
+		eventService.remove(event);
+		return "redirect:/";
+	}
 	
 	
 	

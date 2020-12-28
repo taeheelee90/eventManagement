@@ -1,5 +1,7 @@
 package com.taeheelee.eventmanagement.domain;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -108,46 +110,54 @@ public class Event {
 	}
 
 	public void publish() {
-		if(!this.closed && !this.published) {
+		if (!this.closed && !this.published) {
 			this.published = true;
 			this.publishedDateTime = LocalDateTime.now();
 		} else {
-			throw new RuntimeException ("Can not publish this event.");
+			throw new RuntimeException("Can not publish this event.");
 		}
-		
+
 	}
-	
+
 	public void close() {
 		if (this.published && !this.closed) {
 			this.closed = true;
 			this.closedDateTime = LocalDateTime.now();
 		} else {
-			throw new RuntimeException ("Can not close this event.");
+			throw new RuntimeException("Can not close this event.");
 		}
 	}
 
 	public boolean canUpdateRegistration() {
-		return this.published && this.registrationUpdatedDateTime == null || this.registrationUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
+		return this.published && this.registrationUpdatedDateTime == null
+				|| this.registrationUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
 	}
 
 	public void startRegistration() {
-		if(canUpdateRegistration()) {
+		if (canUpdateRegistration()) {
 			this.registration = true;
 			this.registrationUpdatedDateTime = LocalDateTime.now();
 		} else {
-			throw new RuntimeException ("Can not start registration.");
-		}		
+			throw new RuntimeException("Can not start registration.");
+		}
 	}
 
 	public void stopRegistration() {
-		if(canUpdateRegistration()) {
+		if (canUpdateRegistration()) {
 			this.registration = false;
 			this.registrationUpdatedDateTime = LocalDateTime.now();
 		} else {
 			throw new RuntimeException("Can not stop registration now.");
 		}
 	}
-	
 
+	public String getEncodedPath() {
+
+		return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
+	}
+
+	public boolean isRemovable() {
+		return !this.published;
+	}
 
 }

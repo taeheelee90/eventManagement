@@ -137,4 +137,35 @@ public class EventService {
 
 	}
 
+	public boolean isValidPath(String newPath) {
+		if (!(newPath.length() >= 0 && newPath.length() <= 20)) {
+			return false;
+		}
+
+		return !eventRepository.existsByPath(newPath);
+	}
+
+	public void updateEventPath(Event event, String newPath) {
+		event.setPath(newPath);
+
+	}
+	
+	public boolean isValidTitle(String newTitle) {
+		return newTitle.length() <= 50;
+	}
+
+	public void updateEventTitle(Event event, String newTitle) {
+		event.setTitle(newTitle);
+		
+	}
+
+	public void remove(Event event) {
+		if(event.isRemovable()) {
+			eventRepository.delete(event);
+		} else {
+			throw new IllegalArgumentException("Can not delete event.");
+		}
+		
+	}
+
 }
