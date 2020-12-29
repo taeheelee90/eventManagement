@@ -274,26 +274,10 @@ public class EventSettingController {
 		return "redirect:/";
 	}
 	
-	
-	
 
 	private String getPath(String path) {
 		return URLEncoder.encode(path, StandardCharsets.UTF_8);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 
