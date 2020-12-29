@@ -39,12 +39,12 @@ public class ActivityController {
 	private final ActivityService activityService;
 	private final ModelMapper modelMapper;
 	private final ActivityFormValidator activityFormValidator;
-	
+
 	@InitBinder("activityForm")
 	public void initBinder(WebDataBinder webDataBinder) {
 		webDataBinder.addValidators(activityFormValidator);
 	}
-	
+
 	@GetMapping("/new-activity")
 	public String newActivityForm(@CurrentUser Account account, @PathVariable String path, Model model) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
@@ -53,65 +53,86 @@ public class ActivityController {
 		model.addAttribute(new ActivityForm());
 		return "activity/form";
 	}
-	
+
 	@PostMapping("/new-activity")
-	public String newActivitySubmit(@CurrentUser Account account, @PathVariable String path, @Valid ActivityForm activityForm, Errors errors, Model model) {
+	public String newActivitySubmit(@CurrentUser Account account, @PathVariable String path,
+			@Valid ActivityForm activityForm, Errors errors, Model model) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
-		if(errors.hasErrors()) {
+		if (errors.hasErrors()) {
 			model.addAttribute(account);
 			model.addAttribute(event);
 			return "activity/form";
 		}
-		
-		 Activity activity = activityService.createEvent(modelMapper.map(activityForm, Activity.class), event, account);
-		 return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
-	
+
+		Activity activity = activityService.createEvent(modelMapper.map(activityForm, Activity.class), event, account);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+
 	}
-	
+
 	@GetMapping("/activities/{id}")
-	public String getEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable ("id") Activity activity, Model model) {
+	public String getEvent(@CurrentUser Account account, @PathVariable String path,
+			@PathVariable("id") Activity activity, Model model) {
 		model.addAttribute(account);
 		model.addAttribute(activity);
 		model.addAttribute(eventRepository.findEventWithManagersByPath(path));
 		return "activity/view";
 	}
-	
+
 	@GetMapping("/activities")
 	public String viewEventActivities(@CurrentUser Account account, @PathVariable String path, Model model) {
 		Event event = eventService.getEvent(path);
 		model.addAttribute(account);
 		model.addAttribute(event);
-		
+
 		List<Activity> activities = activityRepository.findByEventOrderByStartDateTime(event);
 		List<Activity> newActivities = new ArrayList<>();
 		List<Activity> oldActivities = new ArrayList<>();
 		activities.forEach(a -> {
-			if(a.getEndDateTime().isBefore(LocalDateTime.now())) {
+			if (a.getEndDateTime().isBefore(LocalDateTime.now())) {
 				oldActivities.add(a);
 			} else {
 				newActivities.add(a);
 			}
 		});
-		
+
 		model.addAttribute("oldActivities", oldActivities);
 		model.addAttribute("newActivities", newActivities);
-		
+
 		return "event/activities";
- 	}
+	}
+
+	@GetMapping("/activities/{id}/edit")
+	public String updateActivity(@CurrentUser Account account, @PathVariable String path,
+			@PathVariable("id") Activity activity, Model model) {
+		Event event = eventService.getEventToUpdate(account, path);
+		model.addAttribute(event);
+		model.addAttribute(account);
+		model.addAttribute(activity);
+		model.addAttribute(modelMapper.map(activity, ActivityForm.class));
+		return "activity/update-form";
+	}
+
+	@PostMapping("/activities/{id}/edit")
+	public String updateActivitySubmit(@CurrentUser Account account, @PathVariable String path,
+			@PathVariable("id") Activity activity, @Valid ActivityForm activityForm, Errors errors, Model model) {
+
+		Event event = eventService.getEventToUpdate(account, path);
+		activityForm.setActivityType(activity.getActivityType());
+		activityFormValidator.validateUpdateForm(activityForm, activity, errors);
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
+		if(errors.hasErrors()) {
+			model.addAttribute(account);
+			model.addAttribute(event);
+			model.addAttribute(activity);
+			
+			return "activity/update-form";
+		}
+		
+		activityService.updateActivity(activity, activityForm);
+		
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+		
+	}
+
 }

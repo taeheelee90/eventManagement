@@ -2,11 +2,14 @@ package com.taeheelee.eventmanagement.activity.validator;
 
 import java.time.LocalDateTime;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.taeheelee.eventmanagement.activity.form.ActivityForm;
+import com.taeheelee.eventmanagement.domain.Activity;
 
 @Component
 public class ActivityFormValidator implements Validator {
@@ -47,6 +50,15 @@ public class ActivityFormValidator implements Validator {
 		LocalDateTime endDateTime = activityForm.getEndDateTime();
 		return endDateTime.isBefore(activityForm.getStartDateTime()) || endDateTime.isBefore(activityForm.getEndEnrollmentDateTime());
 				
+	}
+
+	public void validateUpdateForm(@Valid ActivityForm activityForm, Activity activity, Errors errors) {
+		
+		if(activityForm.getLimitOfEnrollments() < activity.getNumberOfAcceptedEnrollments()) {
+			errors.rejectValue("limitOfEnrollments", "wrong.value", "Can not set lower number than the number of accepted enrollments.");
+		}
+		
+		
 	}
 	
 
