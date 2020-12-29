@@ -335,8 +335,8 @@ Event
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/tags'}">Tags</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/zones'}">Zones</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'event'}? active"
-       href="#" th:href="@{'/event/' + ${event.path} + '/settings/event'}">Event</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'activity'}? active"
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/activity'}">Activities</a>
 </div>
 
 

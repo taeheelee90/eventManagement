@@ -38,8 +38,6 @@ import com.taeheelee.eventmanagement.settings.validator.PasswordFormValidatort;
 import com.taeheelee.eventmanagement.tag.TagRepository;
 import com.taeheelee.eventmanagement.tag.TagService;
 import com.taeheelee.eventmanagement.zone.ZoneRepository;
-import com.taeheelee.eventmanagement.zone.ZoneService;
-
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -48,8 +46,6 @@ public class SettingController {
 	
 	private final AccountService accountService;
 	private final TagService tagService;
-	private final ZoneService zoneService;
-	private final AccountRepository accountRepository;
 	private final ModelMapper modelMapper;
 	private final NicknameFormValidator nicknameFormValidator;
 	private final TagRepository tagRepository;
