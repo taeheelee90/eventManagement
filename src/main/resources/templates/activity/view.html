@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body>
+    <nav th:replace="fragments.html :: main-nav"></nav>
+    <div class="container">
+    	<div class="row py-4 text-left justify-content-center bg-light">
+            <div class="col-6">
+                <span class="h2">
+                <a href="#" class="text-decoration-none" th:href="@{'/event/' + ${event.path}}">
+                    <span th:text="${event.title}">Event Title</span>
+                </a> / </span>
+                <span class="h2" th:text="${activity.title}"></span>
+            </div>
+            <div class="col-4 text-right justify-content-end">
+                <span sec:authorize="isAuthenticated()">
+                    <button th:if="${activity.isEnrollableFor(#authentication.principal)}"
+                            class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll">
+                        <i class="fa fa-plus-circle"></i> Register
+                    </button>
+                    <button th:if="${activity.isDisenrollableFor(#authentication.principal)}"
+                            class="btn btn-outline-primary" data-toggle="modal" data-target="#disenroll">
+                        <i class="fa fa-minus-circle"></i> Cancel registration
+                    </button>
+                    <span class="text-success" th:if="${activity.isAttended(#authentication.principal)}" disabled>
+                        <i class="fa fa-check-circle"></i> Attended
+                    </span>
+                </span>
+            </div>
+            <div class="modal fade" id="disenroll" tabindex="-1" role="dialog" aria-labelledby="leaveTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="leaveTitle" th:text="${activity.title}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you want to cancel registration?</p>
+                            If you press <p><strong>confirm</strong>button, your registration will be cancelled.</p>                     
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <form th:action="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/disenroll'}" method="post">
+                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="enroll" tabindex="-1" role="dialog" aria-labelledby="enrollmentTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="enrollmentTitle" th:text="${activity.title}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you want to register for this activity?</p>
+                            <p>If you press <strong>confirm</strong> button, your registration will be submitted.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <form th:action="@{'/event/' + ${event.path} + '/activites/' + ${activity.id} + '/enroll'}" method="post">
+                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row px-3 justify-content-center">
+            <div class="col-7 pt-3">
+                <dt class="font-weight-light">Description</dt>
+                <dd th:utext="${activity.description}"></dd>
+
+                <dt class="font-weight-light">Enrollment (<span th:text="${activity.enrollments.size()}"></span>)</dt>
+                <dd>
+                    <table class="table table-borderless table-sm" th:if="${activity.enrollments.size() > 0}">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Participants</th>
+                                <th scope="col">Registration date and time</th>
+                                <th scope="col">Registration status</th>
+                                <th th:if="${event.isManager(#authentication.principal)}" scope="col">
+                                   	Manage registrations
+                                </th>
+                                <th th:if="${event.isManager(#authentication.principal)}" scope="col">
+                                  	Manage attendances 
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="enroll: ${activity.enrollments}">
+                                <th scope="row" th:text="${enrollStat.count}"></th>
+                                <td>
+                                    <a th:href="@{'/profile/' + ${enroll.account.nickname}}"
+                                       class="text-decoration-none">
+                                        <svg th:if="${#strings.isEmpty(enroll.account?.profileImage)}" data-jdenticon-value="nickname"
+                                             th:data-jdenticon-value="${enroll.account.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
+                                        <img th:if="${!#strings.isEmpty(enroll.account?.profileImage)}"
+                                             th:src="${enroll.account?.profileImage}" width="24" height="24" class="rounded border"/>
+                                        <span th:text="${enroll.account.nickname}"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="date-time" th:text="${enroll.enrolledAt}"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${enroll.accepted}">Accepted</span>
+                                    <span th:if="${!enroll.accepted}">Waiting</span>
+                                </td>
+                                <td th:if="${event.isManager(#authentication.principal)}">
+                                    <a th:if="${activity.canAccept(enroll)}" href="#" class="text-decoration-none"
+                                       th:href="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >Accept</a>
+                                    <a th:if="${activity.canReject(enroll)}" href="#" class="text-decoration-none"
+                                       th:href="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/enrollments/' + ${enroll.id} + '/reject'}">Reject</a>
+                                </td>
+                                <td th:if="${event.isManager(#authentication.principal)}">
+                                    <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
+                                       th:href="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">Check in</a>
+                                    <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
+                                       th:href="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">Cancel check in</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </dd>
+            </div>
+            <dl class="col-3 pt-3 text-right">
+                <dt class="font-weight-light">Enrollment method</dt>
+                <dd>
+                    <span th:if="${activity.activityType == T(com.taeheelee.eventmanagement.domain.ActivityType).FCFS}">FCFS</span>
+                    <span th:if="${activity.activityType == T(com.taeheelee.eventmanagement.domain.ActivityType).COMFIRMATIVE}">Manager's confirmation</span>
+                </dd>
+
+                <dt class="font-weight-light">Limit of enrollments</dt>
+                <dd>
+                    <span th:text="${activity.limitOfEnrollments}"></span>
+                </dd>
+
+                <dt class="font-weight-light">Due dates</dt>
+                <dd>
+                    <span class="date" th:text="${activity.endEnrollmentDateTime}"></span>
+                    <span class="weekday" th:text="${activity.endEnrollmentDateTime}"></span><br/>
+                    <span class="time" th:text="${activity.endEnrollmentDateTime}"></span>
+                </dd>
+
+                <dt class="font-weight-light">Activity schedules</dt>
+                <dd>
+                    <span class="date" th:text="${activity.startDateTime}"></span>
+                    <span class="weekday" th:text="${activity.startDateTime}"></span><br/>
+                    <span class="time" th:text="${activity.startDateTime}"></span> -
+                    <span class="time" th:text="${activity.endDateTime}"></span>
+                </dd>
+
+                <dt class="font-weight-light">Manager</dt>
+                <dd>
+                    <a th:href="@{'/profile/' + ${activity.createdBy?.nickname}}" class="text-decoration-none">
+                        <svg th:if="${#strings.isEmpty(activity.createdBy?.profileImage)}"
+                             th:data-jdenticon-value="${activity.createdBy?.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
+                        <img th:if="${!#strings.isEmpty(activity.createdBy?.profileImage)}"
+                             th:src="${activity.createdBy?.profileImage}" width="24" height="24" class="rounded border"/>
+                        <span th:text="${activity.createdBy?.nickname}"></span>
+                    </a>
+                </dd>
+
+                <dt th:if="${event.isManager(#authentication.principal)}" class="font-weight-light">Manage activities</dt>
+                <dd th:if="${event.isManager(#authentication.principal)}">
+                    <a class="btn btn-outline-primary btn-sm my-1"
+                       th:href="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/edit'}" >
+                        Edit Activity
+                    </a> <br/>
+                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
+                        Cancel Activity
+                    </button>
+                </dd>
+            </dl>
+            <div class="modal fade" id="cancel" tabindex="-1" role="dialog" aria-labelledby="cancelTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelTitle" th:text="${activity.title}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you want to cancel this activity?</p>
+                            <p>If you press <strong>confirm</strong> button, all records about this activity will be removed.</p>
+                         
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <form th:action="@{'/event/' + ${event.path} + '/activities/' + ${activity.id}}" th:method="delete">
+                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments.html :: footer"></div>
+    </div>
+    <script th:replace="fragments.html :: date-time"></script>
+</body>
+</html>

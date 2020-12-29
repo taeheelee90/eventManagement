@@ -213,14 +213,11 @@
 
 
 <!-- 
+
 Event
+
  -->
 
-<!-- Event Banner 
-<div th:fragment="event-banner" th:if="${event.useBanner}" class="row"
-	id="study-logo">
-	<img th:src="${event.image}" />
-</div>-->
 
 
 <!-- Event Information Title -->
@@ -229,7 +226,7 @@ Event
 		<div class="col-6">
 			<a href="#" class="text-decoration-none"
 				th:href="@{'/event/' + ${event.path}}"> <span class="h2"
-				th:text="${event.title}">Event name</span>
+				th:text="${event.title}">Event title</span>
 			</a>
 		</div>
 		<div class="col-4 text-right justify-content-end">
@@ -266,8 +263,8 @@ Event
 			</span> <span sec:authorize="isAuthenticated()"
 				th:if="${event.published && !event.closed && event.isManager(#authentication.principal)}">
 				<a class="btn btn-outline-primary"
-				th:href="@{'/event/' + ${event.path} + '/new-event'}"> <i
-					class="fa fa-plus"></i> Create Event
+				th:href="@{'/event/' + ${event.path} + '/new-activity'}"> <i
+					class="fa fa-plus"></i> Create Activity
 			</a>
 			</span>
 		</div>
@@ -306,15 +303,20 @@ Event
 		<a class="nav-item nav-link" href="#" th:classappend="${eventMenu == 'info'}? active"
 			th:href="@{'/event/' + ${event.path}}"> <i
 			class="fa fa-info-circle"></i> Description
-		</a> <a class="nav-item nav-link" href="#"
+		</a> 
+		<a class="nav-item nav-link" href="#"
 			th:classappend="${eventMenu == 'members'}? active"
 			th:href="@{'/event/' + ${event.path} + '/members'}"> <i
 			class="fa fa-user"></i> Member
-		</a> <a class="nav-item nav-link"
-			th:classappend="${eventMenu == 'events'}? active" href="#"
-			th:href="@{'/event/' + ${event.path} + '/events'}"> <i
-			class="fa fa-calendar"></i> Schedules
-		</a> <a sec:authorize="isAuthenticated()"
+		</a> 
+		<a class="nav-item nav-link"
+			th:classappend="${eventMenu == 'activities'}? active" href="#"
+			th:href="@{'/event/' + ${event.path} + '/activities'}"> <i
+			class="fa fa-calendar"></i> Activities
+		</a> 
+		
+		
+		<a sec:authorize="isAuthenticated()"
 			th:if="${event.isManager(#authentication.principal)}"
 			class="nav-item nav-link"
 			th:classappend="${eventMenu == 'settings'}? active" href="#"
@@ -335,8 +337,10 @@ Event
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/tags'}">Tags</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/zones'}">Zones</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'activity'}? active"
-       href="#" th:href="@{'/event/' + ${event.path} + '/settings/activity'}">Activities</a>
+  
+    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'event'}? active"
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/event'}">Setting
+    </a>
 </div>
 
 
@@ -356,6 +360,113 @@ Event
 </div>
 
 
+<!-- 
+
+Activities
+
+ -->
+ <div th:fragment="activity-form (mode, action)">
+    <div class="py-5 text-center">
+        <h2>
+            <a th:href="@{'/event/' + ${event.path}}"><span th:text="${event.title}">Event</span></a> /
+            <span th:if="${mode == 'edit'}" th:text="${activity.title}"></span>
+            <span th:if="${mode == 'new'}">Create New Activity</span>
+        </h2>
+    </div>
+    <div class="row justify-content-center">
+        <form class="needs-validation col-sm-10"
+              th:action="@{${action}}"
+              th:object="${activityForm}" method="post" novalidate>
+            <div class="form-group">
+                <label for="title">Activity Title</label>
+                <input id="title" type="text" th:field="*{title}" class="form-control"
+                       placeholder="title" aria-describedby="titleHelp" required>
+                <small id="titleHelp" class="form-text text-muted">
+                    Please enter activity title with less than 50 letters.
+                </small>
+                <small class="invalid-feedback">Please enter activity title.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</small>
+            </div>
+            <div class="form-group" th:if="${mode == 'new'}">
+                <label for="activityType">Enrollment method</label>
+                <select th:field="*{activityType}"  class="custom-select mr-sm-2" id="activityType" aria-describedby="activityTypeHelp">
+                    <option th:value="FCFS">First comes first served</option>
+                    <option th:value="CONFIRMATIVE">Administrator's confirmation</option>
+                </select>
+                <small id="activityTypeHelp" class="form-text text-muted">
+                    There are two ways of enrollment.<br/>
+                    <strong>FCFS</strong>: First comes, first served. Waiting list is available before the deadline. <br/>
+                    <strong>CONFIRMATIVE</strong>:  Administrator's confirmation is required before the deadline.
+                </small>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="limitOfEnrollments">Limit of enrollments</label>
+                    <input id="limitOfEnrollments" type="number" th:field="*{limitOfEnrollments}" class="form-control" placeholder="0"
+                           aria-describedby="limitOfEnrollmentsHelp">
+                    <small id="limitOfEnrollmentsHelp" class="form-text text-muted">
+                       Limit of enrollments must be at least 2.
+                    </small>
+                    <small class="invalid-feedback">Please enter the limit of enrollments.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfEnrollments')}" th:errors="*{limitOfEnrollments}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="endEnrollmentDateTime">End date of enrollment</label>
+                    <input id="endEnrollmentDateTime" type="datetime-local" th:field="*{endEnrollmentDateTime}" class="form-control"
+                           aria-describedby="endEnrollmentDateTimeHelp" required>
+                    <small id="endEnrollmentDateTimeHelp" class="form-text text-muted">
+                        Due date of enrollment.
+                    </small>
+                    <small class="invalid-feedback">Please enter the due date of enrollment.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('endEnrollmentDateTime')}" th:errors="*{endEnrollmentDateTime}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="startDateTime">Start Date of Activity</label>
+                    <input id="startDateTime" type="datetime-local" th:field="*{startDateTime}" class="form-control"
+                           aria-describedby="startDateTimeHelp" required>
+                    <small id="startDateTimeHelp" class="form-text text-muted">
+                        Please select the start date of this activity.
+                    </small>
+                    <small class="invalid-feedback">Please enter the start date.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('startDateTime')}" th:errors="*{startDateTime}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="startDateTime">End date of Activity</label>
+                    <input id="endDateTime" type="datetime-local" th:field="*{endDateTime}" class="form-control"
+                           aria-describedby="endDateTimeHelp" required>
+                    <small id="endDateTimeHelp" class="form-text text-muted">
+                        Activity will be automatically closed after the end date. 
+                    </small>
+                    <small class="invalid-feedback">Please select the end date of this activity.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('endDateTime')}" th:errors="*{endDateTime}">Error</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" type="textarea" th:field="*{description}" class="editor form-control"
+                          placeholder="description." aria-describedby="descriptionHelp" required></textarea>
+                <small id="descriptionHelp" class="form-text text-muted">
+                    Please write the details of this activity.
+                </small>
+                <small class="invalid-feedback">Please enter the description.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" type="submit"
+                        aria-describedby="submitHelp" th:text="${mode == 'edit' ? 'Edit Activity' : 'Create Activity'}">Edit Activity</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<!-- 
+
+Java Script
+
+ -->
 <!-- Form Validation -->
 <script type="application/javascript" th:fragment="form-validation">
 	
@@ -527,6 +638,37 @@ Event
             // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
             tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
         });
+    </script>
+</div>
+
+<!-- moment.js date and time -->
+<div th:fragment="date-time">
+    <script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            moment.locale('ko');
+            $(".date-time").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLL');
+            });
+            $(".date").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LL');
+            });
+            $(".weekday").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('dddd');
+            });
+            $(".time").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LT');
+            });
+            $(".calendar").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").calendar();
+            });
+            $(".fromNow").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
+            });
+            $(".date-weekday-time").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
+            });
+        })
     </script>
 </div>
 
