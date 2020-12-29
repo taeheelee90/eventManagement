@@ -216,11 +216,11 @@
 Event
  -->
 
-<!-- Event Banner -->
+<!-- Event Banner 
 <div th:fragment="event-banner" th:if="${event.useBanner}" class="row"
 	id="study-logo">
 	<img th:src="${event.image}" />
-</div>
+</div>-->
 
 
 <!-- Event Information Title -->
@@ -242,7 +242,7 @@ Event
 				data-toggle="tooltip" data-placement="bottom" title="Closed event">
 				<button class="btn btn-primary btn-sm" style="pointer-events: none;"
 					type="button" disabled>CLOSED</button>
-			</span> <span th:if="${!event.recruiting}" class="d-inline-block ml-1"
+			</span> <span th:if="${!event.registration}" class="d-inline-block ml-1"
 				tabindex="0" data-toggle="tooltip" data-placement="bottom"
 				title="Registration closed">
 				<button class="btn btn-primary btn-sm" style="pointer-events: none;"

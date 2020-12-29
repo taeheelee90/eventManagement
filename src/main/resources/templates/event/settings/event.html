@@ -3,7 +3,6 @@
 <head th:replace="fragments.html :: head"></head>
 <body>
     <nav th:replace="fragments.html :: main-nav"></nav>
-    <div th:replace="fragments.html :: event-banner"></div>
     <div class="container">
     <div th:replace="fragments.html :: event-information"></div>
     <div th:replace="fragments.html :: event-nav(eventMenu='settings')"></div>
@@ -12,7 +11,7 @@
             <div th:replace="fragments.html :: event-settings-menu(currentMenu='event')"></div>
         </div>
             <div class="col-8">
-               <div th:replace="fragments.html :: message"></div>
+               <div th:replace="fragments.html :: msg"></div>
                 <div class="row">
                     <h5 class="col-sm-12">Event publication and close</h5>
                     <form th:if="${!event.published && !event.closed}" class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/event/publish'}" method="post" novalidate>
