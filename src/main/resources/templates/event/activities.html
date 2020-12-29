@@ -12,33 +12,36 @@
                     <ul class="list-group">
                         <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                            	New Activities
-                            <span th:text="${newActivities.size()}">2</span>
+                            <span th:text="${newActivities.size()}">0</span>
                         </a>
                         <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                             Old Activities
-                            <span th:text="${oldActivities.size()}">5</span>
+                            <span th:text="${oldActivities.size()}">0</span>
                         </a>
                     </ul>
                 </div>
+                
                 <div class="col-10 row row-cols-1 row-cols-md-2">
                     <div th:if="${newActivities.size() == 0}" class="col">
                         There are no new activities.
                     </div>
-                    <div class="col mb-4 pr-0" th:each="event: ${newEvents}">
+                    <div class="col mb-4 pr-0" th:each="activity: ${newActivities}">
                         <div class="card">
                             <div class="card-header">
                                 <span th:text="${activity.title}">title</span>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <i class="fa fa-calendar"></i>
-                                    <span class="calendar" th:text="${activity.startDateTime}"></span> Start activity
+                                    <i class="fa fa-calendar"></i> 
+                                    <span class="calendar" th:text="${activity.startDateTime}"></span> 
+                                    (start date)
                                 </li>
                                 <li class="list-group-item">
-                                    <i class="fa fa-hourglass-end"></i> <span class="fromNow" th:text="${activity.endEnrollmentDateTime}"></span> Enrollment closed,
+                                    <i class="fa fa-hourglass-end"></i> <span class="fromNow" th:text="${activity.endEnrollmentDateTime}"></span> (enrollment deadline) <br> 
                                     <span th:if="${activity.limitOfEnrollments != 0}">
-                                    <span th:text="${activity.limitOfEnrollments}"></span>Enrollment ongoing
-                                    (<span th:text="${activity.numberOfRemainSpots()}"></span> seats are available)
+                                    Enrollment ongoing
+                                    
+                                    (<span th:text="${activity.numberOfRemainSpots()}"></span> / <span th:text="${activity.limitOfEnrollments}"></span> seats are available)
                                 </span>
                                 </li>
                                 <li class="list-group-item">
