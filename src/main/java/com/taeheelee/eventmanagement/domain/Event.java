@@ -33,6 +33,7 @@ import lombok.Setter;
 @NamedEntityGraph(name = "Event.withZonesAndManagers", attributeNodes = { @NamedAttributeNode("zones"),
 		@NamedAttributeNode("managers") })
 @NamedEntityGraph(name = "Event.withManagers", attributeNodes = { @NamedAttributeNode("managers") })
+@NamedEntityGraph(name = "Event.withMembers", attributeNodes = { @NamedAttributeNode("members") })
 @Entity
 @Getter
 @Setter
@@ -85,7 +86,7 @@ public class Event {
 
 	private boolean closed;
 
-	private boolean useBanner;
+	private int memberCount;
 
 	public void addManager(Account account) {
 		this.managers.add(account);
@@ -158,6 +159,16 @@ public class Event {
 
 	public boolean isRemovable() {
 		return !this.published;
+	}
+
+	public void addMember(Account account) {
+		this.getMembers().add(account);
+		this.memberCount++;
+	}
+
+	public void removeMember(Account account) {
+		this.getMembers().remove(account);
+		this.memberCount--;		
 	}
 
 }

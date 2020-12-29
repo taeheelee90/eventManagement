@@ -52,19 +52,6 @@ public class EventService {
 
 	}
 
-	public void updateEventBanner(Event event, String image) {
-		event.setImage(image);
-	}
-
-	public void disableEventBanner(Event event) {
-		event.setUseBanner(false);
-
-	}
-
-	public void enableEventBanner(Event event) {
-		event.setUseBanner(true);
-
-	}
 
 	public void addTag(Event event, Tag tag) {
 		event.getTags().add(tag);
@@ -166,6 +153,15 @@ public class EventService {
 			throw new IllegalArgumentException("Can not delete event.");
 		}
 		
+	}
+
+	public void addMember(Event event, Account account) {
+		event.addMember(account);
+		
+	}
+
+	public void removeMember(Event event, Account account) {
+		event.removeMember(account);
 	}
 
 }

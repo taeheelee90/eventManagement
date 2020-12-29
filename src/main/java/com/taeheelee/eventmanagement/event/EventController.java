@@ -70,4 +70,19 @@ public class EventController {
 		model.addAttribute(event);
 		return "event/members";
 	}
+	
+	
+	@GetMapping("/event/{path}/join")
+	public String joinEvent(@CurrentUser Account account, @PathVariable String path) {
+		Event event = eventRepository.findEventWithMembersByPath(path);
+		eventService.addMember(event, account);
+		return "redirect:/event/" + event.getEncodedPath() + "/members";
+	}
+	
+	@GetMapping("/event/{path}/leave")
+	public String leaveEvent(@CurrentUser Account account, @PathVariable String path) {
+		Event event = eventRepository.findEventWithMembersByPath(path);
+		eventService.removeMember(event, account);
+		return "redirect:/event/" + event.getEncodedPath() + "/members";
+	}
 }

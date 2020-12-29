@@ -73,37 +73,10 @@ public class EventSettingController {
 
 		eventService.updateEventDescription(event, eventDescriptionForm);
 		attributes.addFlashAttribute("message", "Updated Event Description.");
-		return "redirect:/event/" + getPath(path) + "/settings/description";
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/description";
 
 	}
-
-
-	/*
-	 * @GetMapping("/banner") public String eventBannerForm(@CurrentUser Account
-	 * account, @PathVariable String path, Model model) { Event event =
-	 * eventService.getEventToUpdate(account, path); model.addAttribute(account);
-	 * model.addAttribute(event); return "event/settings/banner"; }
-	 * 
-	 * @PostMapping("/banner") public String eventBannerSubmit(@CurrentUser Account
-	 * account, @PathVariable String path, String image, RedirectAttributes
-	 * attributes) { Event event = eventService.getEventToUpdate(account, path);
-	 * eventService.updateEventBanner(event, image);
-	 * attributes.addFlashAttribute("message", "Updated Event Banner Image.");
-	 * return "redirect:/event/" + getPath(path) + "/settings/banner"; }
-	 * 
-	 * @PostMapping("/banner/enable") public String enableEventBanner(@CurrentUser
-	 * Account account, @PathVariable String path) { Event event =
-	 * eventService.getEventToUpdate(account, path);
-	 * eventService.enableEventBanner(event); return "redirect:/event/" +
-	 * getPath(path) + "/settings/banner"; }
-	 * 
-	 * @PostMapping("/banner/disable") public String disableEventBanner(@CurrentUser
-	 * Account account, @PathVariable String path) { Event event =
-	 * eventService.getEventToUpdate(account, path);
-	 * eventService.disableEventBanner(event); return "redirect:/event/" +
-	 * getPath(path) + "/settings/banner"; }
-	 */
-
+	
 	@GetMapping("/tags")
 	public String eventTagsForm(@CurrentUser Account account, @PathVariable String path, Model model)
 			throws JsonProcessingException {
@@ -197,88 +170,82 @@ public class EventSettingController {
 		Event event = eventService.getEventToUpdateStatus(account, path);
 		eventService.publish(event);
 		attributes.addFlashAttribute("message", "Published event.");
-		return "redirect:/event/" + getPath(path) + "/settings/event";
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
-	
+
 	@PostMapping("/event/close")
 	public String closeEvent(@CurrentUser Account account, @PathVariable String path, RedirectAttributes attributes) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
 		eventService.close(event);
 		attributes.addFlashAttribute("message", "Closed event.");
-		return "redirect:/event/" + getPath(path) + "/settings/event"; 
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
 
 	@PostMapping("/register/start")
 	public String startRegister(@CurrentUser Account account, @PathVariable String path, Model model,
 			RedirectAttributes attributes) {
-		
+
 		Event event = eventService.getEventToUpdateStatus(account, path);
-		if(!event.canUpdateRegistration()) {
+		if (!event.canUpdateRegistration()) {
 			attributes.addFlashAttribute("message", "Registration status can be changed only once in an hour.");
-			return "redirect:/event/" + getPath(path) + "/settings/event";
+			return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 		}
-		
+
 		eventService.startRegistration(event);
 		attributes.addFlashAttribute("message", "Start registration.");
-		return "redirect:/event/" + getPath(path) + "/settings/event";
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
-	
-	
+
 	@PostMapping("/register/stop")
-	public String stopRegister(@CurrentUser Account account, @PathVariable String path, Model model, RedirectAttributes attributes) {
+	public String stopRegister(@CurrentUser Account account, @PathVariable String path, Model model,
+			RedirectAttributes attributes) {
 		Event event = eventService.getEventToUpdate(account, path);
-		if(!event.canUpdateRegistration()) {
+		if (!event.canUpdateRegistration()) {
 			attributes.addFlashAttribute("message", "Registration status can be changed only once in an hour.");
-			return "redirect:/event/" + getPath(path) + "/settings/event";
+			return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 		}
-		
+
 		eventService.stopRegistration(event);
 		attributes.addFlashAttribute("message", "Stop registration.");
-		return "redirect:/event/" + getPath(path) + "/settings/event";
+		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
-	
+
 	@PostMapping("/event/path")
-	public String updateEventPath(@CurrentUser Account account, @PathVariable String path, String newPath, Model model, RedirectAttributes attributes) {
+	public String updateEventPath(@CurrentUser Account account, @PathVariable String path, String newPath, Model model,
+			RedirectAttributes attributes) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
-		if(!eventService.isValidPath(newPath)) {
+		if (!eventService.isValidPath(newPath)) {
 			model.addAttribute(account);
 			model.addAttribute(event);
 			model.addAttribute("eventPathError", "Can not use tihs path.");
 			return "event/settings/event";
 		}
-		
+
 		eventService.updateEventPath(event, newPath);
 		attributes.addFlashAttribute("message", "Updated event path.");
 		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
-	
+
 	@PostMapping("/event/title")
-	public String updateEventTitle(@CurrentUser Account account, @PathVariable String path, String newTitle, Model model, RedirectAttributes attributes) {
+	public String updateEventTitle(@CurrentUser Account account, @PathVariable String path, String newTitle,
+			Model model, RedirectAttributes attributes) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
-		if(!eventService.isValidTitle(newTitle)) {
+		if (!eventService.isValidTitle(newTitle)) {
 			model.addAttribute(account);
 			model.addAttribute(event);
 			model.addAttribute("eventTitleError", "Please enter title again.");
 			return "event/settings/event";
 		}
-	
+
 		eventService.updateEventTitle(event, newTitle);
 		attributes.addFlashAttribute("message", "Updated event title.");
 		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
-	
+
 	@PostMapping("/event/remove")
-	public String removeEvent (@CurrentUser Account account, @PathVariable String path, Model model) {
+	public String removeEvent(@CurrentUser Account account, @PathVariable String path, Model model) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
 		eventService.remove(event);
 		return "redirect:/";
 	}
-	
-
-	private String getPath(String path) {
-		return URLEncoder.encode(path, StandardCharsets.UTF_8);
-	}
-	
-	
-
 }
