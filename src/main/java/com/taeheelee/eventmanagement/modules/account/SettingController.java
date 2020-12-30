@@ -58,12 +58,12 @@ public class SettingController {
 	public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
 		webDataBinder.addValidators(nicknameFormValidator);
 	}
-
+	
 	public static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
 	public static final String SETTINGS_PROFILE_URL = "/settings/profile";
 
 	public static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-	static final String SETTINGS_PASSWORD_URL = "/settings/password";
+	public static final String SETTINGS_PASSWORD_URL = "/settings/password";
 
 	public static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
 	public static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
@@ -100,7 +100,7 @@ public class SettingController {
 	@GetMapping(SETTINGS_PASSWORD_URL)
 	public String passwordUpdateForm(@CurrentUser Account account, Model model) {
 		model.addAttribute(account);
-		model.addAttribute(new PasswordForm());
+		model.addAttribute("passwordForm", new PasswordForm());
 		return SETTINGS_PASSWORD_VIEW_NAME;
 	}
 

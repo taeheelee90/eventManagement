@@ -12,24 +12,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.web.servlet.ResultHandler;
 
+import com.taeheelee.eventmanagement.infra.MockMvcForTest;
 import com.taeheelee.eventmanagement.infra.mail.EmailMessage;
 import com.taeheelee.eventmanagement.infra.mail.EmailService;
-import com.taeheelee.eventmanagement.modules.account.Account;
-import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcForTest
 public class AccountControllerTest {
 
 	@Autowired
@@ -39,9 +35,9 @@ public class AccountControllerTest {
 	@MockBean
 	EmailService emailService;
 	
-	@DisplayName("email confirmation - invalid")
+	@DisplayName("email confirmation - fail")
 	@Test
-	void checkEmailToken_with_wrong_input() throws Exception{
+	void checkEmailToken_fail() throws Exception{
 		
 	    mockMvc.perform(get("/check-email-token")
                 .param("token", "sdfjslwfwef")
@@ -53,9 +49,9 @@ public class AccountControllerTest {
 				
      }
 	
-	@DisplayName("email confirmation - valid")
+	@DisplayName("email confirmation - success")
 	@Test
-	void checkEmailToken_with_correct_input() throws Exception{
+	void checkEmailToken_success() throws Exception{
 		
 		Account account = Account.builder()
 				.email("test@email.com")
@@ -82,16 +78,18 @@ public class AccountControllerTest {
 
 	@DisplayName("login view test")
 	@Test
-	void signUpForm() throws Exception {
+	void show_signupForm() throws Exception {
 		mockMvc.perform(get("/sign-up"))
+				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(view().name("account/sign-up.html"))
 				.andExpect(model().attributeExists("signUpForm"));
 	}
 
-	@DisplayName("signup handling - invalid input")
+
+	@DisplayName("signup handling - fail")
 	@Test
-	void signUpSubmit_with_wrong_input() throws Exception {
+	void signUpSubmit_fail() throws Exception {
 		mockMvc.perform(post("/sign-up")
 				.param("nickname", "testname1")
 				.param("email", "email..")
@@ -99,14 +97,13 @@ public class AccountControllerTest {
 				.with(csrf()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("account/sign-up.html"))
-				.andExpect(unauthenticated())
-				.andExpect(unauthenticated());;
+				.andExpect(unauthenticated());
 
 	}
 
-	@DisplayName("signup handling - valid input")
+	@DisplayName("signup handling - success")
 	@Test
-	void signUpSubmit_with_correct_input() throws Exception {
+	void signUpSubmit_success() throws Exception {
 		mockMvc.perform(post("/sign-up")
 				.param("nickname", "testname1")
 				.param("email", "my@email.com")
@@ -125,5 +122,6 @@ public class AccountControllerTest {
 		// Check email generate token sent
 		then(emailService).should().sendEmail(any(EmailMessage.class));
 	}
+	
 
 }
