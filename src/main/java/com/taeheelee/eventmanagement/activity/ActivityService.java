@@ -42,7 +42,7 @@ public class ActivityService {
 	}
 
 	public void enroll(Activity activity, Account account) {
-		if(enrollmentRepository.existsByActivityAndAccount(activity, account)) {
+		if(!enrollmentRepository.existsByActivityAndAccount(activity, account)) {
 			Enrollment enrollment = new Enrollment();
 			enrollment.setEnrolledAt(LocalDateTime.now());
 			enrollment.setAccepted(activity.isAbleToAcceptWaitingEnrollment());

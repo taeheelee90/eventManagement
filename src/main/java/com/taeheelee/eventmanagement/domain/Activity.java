@@ -1,6 +1,7 @@
 package com.taeheelee.eventmanagement.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,17 +58,17 @@ public class Activity {
 	@Column(nullable = false)
 	private LocalDateTime endDateTime;
 
-	@Column(nullable = true)
+	@Column
 	private Integer limitOfEnrollments;
 
 	@OneToMany(mappedBy = "activity")
-	private List<Enrollment> enrollments;
+	private List<Enrollment> enrollments = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
 	private ActivityType activityType;
 
 	public boolean isEnrollableFor(UserAccount userAccount) {
-		return isNotClosed() && !isAttended(userAccount) && !isAlreadyEnrolled(userAccount);
+        return isNotClosed() && !isAttended(userAccount) && !isAlreadyEnrolled(userAccount);
 	}
 
 	public boolean isAttended(UserAccount userAccount) {
