@@ -42,7 +42,7 @@ public class ActivityService {
 	}
 
 	public void enroll(Activity activity, Account account) {
-		if(!enrollmentRepository.existsByActivityAndAccount(activity, account)) {
+		if (!enrollmentRepository.existsByActivityAndAccount(activity, account)) {
 			Enrollment enrollment = new Enrollment();
 			enrollment.setEnrolledAt(LocalDateTime.now());
 			enrollment.setAccepted(activity.isAbleToAcceptWaitingEnrollment());
@@ -50,17 +50,36 @@ public class ActivityService {
 			activity.addEnrollment(enrollment);
 			enrollmentRepository.save(enrollment);
 		}
-		
+
 	}
 
 	public void disenroll(Activity activity, Account account) {
 		Enrollment enrollment = enrollmentRepository.findByActivityAndAccount(activity, account);
-		if(!enrollment.isAttended()) {
+		if (!enrollment.isAttended()) {
 			activity.removeEnrollment(enrollment);
 			enrollmentRepository.delete(enrollment);
 			activity.acceptNextWaitingEnrollment();
 		}
-		
+
+	}
+
+	public void acceptEnrollment(Activity activity, Enrollment enrollment) {
+		activity.accept(enrollment);
+
+	}
+
+	public void rejectEnrollment(Activity activity, Enrollment enrollment) {
+		activity.reject(enrollment);
+	}
+
+	public void checkinEnrollment(Enrollment enrollment) {
+		enrollment.setAttended(true);
+
+	}
+
+	public void cancelCheckinEnrollment(Enrollment enrollment) {
+		enrollment.setAttended(false);
+
 	}
 
 }

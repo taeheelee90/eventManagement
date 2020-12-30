@@ -87,10 +87,10 @@
                                 <th scope="col">Registration date and time</th>
                                 <th scope="col">Registration status</th>
                                 <th th:if="${event.isManager(#authentication.principal)}" scope="col">
-                                   	Manage registrations
+                                   	Manage Enrollment
                                 </th>
                                 <th th:if="${event.isManager(#authentication.principal)}" scope="col">
-                                  	Manage attendances 
+                                  	Manage Checkin 
                                 </th>
                             </tr>
                         </thead>

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +22,7 @@ import com.taeheelee.eventmanagement.activity.form.ActivityForm;
 import com.taeheelee.eventmanagement.activity.validator.ActivityFormValidator;
 import com.taeheelee.eventmanagement.domain.Account;
 import com.taeheelee.eventmanagement.domain.Activity;
+import com.taeheelee.eventmanagement.domain.Enrollment;
 import com.taeheelee.eventmanagement.domain.Event;
 import com.taeheelee.eventmanagement.event.EventRepository;
 import com.taeheelee.eventmanagement.event.EventService;
@@ -157,25 +157,33 @@ public class ActivityController {
 		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
 	}
 	
+	@GetMapping("/activities/{activityId}/enrollments/{enrollmentId}/accept")
+	public String acceptEnrollment(@CurrentUser Account account, @PathVariable String path, @PathVariable("activityId") Activity activity, @PathVariable("enrollmentId") Enrollment enrollment) {
+		Event event = eventService.getEventToUpdate(account, path);
+		activityService.acceptEnrollment(activity, enrollment);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+	}
+	
+	@GetMapping("/activities/{activityId}/enrollments/{enrollmentId}/reject")
+	public String rejectEnrollment(@CurrentUser Account account, @PathVariable String path, @PathVariable("activityId") Activity activity, @PathVariable("enrollmentId") Enrollment enrollment) {
+		Event event = eventService.getEventToUpdate(account, path);
+		activityService.rejectEnrollment(activity, enrollment);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+	}
+	
+	@GetMapping("/activities/{activityId}/enrollments/{enrollmentId}/checkin")
+	public String checkinEnrollment(@CurrentUser Account account, @PathVariable String path, @PathVariable("activityId") Activity activity, @PathVariable("enrollmentId") Enrollment enrollment) {
+		Event event = eventService.getEventToUpdate(account, path);
+		activityService.checkinEnrollment(enrollment);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+	}
 	
 	
+	@GetMapping("/activities/{activityId}/enrollments/{enrollmentId}/cancel-checkin")
+	public String cancelCheckinEnrollment(@CurrentUser Account account, @PathVariable String path, @PathVariable("activityId") Activity activity, @PathVariable("enrollmentId") Enrollment enrollment) {
+		Event event = eventService.getEventToUpdate(account, path);
+		activityService.cancelCheckinEnrollment(enrollment);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
