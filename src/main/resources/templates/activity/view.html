@@ -64,8 +64,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <form th:action="@{'/event/' + ${event.path} + '/activites/' + ${activity.id} + '/enroll'}" method="post">
-                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm</button>
+                            <form th:action="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/enroll'}" method="post">
+                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm Registration</button>
                             </form>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                     <span th:text="${activity.limitOfEnrollments}"></span>
                 </dd>
 
-                <dt class="font-weight-light">Due dates</dt>
+                <dt class="font-weight-light">Enrollment due date</dt>
                 <dd>
                     <span class="date" th:text="${activity.endEnrollmentDateTime}"></span>
                     <span class="weekday" th:text="${activity.endEnrollmentDateTime}"></span><br/>
@@ -153,8 +153,8 @@
                 <dt class="font-weight-light">Activity schedules</dt>
                 <dd>
                     <span class="date" th:text="${activity.startDateTime}"></span>
-                    <span class="weekday" th:text="${activity.startDateTime}"></span><br/>
-                    <span class="time" th:text="${activity.startDateTime}"></span> -
+                    <span class="time" th:text="${activity.startDateTime}"></span> <br/> -
+                    <span class="date" th:text="${activity.endDateTime}"></span>
                     <span class="time" th:text="${activity.endDateTime}"></span>
                 </dd>
 

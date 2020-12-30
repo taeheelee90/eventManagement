@@ -143,6 +143,19 @@ public class ActivityController {
 		return "redirect:/event/" + event.getEncodedPath() + "/activities";
 	}
 	
+	@PostMapping("/activities/{id}/enroll")
+	public String enroll(@CurrentUser Account account, @PathVariable String path, @PathVariable("id") Activity activity) {
+		Event event = eventService.getEventToEnroll(path);
+		activityService.enroll(activity, account);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+	}
+	
+	@PostMapping("/activities/{id}/disenroll")
+	public String disenroll(@CurrentUser Account account, @PathVariable String path, @PathVariable("id") Activity activity) {
+		Event event = eventService.getEventToEnroll(path);
+		activityService.disenroll(activity, account);
+		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
+	}
 	
 	
 	

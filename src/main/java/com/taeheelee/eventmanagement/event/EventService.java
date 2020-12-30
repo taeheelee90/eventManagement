@@ -164,4 +164,10 @@ public class EventService {
 		event.removeMember(account);
 	}
 
+	public Event getEventToEnroll(String path) {
+		Event event = eventRepository.findEventOnlyByPath(path);
+		checkIfExistingEvent(path, event);
+		return event;
+	}
+
 }
