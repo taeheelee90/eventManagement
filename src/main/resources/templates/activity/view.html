@@ -134,8 +134,8 @@
             <dl class="col-3 pt-3 text-right">
                 <dt class="font-weight-light">Enrollment method</dt>
                 <dd>
-                    <span th:if="${activity.activityType == T(com.taeheelee.eventmanagement.domain.ActivityType).FCFS}">FCFS</span>
-                    <span th:if="${activity.activityType == T(com.taeheelee.eventmanagement.domain.ActivityType).COMFIRMATIVE}">Manager's confirmation</span>
+                    <span th:if="${activity.activityType == T(com.taeheelee.eventmanagement.modules.activity.ActivityType).FCFS}">FCFS</span>
+                    <span th:if="${activity.activityType == T(com.taeheelee.eventmanagement.modules.activity.ActivityType).COMFIRMATIVE}">Manager's confirmation</span>
                 </dd>
 
                 <dt class="font-weight-light">Limit of enrollments</dt>

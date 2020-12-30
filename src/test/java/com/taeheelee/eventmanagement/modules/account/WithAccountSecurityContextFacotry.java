@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement;
+package com.taeheelee.eventmanagement.modules.account;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

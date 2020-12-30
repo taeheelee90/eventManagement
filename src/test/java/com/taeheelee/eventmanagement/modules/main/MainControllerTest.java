@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.main;
+package com.taeheelee.eventmanagement.modules.main;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;

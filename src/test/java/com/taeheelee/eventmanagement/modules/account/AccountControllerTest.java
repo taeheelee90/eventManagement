@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.account;
+package com.taeheelee.eventmanagement.modules.account;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

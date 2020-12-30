@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement;
+package com.taeheelee.eventmanagement.modules.account;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

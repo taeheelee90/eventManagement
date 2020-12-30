@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.event;
+package com.taeheelee.eventmanagement.modules.event;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taeheelee.eventmanagement.WithAccount;
 import com.taeheelee.eventmanagement.modules.account.Account;
+import com.taeheelee.eventmanagement.modules.account.WithAccount;
 import com.taeheelee.eventmanagement.modules.event.Event;
 
 import lombok.RequiredArgsConstructor;

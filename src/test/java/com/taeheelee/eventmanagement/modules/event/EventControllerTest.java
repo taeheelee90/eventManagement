@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.event;
+package com.taeheelee.eventmanagement.modules.event;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -20,9 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taeheelee.eventmanagement.WithAccount;
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.AccountRepository;
+import com.taeheelee.eventmanagement.modules.account.WithAccount;
 import com.taeheelee.eventmanagement.modules.event.Event;
 import com.taeheelee.eventmanagement.modules.event.EventRepository;
 import com.taeheelee.eventmanagement.modules.event.EventService;

@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.settings;
+package com.taeheelee.eventmanagement.modules.account;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taeheelee.eventmanagement.WithAccount;
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 import com.taeheelee.eventmanagement.modules.account.AccountService;
