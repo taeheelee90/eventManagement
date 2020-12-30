@@ -16,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.taeheelee.eventmanagement.Account.AccountRepository;
-import com.taeheelee.eventmanagement.Account.AccountService;
-import com.taeheelee.eventmanagement.Account.SignUpForm;
+import com.taeheelee.eventmanagement.modules.account.AccountRepository;
+import com.taeheelee.eventmanagement.modules.account.AccountService;
+import com.taeheelee.eventmanagement.modules.account.form.SignUpForm;
 
 @SpringBootTest
 @AutoConfigureMockMvc

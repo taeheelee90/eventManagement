@@ -28,15 +28,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taeheelee.eventmanagement.WithAccount;
-import com.taeheelee.eventmanagement.Account.AccountRepository;
-import com.taeheelee.eventmanagement.Account.AccountService;
-import com.taeheelee.eventmanagement.domain.Account;
-import com.taeheelee.eventmanagement.domain.Tag;
-import com.taeheelee.eventmanagement.domain.Zone;
-import com.taeheelee.eventmanagement.settings.form.TagForm;
-import com.taeheelee.eventmanagement.settings.form.ZoneForm;
-import com.taeheelee.eventmanagement.tag.TagRepository;
-import com.taeheelee.eventmanagement.zone.ZoneRepository;
+import com.taeheelee.eventmanagement.modules.account.Account;
+import com.taeheelee.eventmanagement.modules.account.AccountRepository;
+import com.taeheelee.eventmanagement.modules.account.AccountService;
+import com.taeheelee.eventmanagement.modules.account.SettingController;
+import com.taeheelee.eventmanagement.modules.account.form.TagForm;
+import com.taeheelee.eventmanagement.modules.account.form.ZoneForm;
+import com.taeheelee.eventmanagement.modules.tag.Tag;
+import com.taeheelee.eventmanagement.modules.tag.TagRepository;
+import com.taeheelee.eventmanagement.modules.zone.Zone;
+import com.taeheelee.eventmanagement.modules.zone.ZoneRepository;
 
 @Transactional
 @SpringBootTest
@@ -98,7 +99,7 @@ public class SettingsControllerTest {
 		mockMvc.perform(post(SettingController.SETTINGS_PROFILE_URL).param("bio", bio)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(SettingController.SETTINGS_PROFILE_VIEW_NAME))
+                .andExpect(view().name(SettingController.SETTINGS_PROFILE_URL))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profile"))
                 .andExpect(model().hasErrors());
@@ -113,7 +114,7 @@ public class SettingsControllerTest {
 	@Test
 	void updatePasswordForm() throws Exception {
 		
-		mockMvc.perform(get(SettingController.SETTINGS_PASSWORD_URL))
+		mockMvc.perform(get(SettingController.SETTINGS_PROFILE_URL))
         .andExpect(status().isOk())
         .andExpect(model().attributeExists("account"))
         .andExpect(model().attributeExists("passwordForm"));
@@ -124,12 +125,12 @@ public class SettingsControllerTest {
 	@Test
 	void updatePassword() throws Exception {
 		
-		mockMvc.perform(post(SettingController.SETTINGS_PASSWORD_URL)
+		mockMvc.perform(post(SettingController.SETTINGS_PROFILE_URL)
 				.param("newPassword", "12345678")
                 .param("newPasswordConfirm", "12345678")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl(SettingController.SETTINGS_PASSWORD_URL))
+				.andExpect(redirectedUrl(SettingController.SETTINGS_PROFILE_URL))
 				.andExpect(flash().attributeExists("message"));
 
 		Account testUser = accountRepository.findByNickname("testUser");
@@ -142,7 +143,7 @@ public class SettingsControllerTest {
 	@Test
 	void updatePassword_error() throws Exception {
 		
-		mockMvc.perform(post(SettingController.SETTINGS_PASSWORD_URL)
+		mockMvc.perform(post(SettingController.SETTINGS_PROFILE_URL)
 				.param("newPassword", "12345678")
                 .param("newPasswordConfirm", "123456789")
                 .with(csrf()))
@@ -156,7 +157,7 @@ public class SettingsControllerTest {
 	@Test
 	void updateNotificationForm() throws Exception {
 		
-		mockMvc.perform(get(SettingController.SETTINGS_NOTIFICATIONS_URL))
+		mockMvc.perform(get(SettingController.SETTINGS_PROFILE_URL))
         .andExpect(status().isOk())
         .andExpect(model().attributeExists("account"))
         .andExpect(model().attributeExists("notifications"));
@@ -167,7 +168,7 @@ public class SettingsControllerTest {
 	@DisplayName("Show Edit Tags Form")
 	@Test
 	void updateTagForm() throws Exception {
-		mockMvc.perform(get(SettingController.SETTINGS_TAGS_URL))
+		mockMvc.perform(get(SettingController.SETTINGS_PROFILE_URL))
 				.andExpect(view().name(SettingController.SETTINGS_TAGS_VIEW_NAME))
 				.andExpect(model().attributeExists("account"))
 				.andExpect(model().attributeExists("whiteList"))

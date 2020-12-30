@@ -22,10 +22,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taeheelee.eventmanagement.Account.AccountRepository;
-import com.taeheelee.eventmanagement.domain.Account;
-import com.taeheelee.eventmanagement.mail.EmailMessage;
-import com.taeheelee.eventmanagement.mail.EmailService;
+import com.taeheelee.eventmanagement.infra.mail.EmailMessage;
+import com.taeheelee.eventmanagement.infra.mail.EmailService;
+import com.taeheelee.eventmanagement.modules.account.Account;
+import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 
 @Transactional
 @SpringBootTest

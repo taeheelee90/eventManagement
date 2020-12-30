@@ -21,9 +21,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.WithAccount;
-import com.taeheelee.eventmanagement.Account.AccountRepository;
-import com.taeheelee.eventmanagement.domain.Account;
-import com.taeheelee.eventmanagement.domain.Event;
+import com.taeheelee.eventmanagement.modules.account.Account;
+import com.taeheelee.eventmanagement.modules.account.AccountRepository;
+import com.taeheelee.eventmanagement.modules.event.Event;
+import com.taeheelee.eventmanagement.modules.event.EventRepository;
+import com.taeheelee.eventmanagement.modules.event.EventService;
 
 import lombok.RequiredArgsConstructor;
 
