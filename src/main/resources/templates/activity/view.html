@@ -191,13 +191,13 @@
                         </div>
                         <div class="modal-body">
                             <p>Do you want to cancel this activity?</p>
-                            <p>If you press <strong>confirm</strong> button, all records about this activity will be removed.</p>
+                            <p>If you press <strong>confirm</strong> button, all records about this activity will be deleted.</p>
                          
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <form th:action="@{'/event/' + ${event.path} + '/activities/' + ${activity.id}}" th:method="delete">
-                                <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm</button>
+                            <form th:action="@{'/event/' + ${event.path} + '/activities/' + ${activity.id} + '/delete'}" th:method="post">
+                             	<button class="btn btn-primary" type="submit" aria-describedby="submitHelp">Confirm</button>
                             </form>
                         </div>
                     </div>

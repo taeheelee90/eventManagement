@@ -22,12 +22,12 @@ public class ActivityService {
 
 	private final ActivityRepository activityRepository;
 	private final ModelMapper modelMapper;
-	
+
 	public Activity createEvent(Activity activity, Event event, Account account) {
 		activity.setCreatedBy(account);
 		activity.setCreatedDateTime(LocalDateTime.now());
 		activity.setEvent(event);
-		
+
 		return activityRepository.save(activity);
 	}
 
@@ -36,5 +36,9 @@ public class ActivityService {
 		activity.acceptWaitingList();
 	}
 
+	public void deleteActivity(Activity activity) {
+		activityRepository.delete(activity);
+
+	}
 
 }
