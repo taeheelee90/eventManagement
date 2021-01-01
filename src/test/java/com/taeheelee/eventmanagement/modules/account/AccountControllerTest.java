@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
 import com.taeheelee.eventmanagement.infra.MockMvcForTest;
 import com.taeheelee.eventmanagement.infra.mail.EmailMessage;
 import com.taeheelee.eventmanagement.infra.mail.EmailService;

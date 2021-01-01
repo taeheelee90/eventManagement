@@ -21,9 +21,7 @@ import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.AccountObjectMother;
 import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 import com.taeheelee.eventmanagement.modules.account.WithAccount;
-import com.taeheelee.eventmanagement.modules.event.Event;
-import com.taeheelee.eventmanagement.modules.event.EventRepository;
-import com.taeheelee.eventmanagement.modules.event.EventService;
+
 
 @MockMvcForTest
 public class EventControllerTest {
