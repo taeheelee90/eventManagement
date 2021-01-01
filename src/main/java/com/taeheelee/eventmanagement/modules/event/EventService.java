@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
+import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventCreated;
 import com.taeheelee.eventmanagement.modules.event.form.EventDescriptionForm;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
 import com.taeheelee.eventmanagement.modules.zone.Zone;
@@ -22,14 +23,13 @@ public class EventService {
 
 	private final EventRepository eventRepository;
 	private final ModelMapper modelMapper;
-	// private final ApplicationEventPublisher appEventPublisher;
+	private final ApplicationEventPublisher appEventPublisher;
 
 	public com.taeheelee.eventmanagement.modules.event.Event createNewEvent(com.taeheelee.eventmanagement.modules.event.Event event,
 			Account account) {
 		com.taeheelee.eventmanagement.modules.event.Event newEvent = eventRepository.save(event);
 		newEvent.addManager(account);
-
-		return newEvent;
+	return newEvent;
 	}
 
 	public Event getEventToUpdate(Account account, String path) {
@@ -46,8 +46,7 @@ public class EventService {
 
 	public void updateEventDescription(Event event, @Valid EventDescriptionForm eventDescriptionForm) {
 		modelMapper.map(eventDescriptionForm, event);
-		// appEventPublisher.publishEvent(new EventUpdate(event, "Updated Event
-		// Description"));
+	
 
 	}
 
@@ -107,6 +106,7 @@ public class EventService {
 
 	public void publish(Event event) {
 		event.publish();
+		this.appEventPublisher.publishEvent(new EventCreated(event));
 
 	}
 
