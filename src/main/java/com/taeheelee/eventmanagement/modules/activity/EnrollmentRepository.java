@@ -12,5 +12,4 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
 	Enrollment findByActivityAndAccount(Activity activity, Account account);
 
-	
 }

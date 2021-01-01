@@ -21,7 +21,7 @@ public class ActivityService {
 	private final EnrollmentRepository enrollmentRepository;
 	private final ModelMapper modelMapper;
 
-	public Activity createEvent(Activity activity, Event event, Account account) {
+	public Activity createActivity(Activity activity, Event event, Account account) {
 		activity.setCreatedBy(account);
 		activity.setCreatedDateTime(LocalDateTime.now());
 		activity.setEvent(event);

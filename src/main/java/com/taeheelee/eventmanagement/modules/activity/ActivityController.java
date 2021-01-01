@@ -63,7 +63,7 @@ public class ActivityController {
 			return "activity/form";
 		}
 
-		Activity activity = activityService.createEvent(modelMapper.map(activityForm, Activity.class), event, account);
+		Activity activity = activityService.createActivity(modelMapper.map(activityForm, Activity.class), event, account);
 		return "redirect:/event/" + event.getEncodedPath() + "/activities/" + activity.getId();
 
 	}

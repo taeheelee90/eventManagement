@@ -1,7 +1,8 @@
 package com.taeheelee.eventmanagement.modules.main;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -11,17 +12,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.taeheelee.eventmanagement.infra.MockMvcForTest;
 import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 import com.taeheelee.eventmanagement.modules.account.AccountService;
 import com.taeheelee.eventmanagement.modules.account.form.SignUpForm;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcForTest
 class MainControllerTest {
 	
 	@Autowired MockMvc mockMvc;
@@ -44,7 +43,7 @@ class MainControllerTest {
 	
 	
 	
-	@DisplayName("Email Login Success")
+	@DisplayName("Email Login - Success")
 	@Test
 	void login_with_email() throws Exception {		
 				
@@ -59,7 +58,7 @@ class MainControllerTest {
 	}
 	
 	
-	@DisplayName("Nickname Login Success")
+	@DisplayName("Nickname Login - Success")
 	@Test
 	void login_with_nickname() throws Exception {
 		mockMvc.perform(post("/login")
@@ -72,7 +71,7 @@ class MainControllerTest {
 
 	}
 	
-	@DisplayName("Login Fail")
+	@DisplayName("Login - Fail")
 	@Test
 	void login_fail() throws Exception {
 		mockMvc.perform(post("/login")

@@ -1,4 +1,4 @@
-package com.taeheelee.eventmanagement.modules.activity;
+package com.taeheelee.eventmanagement.modules.event;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
