@@ -1,8 +1,11 @@
 package com.taeheelee.eventmanagement.modules.event;
 
+import java.util.HashSet;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventCreated;
 import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventUpdated;
 import com.taeheelee.eventmanagement.modules.event.form.EventDescriptionForm;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
+import com.taeheelee.eventmanagement.modules.tag.TagRepository;
 import com.taeheelee.eventmanagement.modules.zone.Zone;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventService {
 
+	private final TagRepository tagRepository;
 	private final EventRepository eventRepository;
 	private final ModelMapper modelMapper;
 	private final ApplicationEventPublisher appEventPublisher;
@@ -171,5 +176,27 @@ public class EventService {
 		checkIfExistingEvent(path, event);
 		return event;
 	}
+
+	/* creating random data
+	public void generateTestData(Account account) {
+		for (int i = 0; i <40; i ++) {
+			String randomString = RandomString.make(6);
+			Event event = Event.builder()
+								.title("Test Event " + randomString)
+								.path("test-" + randomString)
+								.shortDescription("test")
+								.fullDescription("testtesttest")
+								.tags(new HashSet<>())
+								.managers(new HashSet<>())
+								.build();
+			
+			event.publish();
+			Event newEvent = this.createNewEvent(event, account);
+			Tag web = tagRepository.findByTitle("WEB");
+			newEvent.getTags().add(web);
+					
+		}
+		
+	}*/
 
 }

@@ -14,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.UserAccount;

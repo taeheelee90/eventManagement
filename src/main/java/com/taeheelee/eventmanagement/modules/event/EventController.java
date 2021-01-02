@@ -84,4 +84,11 @@ public class EventController {
 		eventService.removeMember(event, account);
 		return "redirect:/event/" + event.getEncodedPath() + "/members";
 	}
+	
+	/*
+	@GetMapping("/event/data")
+	public String generateTestData(@CurrentUser Account account) {
+		eventService.generateTestData(account);
+		return "redirect:/";
+	}*/
 }
