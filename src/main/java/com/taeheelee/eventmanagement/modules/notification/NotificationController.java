@@ -27,7 +27,7 @@ public class NotificationController {
 	
 	@GetMapping("/notifications")
 	public String showNotifications(@CurrentUser Account account, Model model) {
-		List<Notification> notifications = notificationRepository.findByAccountAndCheckedOrderByCreatedAtDesc(account, true);
+		List<Notification> notifications = notificationRepository.findByAccountAndCheckedOrderByCreatedAtDesc(account, false);
 		long numberOfChecked = notificationRepository.countByAccountAndChecked(account, true);
 		categorizeNotifications(model, notifications, numberOfChecked, notifications.size());
 		model.addAttribute("isNew", true);
@@ -44,7 +44,7 @@ public class NotificationController {
 		return "notification/view";
 	}
 	
-	@DeleteMapping("/notifications/{id}")
+	@DeleteMapping("/notifications")
 	public String deleteNotification(@CurrentUser Account account) {
 		notificationRepository.deleteByAccountAndChecked(account, true);
 		return "redirect:/notifications";
