@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventCreated;
+import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventUpdated;
 import com.taeheelee.eventmanagement.modules.event.form.EventDescriptionForm;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
 import com.taeheelee.eventmanagement.modules.zone.Zone;
@@ -46,8 +47,7 @@ public class EventService {
 
 	public void updateEventDescription(Event event, @Valid EventDescriptionForm eventDescriptionForm) {
 		modelMapper.map(eventDescriptionForm, event);
-	
-
+		appEventPublisher.publishEvent(new EventUpdated(event, "Event description has been updated"));
 	}
 
 
@@ -112,14 +112,17 @@ public class EventService {
 
 	public void close(Event event) {
 		event.close();
+		appEventPublisher.publishEvent(new EventUpdated(event, "Event is closed."));
 	}
 
 	public void startRegistration(Event event) {
 		event.startRegistration();
+		appEventPublisher.publishEvent(new EventUpdated(event, "Event started recruiting members."));
 	}
 
 	public void stopRegistration(Event event) {
 		event.stopRegistration();
+		appEventPublisher.publishEvent(new EventUpdated(event, "Event finished recruiting members."));
 
 	}
 

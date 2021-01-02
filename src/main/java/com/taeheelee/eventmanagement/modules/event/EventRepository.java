@@ -9,24 +9,27 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
 	boolean existsByPath(String path);
 
-	@EntityGraph(value = "Event.withAll", type = EntityGraph.EntityGraphType.LOAD)
+	@EntityGraph(attributePaths = {"tags", "zones", "managers", "members"}, type = EntityGraph.EntityGraphType.LOAD)
 	Event findByPath(String path);
 
-	@EntityGraph(value = "Event.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+	@EntityGraph(attributePaths = {"tags", "managers"})
 	Event findEventWithTagsByPath(String path);
 
-	@EntityGraph(value = "Event.withZonesAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+	@EntityGraph(attributePaths = {"zones", "managers"})
 	Event findEventWithZonesByPath(String path);
 
-	@EntityGraph(value = "Event.withManagers", type = EntityGraph.EntityGraphType.FETCH)
+	@EntityGraph(attributePaths = {"managers"})
 	Event findEventWithManagersByPath(String path);
 
-	@EntityGraph(value = "Event.withMembers", type = EntityGraph.EntityGraphType.FETCH)
+	@EntityGraph(attributePaths = {"members"})
 	Event findEventWithMembersByPath(String path);
 
 	Event findEventOnlyByPath(String path);
 	
-	@EntityGraph(value = "Event.withTagsAndZones", type = EntityGraph.EntityGraphType.FETCH)
+	@EntityGraph(attributePaths = {"zones", "tags"})
 	Event findEventWithTagsAndZonesById(Long id);
+
+	@EntityGraph(attributePaths = {"members", "managers"})
+	Event findEventWithManagersAndMembersById(Long id);
 
 }

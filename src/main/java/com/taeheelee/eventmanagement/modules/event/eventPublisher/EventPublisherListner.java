@@ -1,6 +1,8 @@
 package com.taeheelee.eventmanagement.modules.event.eventPublisher;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -47,13 +49,32 @@ public class EventPublisherListner {
 		accounts.forEach(account -> {
 			if (account.isEventCreatedByEmail()) {
 				sendEventCreatedEmail(event, account, "New event created",
-						"Event Management, '" + event.getTitle() + "'.");
+						"Event Management, '" + event.getTitle() + "' is created.");
 			}
 
 			if (account.isEventCreatedByWeb()) {
 				sendNotification(event, account, event.getShortDescription(), NotificationType.EVENT_CREATED);
 			}
 		});
+	}
+	
+	@EventListener
+	public void listenEventUpdated(EventUpdated eventUpdated) {
+		Event event = eventRepository.findEventWithManagersAndMembersById(eventUpdated.getEvent().getId());
+		Set<Account> accounts = new HashSet<>();
+		accounts.addAll(event.getManagers());
+		accounts.addAll(event.getMembers());
+		
+		accounts.forEach(a -> {
+			if(a.isEventUpdateByEmail()) {
+				sendEventCreatedEmail (event, a, eventUpdated.getMessage(), "Event Management, '" + event.getTitle() + "' has updates.");
+			}
+			
+			if(a.isEventUpdateByWeb()) {
+				sendNotification(event, a, eventUpdated.getMessage(), NotificationType.EVENT_UPDATED);
+			}
+		});
+		
 	}
 
 	private void sendNotification(Event event, Account account, String msg, NotificationType type) {

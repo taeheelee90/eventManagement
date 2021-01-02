@@ -3,12 +3,14 @@ package com.taeheelee.eventmanagement.modules.activity;
 import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.activity.form.ActivityForm;
 import com.taeheelee.eventmanagement.modules.event.Event;
+import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventUpdated;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,22 +22,27 @@ public class ActivityService {
 	private final ActivityRepository activityRepository;
 	private final EnrollmentRepository enrollmentRepository;
 	private final ModelMapper modelMapper;
+	private final ApplicationEventPublisher appEventPublisher;
 
 	public Activity createActivity(Activity activity, Event event, Account account) {
 		activity.setCreatedBy(account);
 		activity.setCreatedDateTime(LocalDateTime.now());
 		activity.setEvent(event);
 
+		appEventPublisher.publishEvent(new EventUpdated(activity.getEvent(),  "'" + activity.getTitle() + "' activity has been created."));
+		
 		return activityRepository.save(activity);
 	}
 
 	public void updateActivity(Activity activity, ActivityForm activityForm) {
 		modelMapper.map(activityForm, activity);
 		activity.acceptWaitingList();
+		appEventPublisher.publishEvent(new EventUpdated(activity.getEvent(),  "'" + activity.getTitle() + "' activity has been updated."));
 	}
 
 	public void deleteActivity(Activity activity) {
 		activityRepository.delete(activity);
+		appEventPublisher.publishEvent(new EventUpdated(activity.getEvent(),  "'" + activity.getTitle() + "' activity has been deleted."));
 
 	}
 

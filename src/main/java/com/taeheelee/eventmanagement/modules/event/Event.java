@@ -29,16 +29,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NamedEntityGraph(name = "Event.withAll", attributeNodes = { @NamedAttributeNode("tags"), @NamedAttributeNode("zones"),
-		@NamedAttributeNode("managers"), @NamedAttributeNode("members") })
-@NamedEntityGraph(name = "Event.withTagsAndManagers", attributeNodes = { @NamedAttributeNode("tags"),
-		@NamedAttributeNode("managers") })
-@NamedEntityGraph(name = "Event.withTagsAndZones", attributeNodes = { @NamedAttributeNode("tags"),
-		@NamedAttributeNode("zones") })
-@NamedEntityGraph(name = "Event.withZonesAndManagers", attributeNodes = { @NamedAttributeNode("zones"),
-		@NamedAttributeNode("managers") })
-@NamedEntityGraph(name = "Event.withManagers", attributeNodes = { @NamedAttributeNode("managers") })
-@NamedEntityGraph(name = "Event.withMembers", attributeNodes = { @NamedAttributeNode("members") })
 @Entity
 @Getter
 @Setter
@@ -173,7 +163,7 @@ public class Event {
 
 	public void removeMember(Account account) {
 		this.getMembers().remove(account);
-		this.memberCount--;		
+		this.memberCount--;
 	}
 
 }
