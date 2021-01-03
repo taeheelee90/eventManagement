@@ -1,7 +1,5 @@
 package com.taeheelee.eventmanagement.modules.main;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
+import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 import com.taeheelee.eventmanagement.modules.account.CurrentUser;
 import com.taeheelee.eventmanagement.modules.event.Event;
 import com.taeheelee.eventmanagement.modules.event.EventRepository;
@@ -23,10 +22,12 @@ public class MainController {
 	
 	private final EventRepository eventRepository;
 
+
 	@GetMapping("/")
 	public String home(@CurrentUser Account account, Model model) {
 		if(account != null) {
 			model.addAttribute(account);
+		
 		}
 		model.addAttribute("eventList", eventRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false));
 		return "index";

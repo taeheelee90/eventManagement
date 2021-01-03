@@ -16,4 +16,5 @@ public interface AccountRepository extends JpaRepository <Account, Long>, Queryd
 
 	Account findByNickname(String nickname);
 
+
 }
