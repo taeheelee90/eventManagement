@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Profile("dev")
+//@Profile("dev")
 @Component
 @RequiredArgsConstructor
 public class HtmlEmailService implements EmailService {
