@@ -1,5 +1,6 @@
 package com.taeheelee.eventmanagement.modules.account;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +18,7 @@ public class UserAccount extends User {
 	private Account account;
 	
 	public UserAccount(Account account) {
-		super(account.getNickname(), account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		super(account.getNickname(), account.getPassword(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 		this.account = account;
 	}
 

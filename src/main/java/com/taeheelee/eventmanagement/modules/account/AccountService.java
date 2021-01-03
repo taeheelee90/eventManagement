@@ -1,5 +1,6 @@
 package com.taeheelee.eventmanagement.modules.account;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -80,7 +81,7 @@ public class AccountService implements UserDetailsService {
 
 	public void login(Account account) {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new UserAccount(account),
-				account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+				account.getPassword(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
 		SecurityContextHolder.getContext().setAuthentication(token);
 	}
 
