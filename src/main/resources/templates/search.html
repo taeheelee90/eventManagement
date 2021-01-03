@@ -4,9 +4,11 @@
 <body class="bg-light">
     <div th:replace="fragments.html :: main-nav"></div>
     <div class="container">
+    
+    <!-- Title -->
         <div class="py-5 text-center">
             <p class="lead" th:if="${eventPage.getTotalElements() == 0}">
-                <strong th:text="${keyword}" id="keyword" class="context"></strong>is not found.
+                Event related to <strong th:text="${keyword}" id="keyword" class="context"></strong> is not found.
             </p>
             <p class="lead" th:if="${eventPage.getTotalElements() > 0}">
                There are <span th:text="${eventPage.getTotalElements()}"></span> events related to <strong th:text="${keyword}" id="keyword" class="context"></strong>.
@@ -28,9 +30,49 @@
                 </div>
             </div>
         </div>
+        
+        
+        <!-- Page card vieew -->
         <div class="row justify-content-center">
-            <div th:replace="fragments.html :: event-list (eventList=${eventPage.getContent()})"></div>
+         <div class="col-sm-10">
+         	<div class="row">
+         		<div class="col-md-4" th:each="event: ${eventPage.getContent()}">
+         			<div class="card mb-4 shadow-sm">
+         				<div class="card-body">
+         					<a th:href ="@{'/event/' + ${event.path}}" class="text-decoration-none">
+         						<h5 class="card-title context" th:text="${event.title}"></h5>
+         					</a>
+         					
+         					<p class="card-text" th:text="${event.shortDescription}">Short description</p>
+         					<p class="card-text context">
+         						<span th:each="tag: ${event.tags}" class="font-weight-light text-monospace badge badge-pill badge-primary">
+         							<a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+         								<i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+         							</a>
+         						</span>
+         						<span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary">
+         							<a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+         								<i class="fa fa-tag"></i> <span th:text="${zone.city}" class="text-white">Zone</span>
+         							</a>
+         						</span>       						
+         					</p>
+         					
+         					<div class="d-flex justify-content-between alighn-items-center">
+         						<small class="text-muted">
+         							<i class="fa fa-user-circle"></i>
+         							<span th:text="${event.members.size()}"></span>
+         						</small>
+         						
+         						<small class="text-muted date" th:text="${event.publishedDateTime}"></small>
+         					</div>         					         					
+         				</div>         			
+         			</div>       		
+         		</div>
+         	</div>
+            
         </div>
+        
+        <!-- Pagination -->
         <div class="row justify-content-center">
             <div class="col-sm-10">
                 <nav>

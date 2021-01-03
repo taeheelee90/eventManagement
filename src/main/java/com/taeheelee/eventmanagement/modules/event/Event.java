@@ -57,10 +57,6 @@ public class Event {
 	@Basic(fetch = FetchType.EAGER)
 	private String fullDescription;
 
-	@Lob
-	@Basic(fetch = FetchType.EAGER)
-	private String image;
-
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<>();
 
