@@ -17,6 +17,47 @@
 			<h2>Event Management</h2>
 		</div>
 		
+		<div class="row justify-content-center">
+         <div class="col-sm-10">
+         	<div class="row">
+         		<div class="col-md-4" th:each="event: ${eventList}">
+         			<div class="card mb-4 shadow-sm">
+         				<div class="card-body">
+         					<a th:href ="@{'/event/' + ${event.path}}" class="text-decoration-none">
+         						<h5 class="card-title context" th:text="${event.title}"></h5>
+         					</a>
+         					
+         					<p class="card-text" th:text="${event.shortDescription}">Short description</p>
+         					<p class="card-text context">
+         						<span th:each="tag: ${event.tags}" class="font-weight-light text-monospace badge badge-pill badge-primary">
+         							<a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+         								<i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+         							</a>
+         						</span>
+         						<span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary">
+         							<a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+         								<i class="fa fa-tag"></i> <span th:text="${zone.city}" class="text-white">Zone</span>
+         							</a>
+         						</span>       						
+         					</p>
+         					
+         					<div class="d-flex justify-content-between alighn-items-center">
+         						<small class="text-muted">
+         							<i class="fa fa-user-circle"></i>
+         							<span th:text="${event.members.size()}"></span>
+         						</small>
+         						
+         						<small class="text-muted date" th:text="${event.publishedDateTime}"></small>
+         					</div>         					         					
+         				</div>         			
+         			</div>       		
+         		</div>
+         	</div>
+            
+       
+		
+		
+		
 		<div th:replace="fragments.html :: footer"></div>
 	</div>
 </body>

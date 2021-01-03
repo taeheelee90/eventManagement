@@ -28,7 +28,7 @@ public class MainController {
 		if(account != null) {
 			model.addAttribute(account);
 		}
-		
+		model.addAttribute("eventList", eventRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false));
 		return "index";
 		
 	}

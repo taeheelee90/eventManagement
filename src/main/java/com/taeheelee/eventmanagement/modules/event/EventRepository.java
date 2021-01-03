@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface EventRepository extends JpaRepository<Event, Long>, EventRepositoryExtension {
 
+
+
 	boolean existsByPath(String path);
 
 	@EntityGraph(attributePaths = {"tags", "zones", "managers", "members"}, type = EntityGraph.EntityGraphType.LOAD)
@@ -33,6 +35,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
 	@EntityGraph(attributePaths = {"members", "managers"})
 	Event findEventWithManagersAndMembersById(Long id);
+
+	List<Event> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
 
 	
 
