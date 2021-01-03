@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Getter @Setter
 @Entity
 @EqualsAndHashCode(of = "id")
+@Table(name = "notification")
 public class Notification {
 
 	@Id @GeneratedValue

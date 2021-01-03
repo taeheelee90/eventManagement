@@ -8,13 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.CurrentUser;
-import com.taeheelee.eventmanagement.modules.activity.Activity;
-import com.taeheelee.eventmanagement.modules.event.Event;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,7 +53,8 @@ public class NotificationController {
 		List<Notification> createdEventNotifications = new ArrayList<>();
 		List<Notification> activityEnrollmentNotifications = new ArrayList<>();
 		List<Notification> updatedEventNotifications = new ArrayList<>();
-		for(var n : notifications) {
+		
+		for(Notification n : notifications) {
 			switch(n.getNotificationType()) {
 				case EVENT_CREATED: createdEventNotifications.add(n); break;
 				case ACTIVITY_ENROLLMENT: activityEnrollmentNotifications.add(n); break;

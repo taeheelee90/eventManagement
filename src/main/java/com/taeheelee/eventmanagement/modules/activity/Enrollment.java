@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
+@Table(name = "enrollment")
 public class Enrollment {
 
 	@Id

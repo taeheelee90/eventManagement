@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.UserAccount;
@@ -30,6 +31,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
+@Table(name = "activity")
 public class Activity {
 
 	@Id
@@ -142,7 +144,7 @@ public class Activity {
 
 	public void acceptWaitingList() {
 		if (this.isAbleToAcceptWaitingEnrollment()) {
-			var waitingList = getWaitingList();
+			List<Enrollment> waitingList = getWaitingList();
 			int numberToAccept = (int) Math.min(this.limitOfEnrollments - this.getNumberOfAcceptedEnrollments(),
 					waitingList.size());
 			waitingList.subList(0, numberToAccept).forEach(e -> e.setAccepted(true));

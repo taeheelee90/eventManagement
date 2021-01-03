@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.UserAccount;
@@ -34,6 +35,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table (name = "event")
 public class Event {
 
 	@Id
@@ -143,7 +145,7 @@ public class Event {
 
 	public String getEncodedPath() {
 
-		return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
+		return URLEncoder.encode(this.path, StandardCharsets.US_ASCII);
 	}
 
 	public boolean isRemovable() {
