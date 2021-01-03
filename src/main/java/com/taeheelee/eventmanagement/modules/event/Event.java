@@ -144,8 +144,9 @@ public class Event {
 	}
 
 	public String getEncodedPath() {
-
-		return URLEncoder.encode(this.path, StandardCharsets.US_ASCII);
+		//URLEncoder.encode(this.path, StandardCharsets.US_ASCII);
+		
+		return URLEncoder.encode(this.path);
 	}
 
 	public boolean isRemovable() {
