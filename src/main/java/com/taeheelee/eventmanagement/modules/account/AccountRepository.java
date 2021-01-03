@@ -1,5 +1,7 @@
 package com.taeheelee.eventmanagement.modules.account;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,5 +18,6 @@ public interface AccountRepository extends JpaRepository <Account, Long>, Queryd
 
 	Account findByNickname(String nickname);
 
+	Optional<Account> findById(Long id);
 
 }

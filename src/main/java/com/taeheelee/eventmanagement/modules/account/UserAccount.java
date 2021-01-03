@@ -10,6 +10,10 @@ import lombok.Getter;
 @Getter
 public class UserAccount extends User {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Account account;
 	
 	public UserAccount(Account account) {

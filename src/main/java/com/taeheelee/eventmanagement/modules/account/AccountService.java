@@ -1,6 +1,7 @@
 package com.taeheelee.eventmanagement.modules.account;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -168,7 +169,12 @@ public class AccountService implements UserDetailsService {
 
 	public Set<Tag> getTags(Account account) {
 		Optional<Account> byId = accountRepository.findById(account.getId());
-		return byId.orElseThrow().getTags();
+				
+		if (byId == null) {
+			throw new NoSuchElementException();
+		}
+		
+		return byId.get().getTags();
 		
 	}
 
@@ -180,7 +186,11 @@ public class AccountService implements UserDetailsService {
 
 	public Set<Zone> getZones(Account account) {
 		Optional<Account> byId = accountRepository.findById(account.getId());
-		return byId.orElseThrow().getZones();
+		if (byId == null) {
+			throw new NoSuchElementException();
+		}
+		
+		return byId.get().getZones();
 	}
 
 	public void addZone(Account account, Zone zone) {
