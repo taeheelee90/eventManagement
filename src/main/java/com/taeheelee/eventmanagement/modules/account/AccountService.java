@@ -61,7 +61,7 @@ public class AccountService implements UserDetailsService {
 	public void sendSignUpConfirmEmail(Account newAccount) {
 		
 		Context context = new Context();
-		context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
+		context.setVariable("link", "check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
 		context.setVariable("nickname", newAccount.getNickname());
 		context.setVariable("linkName", "Verification");
 		context.setVariable("message", "Please click the link to complete sign up to Event Management.");
@@ -143,7 +143,7 @@ public class AccountService implements UserDetailsService {
 	public void sendLoginLink(Account account) {
 		
 		Context context = new Context();
-		context.setVariable("link", "/login-by-email?token=" + account.getEmailCheckToken() +
+		context.setVariable("link", "login-by-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
 		context.setVariable("nickname", account.getNickname());
 		context.setVariable("linkName", "Login to Event Management");
