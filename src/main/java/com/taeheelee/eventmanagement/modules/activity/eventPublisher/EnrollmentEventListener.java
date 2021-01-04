@@ -54,7 +54,7 @@ public class EnrollmentEventListener {
 	private void sendNotification(EnrollmentEvent enrollmentEvent, Account account, Activity activity, Event event) {
 		Notification notification = new Notification();
 		notification.setTitle(event.getTitle() + " / " + activity.getTitle());
-		notification.setLink("event/" + event.getEncodedPath() + "/activities/" + activity.getId());
+		notification.setLink("/event/" + event.getEncodedPath() + "/activities/" + activity.getId());
 		notification.setChecked(false);
 		notification.setCreatedAt(LocalDateTime.now());
 		notification.setMessage(enrollmentEvent.getMessage());
@@ -67,7 +67,7 @@ public class EnrollmentEventListener {
 	private void sendEmail(EnrollmentEvent enrollmentEvent, Account account, Activity activity, Event event) {
 		Context context = new Context();
 		context.setVariable("nickname", account.getNickname());
-		context.setVariable("link", "event/" + event.getEncodedPath() + "/activities/" + activity.getId());
+		context.setVariable("link", "/event/" + event.getEncodedPath() + "/activities/" + activity.getId());
 		context.setVariable("linkName", event.getTitle());
 		context.setVariable("message", enrollmentEvent.getMessage());
 		context.setVariable("host", appProperties.getHost());

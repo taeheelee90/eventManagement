@@ -80,7 +80,7 @@ public class EventPublisherListner {
 	private void sendNotification(Event event, Account account, String msg, NotificationType type) {
 		Notification notification = new Notification();
 		notification.setTitle(event.getTitle());
-		notification.setLink("event/" + event.getEncodedPath());
+		notification.setLink("/event/" + event.getEncodedPath());
 		notification.setChecked(false);
 		notification.setCreatedAt(LocalDateTime.now());
 		notification.setMessage(msg);
@@ -93,7 +93,7 @@ public class EventPublisherListner {
 	private void sendEventCreatedEmail(Event event, Account account, String msg, String subject) {
 		Context context = new Context();
 		context.setVariable("nickname", account.getNickname());
-		context.setVariable("link", "event/" + event.getEncodedPath());
+		context.setVariable("link", "/event/" + event.getEncodedPath());
 		context.setVariable("linkName", event.getTitle());
 		context.setVariable("message", msg);
 		context.setVariable("host", appProperties.getHost());
