@@ -1,7 +1,7 @@
 # eventManagement
 https://eventmanagement-2021.herokuapp.com/
 
-Event Management Application connect users and events which have related tag or location. 
+Event Management Application connects users and events which have related tag or location. 
 
 ## User
 Users can create and join event or activity.
