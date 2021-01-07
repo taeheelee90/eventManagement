@@ -23,12 +23,14 @@
 		    		Please retry or use <a href="#" th:href="@{/find-password}">Forgot Password</a>
 		    	</p>
 		    	
+		   
+		    	
 		    </div>
 		    
 		    <form class ="needs-validation col-sm-6" action ="#" th:action="@{/login}" method="post" novalidate>
 		    	<div class="form-group">
 		    		<label for="username">Email or Nickname</label>
-		    		<input id ="username" type="text" name="username" class="form-control" placeholder="your@email.com" aria-describedby="emailHelp" required>
+		    		<input id ="username" type="text" name="username" class="form-control" aria-describedby="emailHelp" required>
 		    		<small id ="emailHelp" class="form-text text-muted">
 		    			Please enter email or nickname used when sign up.
 		    		</small>

@@ -17,10 +17,10 @@
 				<div class="form-group">
 					<label for="nickname">Nickname</label> 
 					<input id="nickname" type="text" th:field="*{nickname}" class="form-control"
-						placeholder="user" aria-describedby="nicknameHelp" required
+						aria-describedby="nicknameHelp" required
 						minlength="3" maxlength="20"> <small id="nicknameHelp"
-						class="form-text text-muted"> 3~20 alphanumeric without
-						spaces. (can update later) </small> 
+						class="form-text text-muted"> 3~20 characters without
+						space. </small> 
 						<small class="invalid-feedback">Please
 						enter nickname</small> 
 						<small class="form-text text-danger"
@@ -31,9 +31,8 @@
 				<div class="form-group">
 					<label for="email">Email</label> <input id="email" type="email"
 						th:field="*{email}" class="form-control"
-						placeholder="your@email.com" aria-describedby="emailHelp" required>
-					<small id="emailHelp" class="form-text text-muted"> Email
-						is not used for any other purposes. </small>
+						 required>
+					
 						 <small
 						class="invalid-feedback">Please enter email</small> <small
 						class="form-text text-danger"
@@ -46,8 +45,7 @@
 						type="password" th:field="*{password}" class="form-control"
 						aria-describedby="passwordHelp" required minlength="8"
 						maxlength="50"> <small id="passwordHelp"
-						class="form-text text-muted"> 8~50 characters. Can include
-						number and special symbols but not spaces. </small> 
+						class="form-text text-muted"> 8~50 characters without space. </small> 
 						<small
 						class="invalid-feedback">Please enter password</small>
 						 <small

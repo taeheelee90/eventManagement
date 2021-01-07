@@ -51,7 +51,7 @@ public class EventController {
 		
 		Event newEvent = eventService.createNewEvent(modelMapper.map(eventForm, Event.class), account);
 		
-		return "redirect:/event/" + newEvent.getPath();
+		return "redirect:/event/" + newEvent.getPath() + "/settings/event";
 	}
 	
 	@GetMapping("/event/{path}")
