@@ -1,11 +1,14 @@
-package com.taeheelee.eventmanagement.modules.activity.eventPublisher;
+package com.taeheelee.eventmanagement.modules.event.registrationPublisher;
 
-import com.taeheelee.eventmanagement.modules.activity.Enrollment;
+
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter @RequiredArgsConstructor
+public class RegistrationEvent {
+
+	/*
+	 * @Getter @RequiredArgsConstructor
 public abstract class EnrollmentEvent {
 
 	
@@ -13,4 +16,6 @@ public abstract class EnrollmentEvent {
 	
 	protected final String message;
 
+}
+	 * */
 }

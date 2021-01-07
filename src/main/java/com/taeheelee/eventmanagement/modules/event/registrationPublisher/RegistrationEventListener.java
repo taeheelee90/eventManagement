@@ -1,29 +1,11 @@
-package com.taeheelee.eventmanagement.modules.activity.eventPublisher;
+package com.taeheelee.eventmanagement.modules.event.registrationPublisher;
 
-import java.time.LocalDateTime;
 
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-import com.taeheelee.eventmanagement.infra.config.AppProperties;
-import com.taeheelee.eventmanagement.infra.mail.EmailMessage;
-import com.taeheelee.eventmanagement.infra.mail.EmailService;
-import com.taeheelee.eventmanagement.modules.account.Account;
-import com.taeheelee.eventmanagement.modules.activity.Activity;
-import com.taeheelee.eventmanagement.modules.activity.Enrollment;
-import com.taeheelee.eventmanagement.modules.event.Event;
-import com.taeheelee.eventmanagement.modules.notification.Notification;
-import com.taeheelee.eventmanagement.modules.notification.NotificationRepository;
-import com.taeheelee.eventmanagement.modules.notification.NotificationType;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
+public class RegistrationEventListener {
+	
+	/*
+	 * @Slf4j
 @Async
 @Transactional
 @RequiredArgsConstructor
@@ -82,4 +64,8 @@ public class EnrollmentEventListener {
 		emailService.sendEmail(emailMessage);
 		
 	}
+}
+	 * 
+	 * */
+
 }

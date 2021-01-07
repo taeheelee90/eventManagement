@@ -1,17 +1,18 @@
 package com.taeheelee.eventmanagement.modules.event;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
+
 import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventCreated;
 import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventUpdated;
 import com.taeheelee.eventmanagement.modules.event.form.EventDescriptionForm;
@@ -28,14 +29,15 @@ public class EventService {
 
 	private final TagRepository tagRepository;
 	private final EventRepository eventRepository;
+	private final RegistrationRepository registrationRepository;
 	private final ModelMapper modelMapper;
 	private final ApplicationEventPublisher appEventPublisher;
 
-	public com.taeheelee.eventmanagement.modules.event.Event createNewEvent(com.taeheelee.eventmanagement.modules.event.Event event,
-			Account account) {
+	public com.taeheelee.eventmanagement.modules.event.Event createNewEvent(
+			com.taeheelee.eventmanagement.modules.event.Event event, Account account) {
 		com.taeheelee.eventmanagement.modules.event.Event newEvent = eventRepository.save(event);
 		newEvent.addManager(account);
-	return newEvent;
+		return newEvent;
 	}
 
 	public Event getEventToUpdate(Account account, String path) {
@@ -54,7 +56,6 @@ public class EventService {
 		modelMapper.map(eventDescriptionForm, event);
 		appEventPublisher.publishEvent(new EventUpdated(event, "Event description has been updated"));
 	}
-
 
 	public void addTag(Event event, Tag tag) {
 		event.getTags().add(tag);
@@ -143,28 +144,28 @@ public class EventService {
 		event.setPath(newPath);
 
 	}
-	
+
 	public boolean isValidTitle(String newTitle) {
 		return newTitle.length() <= 50;
 	}
 
 	public void updateEventTitle(Event event, String newTitle) {
 		event.setTitle(newTitle);
-		
+
 	}
 
 	public void remove(Event event) {
-		if(event.isRemovable()) {
+		if (event.isRemovable()) {
 			eventRepository.delete(event);
 		} else {
 			throw new IllegalArgumentException("Can not delete event.");
 		}
-		
+
 	}
 
 	public void addMember(Event event, Account account) {
 		event.addMember(account);
-		
+
 	}
 
 	public void removeMember(Event event, Account account) {
@@ -177,26 +178,75 @@ public class EventService {
 		return event;
 	}
 
-	/* creating random data
-	public void generateTestData(Account account) {
-		for (int i = 0; i <40; i ++) {
-			String randomString = RandomString.make(6);
-			Event event = Event.builder()
-								.title("Test Event " + randomString)
-								.path("test-" + randomString)
-								.shortDescription("test")
-								.fullDescription("testtesttest")
-								.tags(new HashSet<>())
-								.managers(new HashSet<>())
-								.build();
-			
-			event.publish();
-			Event newEvent = this.createNewEvent(event, account);
-			Tag web = tagRepository.findByTitle("WEB");
-			newEvent.getTags().add(web);
-					
+	public void enroll(Event event, Account account) {
+		if (!registrationRepository.existsByEventAndAccount(event, account)) {
+			Registration registration = new Registration();
+			registration.setEnrolledAt(LocalDateTime.now());
+			registration.setAccepted(event.isAbleToAcceptWaitingRegistration());
+			registration.setAccount(account);
+			event.addRegistration(registration);
+			registrationRepository.save(registration);
 		}
-		
-	}*/
+
+	}
+
+	public void disenroll(Event event, Account account) {
+		Registration registration = registrationRepository.findByEventAndAccount(event, account);
+		if (!registration.isAttended()) {
+			event.removeregistration(registration);
+			registrationRepository.delete(registration);
+			event.acceptNextWaitingregistration();
+		}
+
+	}
+
+	public void acceptregistration(Event event, Registration registration) {
+		event.accept(registration);
+
+	}
+
+	public void rejectregistration(Event event, Registration registration) {
+		event.reject(registration);
+	}
+
+	public void checkinregistration(Registration registration) {
+		registration.setAttended(true);
+
+	}
+
+	public void cancelCheckinregistration(Registration registration) {
+		registration.setAttended(false);
+
+	}
+	/*
+	 * creating random data public void generateTestData(Account account) { for (int
+	 * i = 0; i <40; i ++) { String randomString = RandomString.make(6); Event event
+	 * = Event.builder() .title("Test Event " + randomString) .path("test-" +
+	 * randomString) .shortDescription("test") .fullDescription("testtesttest")
+	 * .tags(new HashSet<>()) .managers(new HashSet<>()) .build();
+	 * 
+	 * event.publish(); Event newEvent = this.createNewEvent(event, account); Tag
+	 * web = tagRepository.findByTitle("WEB"); newEvent.getTags().add(web);
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
+
+	/*
+	 * public void updateEvent(event event, eventForm eventForm) {
+	 * modelMapper.map(eventForm, event); event.acceptWaitingList();
+	 * appEventPublisher.publishEvent(new EventUpdated(event.getEvent(), "'" +
+	 * event.getTitle() + "' event has been updated.")); }
+	 * 
+	 * public void deleteEvent(event event) {
+	 * eventRepository.delete(event); appEventPublisher.publishEvent(new
+	 * EventUpdated(event.getEvent(), "'" + event.getTitle() +
+	 * "' event has been deleted."));
+	 * 
+	 * }
+	 *
+	 * 
+	 */
 
 }

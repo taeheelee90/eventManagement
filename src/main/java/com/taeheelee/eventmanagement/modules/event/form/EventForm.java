@@ -1,8 +1,14 @@
 package com.taeheelee.eventmanagement.modules.event.form;
 
+import java.time.LocalDateTime;
+
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.taeheelee.eventmanagement.modules.event.RegistrationType;
 
 import lombok.Data;
 
@@ -17,12 +23,25 @@ public class EventForm {
 	@Length(max = 50)
 	private String title;
 
-
 	@NotBlank
 	@Length(max = 100)
 	private String shortDescription;
 	
 	@NotBlank
 	private String fullDescription;
+	
+	private RegistrationType registrationType = RegistrationType.FCFS;
+	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime endRegistrationDateTime;
+	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime eventStartDateTime;
+	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime eventEndDateTime;
+	
+	@Min(2)
+	private Integer limitOfRegistrations = 2;
 
 }

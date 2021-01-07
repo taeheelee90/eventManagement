@@ -2,17 +2,23 @@ package com.taeheelee.eventmanagement.modules.event;
 
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
@@ -34,7 +40,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table (name = "event")
+@Table(name = "event")
 public class Event {
 
 	@Id
@@ -64,11 +70,14 @@ public class Event {
 	@ManyToMany
 	private Set<Zone> zones = new HashSet<>();
 
-	private LocalDateTime publishedDateTime;
+	private LocalDateTime publishedDateTime; // Publish event
 
-	private LocalDateTime closedDateTime;
+	private LocalDateTime closedDateTime; // Close event
 
-	private LocalDateTime registrationUpdatedDateTime;
+	private LocalDateTime registrationUpdatedDateTime; // will delete
+
+	@Column(nullable = false)
+	private LocalDateTime registrationStartDateTime;
 
 	private boolean registration;
 
@@ -77,6 +86,24 @@ public class Event {
 	private boolean closed;
 
 	private int memberCount;
+
+	@Column(nullable = false)
+	private LocalDateTime endRegistrationDateTime;
+
+	@Column(nullable = false)
+	private LocalDateTime eventStartDateTime;
+
+	@Column(nullable = false)
+	private LocalDateTime eventEndDateTime;
+
+	@Column
+	private Integer limitOfRegistrations;
+
+	@OneToMany(mappedBy = "event")
+	private List<Registration> registrations = new ArrayList<>();
+
+	@Enumerated(EnumType.STRING)
+	private RegistrationType registrationType;
 
 	public void addManager(Account account) {
 		this.managers.add(account);
@@ -143,8 +170,8 @@ public class Event {
 	}
 
 	public String getEncodedPath() {
-		//URLEncoder.encode(this.path, StandardCharsets.US_ASCII);
-		
+		// URLEncoder.encode(this.path, StandardCharsets.US_ASCII);
+
 		return URLEncoder.encode(this.path);
 	}
 
@@ -160,6 +187,117 @@ public class Event {
 	public void removeMember(Account account) {
 		this.getMembers().remove(account);
 		this.memberCount--;
+	}
+
+	public boolean canRegister(UserAccount userAccount) {
+		return isNotClosed() && !isAttended(userAccount) && !isAlreadyRegistered(userAccount);
+	}
+
+	public boolean isAttended(UserAccount userAccount) {
+		Account account = userAccount.getAccount();
+		for (Registration e : this.registrations) {
+			if (e.getAccount().equals(account) && e.isAttended()) {
+				return true;
+			}
+
+		}
+		return false;
+	}
+
+	public boolean cannotRegister(UserAccount userAccount) {
+		return isNotClosed() && !isAttended(userAccount) && isAlreadyRegistered(userAccount);
+	}
+
+	public boolean isAlreadyRegistered(UserAccount userAccount) {
+		Account account = userAccount.getAccount();
+		for (Registration e : this.registrations) {
+			if (e.getAccount().equals(account)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isNotClosed() {
+		return this.registrationStartDateTime.isAfter(LocalDateTime.now());
+	}
+
+	public int numberOfRemainSpots() {
+		return this.limitOfRegistrations - (int) this.registrations.stream().filter(Registration::isAccepted).count();
+	}
+
+	public long getNumberOfAcceptedRegistrations() {
+		return this.registrations.stream().filter(Registration::isAccepted).count();
+	}
+
+	public void addRegistration(Registration registration) {
+		this.registrations.add(registration);
+		registration.setEvent(this);
+	}
+
+	public void removeregistration(Registration registration) {
+		this.registrations.remove(registration);
+		registration.setEvent(null);
+	}
+
+	public boolean isAbleToAcceptWaitingRegistration() {
+		return this.registrationType == RegistrationType.FCFS
+				&& this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
+	}
+
+	public boolean canAccept(Registration registration) {
+		return this.registrationType == RegistrationType.COMFIRMATIVE && this.registrations.contains(registration)
+				&& this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations() && !registration.isAttended()
+				&& !registration.isAccepted();
+	}
+
+	public boolean canReject(Registration registration) {
+		return this.registrationType == RegistrationType.COMFIRMATIVE && this.registrations.contains(registration)
+				&& !registration.isAttended() && registration.isAccepted();
+	}
+
+	public List<Registration> getWaitingList() {
+		return this.registrations.stream().filter(registration -> !registration.isAccepted()).collect(Collectors.toList());
+	}
+
+	public void acceptWaitingList() {
+		if (this.isAbleToAcceptWaitingRegistration()) {
+			List<Registration> waitingList = getWaitingList();
+			int numberToAccept = (int) Math.min(this.limitOfRegistrations - this.getNumberOfAcceptedRegistrations(),
+					waitingList.size());
+			waitingList.subList(0, numberToAccept).forEach(e -> e.setAccepted(true));
+		}
+	}
+
+	public void acceptNextWaitingregistration() {
+		if (this.isAbleToAcceptWaitingRegistration()) {
+			Registration registrationToAccept = this.getTheFirstWaitingRegistration();
+			if (registrationToAccept != null) {
+				registrationToAccept.setAccepted(true);
+			}
+		}
+	}
+
+	private Registration getTheFirstWaitingRegistration() {
+		for (Registration e : this.registrations) {
+			if (!e.isAccepted()) {
+				return e;
+			}
+		}
+		return null;
+	}
+
+	public void accept(Registration registration) {
+		if (this.registrationType == RegistrationType.COMFIRMATIVE
+				&& this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations()) {
+			registration.setAccepted(true);
+		}
+	}
+
+	public void reject(Registration registration) {
+		if (this.registrationType == RegistrationType.COMFIRMATIVE) {
+			registration.setAccepted(false);
+		}
 	}
 
 }

@@ -38,6 +38,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
 	List<Event> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
 
-	
-
+	@EntityGraph(value = "Event.withRegistrations", type = EntityGraph.EntityGraphType.LOAD)
+	//List<Event> findByEventOrderByStartDateTime(Event event);
+	List<Event> findEventOrderByEventStartDateTime(Event event);
 }
