@@ -1,7 +1,6 @@
 package com.taeheelee.eventmanagement.modules.event;
 
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;

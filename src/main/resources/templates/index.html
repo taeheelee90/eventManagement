@@ -44,10 +44,11 @@
          					<div class="d-flex justify-content-between alighn-items-center">
          						<small class="text-muted">
          							<i class="fa fa-user-circle"></i>
-         							<span th:text="${event.members.size()}"></span>
+         							<span th:text="'members: ' + ${event.members.size()}"></span>
          						</small>
          						
-         						<small class="text-muted date" th:text="${event.publishedDateTime}"></small>
+         				
+         						<small class="text-muted date" th:text="'published: ' + ${#temporals.format(event.publishedDateTime, 'yyyy-MM-dd')}"></small>
          					</div>         					         					
          				</div>         			
          			</div>       		

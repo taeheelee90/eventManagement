@@ -17,7 +17,7 @@
                     <input id="path" type="text" th:field="*{path}" class="form-control"
                            placeholder="i.e.) event-path" aria-describedby="pathHelp" required min="2" max="20">
                     <small id="pathHelp" class="form-text text-muted">
-                       2-20 letters i.e.)<b>study-path</b>
+                       2-20 characters i.e.)<b>event-path</b>
                     </small>
                     <small class="invalid-feedback">Please enter study path</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">Path Error</small>
@@ -28,7 +28,7 @@
                     <input id="title" type="text" th:field="*{title}" class="form-control"
                            placeholder="Title" aria-describedby="titleHelp" required max="50">
                     <small id="titleHelp" class="form-text text-muted">
-                       	Less than 50 letters.
+                       	Less than 50 characters.
                     </small>
                     <small class="invalid-feedback">Please enter study title.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
@@ -48,11 +48,9 @@
                 <div class="form-group">
                     <label for="fullDescription">Full Description</label>
                     <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="editor form-control"
-                              placeholder="Full description" aria-describedby="fullDescriptionHelp" required></textarea>
-                    <small id="fullDescriptionHelp" class="form-text text-muted">
-                        Please enter details about the event.
-                    </small>
-                    <small class="invalid-feedback">Please enter full desxription.</small>
+                              placeholder="Full description" required></textarea>
+                   
+                    <small class="invalid-feedback">Please enter full description.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">FullDescription Error</small>
                 </div>
 
