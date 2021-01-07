@@ -11,6 +11,9 @@
                 <div th:replace="fragments.html :: event-settings-menu(currentMenu='description')"></div>
             </div>
             <div class="col-8">
+            <div class="row">
+                    <h2 class="col-sm-12">Update Event Description</h2>
+                </div>
                 <div th:replace="fragments.html :: msg"></div>
                 <form class="needs-validation" th:action="@{'/event/' + ${event.getPath()} + '/settings/description'}"
                       th:object="${eventDescriptionForm}" method="post" novalidate>
@@ -39,7 +42,7 @@
 
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit"
-                                aria-describedby="submitHelp">Update Event</button>
+                                aria-describedby="submitHelp">Update Description</button>
                     </div>
                 </form>
             </div>

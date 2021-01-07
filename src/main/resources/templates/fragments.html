@@ -244,7 +244,8 @@ Event
 				tabindex="0" data-toggle="tooltip" data-placement="bottom"
 				title="Registration closed">
 				<button class="btn btn-primary btn-sm" style="pointer-events: none;"
-					type="button" disabled>OFF</button>
+					type="button" disabled>NOT RECRUITING</button>
+					
 			</span> <span sec:authorize="isAuthenticated()"
 				th:if="${event.isJoinable(#authentication.principal)}"
 				class="btn-group" role="group" aria-label="Basic example"> <a
@@ -257,17 +258,11 @@ Event
 				th:if="${!event.closed && event.isMember(#authentication.principal)}"
 				class="btn-group" role="group"> <a
 				class="btn btn-outline-warning"
-				th:href="@{'/event/' + ${event.path} + '/leave'}"> Cancel
-					registration </a> <a class="btn btn-outline-primary"
+				th:href="@{'/event/' + ${event.path} + '/leave'}"> Cancel registration </a> 
+				<a class="btn btn-outline-primary"
 				th:href="@{'/event/' + ${event.path} + '/members'}"
 				th:text="${event.members.size()}">1</a>
-			</span> <span sec:authorize="isAuthenticated()"
-				th:if="${event.published && !event.closed && event.isManager(#authentication.principal)}">
-				<a class="btn btn-outline-primary"
-				th:href="@{'/event/' + ${event.path} + '/new-activity'}"> <i
-					class="fa fa-plus"></i> Create Activity
-			</a>
-			</span>
+			</span> 
 		</div>
 	</div>
 
@@ -310,12 +305,6 @@ Event
 			th:href="@{'/event/' + ${event.path} + '/members'}"> <i
 			class="fa fa-user"></i> Member
 		</a> 
-		<a class="nav-item nav-link"
-			th:classappend="${eventMenu == 'activities'}? active" href="#"
-			th:href="@{'/event/' + ${event.path} + '/activities'}"> <i
-			class="fa fa-calendar"></i> Activities
-		</a> 
-		
 		
 		<a sec:authorize="isAuthenticated()"
 			th:if="${event.isManager(#authentication.principal)}"
@@ -331,13 +320,13 @@ Event
 <!-- Event Settings Menu -->
 <div th:fragment="event-settings-menu (currentMenu)" class="list-group">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
-       href="#" th:href="@{'/event/' + ${event.path} + '/settings/description'}">Description</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/description'}">Edit Description</a>
     <!-- <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'image'}? active"
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/banner'}">Banner Image</a> -->
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active"
-       href="#" th:href="@{'/event/' + ${event.path} + '/settings/tags'}">Tags</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/tags'}">Edit Tags</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
-       href="#" th:href="@{'/event/' + ${event.path} + '/settings/zones'}">Zones</a>
+       href="#" th:href="@{'/event/' + ${event.path} + '/settings/zones'}">Edit Zones</a>
   
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'event'}? active"
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/event'}">Setting

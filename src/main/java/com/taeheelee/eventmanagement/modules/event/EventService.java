@@ -39,6 +39,8 @@ public class EventService {
 		newEvent.addManager(account);
 		newEvent.setPublishedDateTime(LocalDateTime.now());
 		newEvent.setStartRegistrationDateTime(LocalDateTime.now());
+		newEvent.setPublished(true);
+		newEvent.setRegistration(true);
 		return newEvent;
 	}
 
