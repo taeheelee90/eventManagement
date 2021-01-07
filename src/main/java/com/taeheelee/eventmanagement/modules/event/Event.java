@@ -76,16 +76,8 @@ public class Event {
 
 	private LocalDateTime registrationUpdatedDateTime; // will delete
 
-	@Column(nullable = false)
-	private LocalDateTime registrationStartDateTime;
-
-	private boolean registration;
-
-	private boolean published;
-
-	private boolean closed;
-
-	private int memberCount;
+	//@Column(nullable = false)
+	private LocalDateTime startRegistrationDateTime;
 
 	@Column(nullable = false)
 	private LocalDateTime endRegistrationDateTime;
@@ -98,6 +90,14 @@ public class Event {
 
 	@Column
 	private Integer limitOfRegistrations;
+
+	private boolean registration;
+
+	private boolean published;
+
+	private boolean closed;
+
+	private int memberCount;
 
 	@OneToMany(mappedBy = "event")
 	private List<Registration> registrations = new ArrayList<>();
@@ -219,7 +219,7 @@ public class Event {
 	}
 
 	public boolean isNotClosed() {
-		return this.registrationStartDateTime.isAfter(LocalDateTime.now());
+		return this.startRegistrationDateTime.isAfter(LocalDateTime.now());
 	}
 
 	public int numberOfRemainSpots() {
@@ -257,7 +257,8 @@ public class Event {
 	}
 
 	public List<Registration> getWaitingList() {
-		return this.registrations.stream().filter(registration -> !registration.isAccepted()).collect(Collectors.toList());
+		return this.registrations.stream().filter(registration -> !registration.isAccepted())
+				.collect(Collectors.toList());
 	}
 
 	public void acceptWaitingList() {

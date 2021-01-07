@@ -37,6 +37,8 @@ public class EventService {
 			com.taeheelee.eventmanagement.modules.event.Event event, Account account) {
 		com.taeheelee.eventmanagement.modules.event.Event newEvent = eventRepository.save(event);
 		newEvent.addManager(account);
+		newEvent.setPublishedDateTime(LocalDateTime.now());
+		newEvent.setStartRegistrationDateTime(LocalDateTime.now());
 		return newEvent;
 	}
 

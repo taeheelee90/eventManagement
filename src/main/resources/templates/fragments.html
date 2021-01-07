@@ -388,6 +388,8 @@ Activities
                 <small class="invalid-feedback">Please enter activity title.</small>
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</small>
             </div>
+            
+            
             <div class="form-group" th:if="${mode == 'new'}">
                 <label for="activityType">Enrollment method</label>
                 <select th:field="*{activityType}"  class="custom-select mr-sm-2" id="activityType" aria-describedby="activityTypeHelp">
@@ -400,6 +402,8 @@ Activities
                     <strong>CONFIRMATIVE</strong>:  Administrator's confirmation is required before the deadline.
                 </small>
             </div>
+            
+            
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="limitOfEnrollments">Limit of enrollments</label>
@@ -468,7 +472,7 @@ Notification
     <a href="#" th:href="@{${noti.link}}" th:each="noti: ${notifications}"
        class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-            <small class="text-muted" th:text="${noti.title}">Noti title</small>
+            <small class="text-muted" th:text="${noti.title}">Notification title</small>
             <small class="fromNow text-muted" th:text="${noti.createdAt}">3 days ago</small>
         </div>
         <p th:text="${noti.message}" class="text-left mb-0 mt-1">message</p>
