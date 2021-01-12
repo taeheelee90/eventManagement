@@ -6,6 +6,7 @@ import java.util.HashSet;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -222,20 +223,73 @@ public class EventService {
 		registration.setAttended(false);
 
 	}
+
 	/*
-	 * creating random data public void generateTestData(Account account) { for (int
-	 * i = 0; i <40; i ++) { String randomString = RandomString.make(6); Event event
-	 * = Event.builder() .title("Test Event " + randomString) .path("test-" +
-	 * randomString) .shortDescription("test") .fullDescription("testtesttest")
-	 * .tags(new HashSet<>()) .managers(new HashSet<>()) .build();
-	 * 
-	 * event.publish(); Event newEvent = this.createNewEvent(event, account); Tag
-	 * web = tagRepository.findByTitle("WEB"); newEvent.getTags().add(web);
-	 * 
-	 * }
-	 * 
-	 * }
+	 * creating random data
 	 */
+	public void generateTestData(Account account) {
+		for (int i = 0; i < 10; i++) {
+			String randomString = RandomString.make(6);
+			Event event = Event.builder().title("Web Event " + i + randomString).path("web-" + i + randomString)
+					.shortDescription("test").fullDescription("testtesttest").tags(new HashSet<>())
+					.managers(new HashSet<>()).build();
+
+			event.publish();
+			Event newEvent = this.createNewEvent(event, account);
+			Tag web = tagRepository.findByTitle("WEB");
+			newEvent.getTags().add(web);
+
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			String randomString = RandomString.make(6);
+			Event event = Event.builder()
+						.title("Cloud Event " + i + randomString)
+						.path("cloud-" + i + randomString)
+						.shortDescription("test")
+						.fullDescription("testtesttest")
+						.registrationType(RegistrationType.FCFS)
+						.limitOfRegistrations(5)
+						.startRegistrationDateTime(LocalDateTime.now())
+						.endRegistrationDateTime(LocalDateTime.now().plusDays(3))
+						.eventStartDateTime(LocalDateTime.now().plusDays(5))
+						.eventEndDateTime(LocalDateTime.now().plusDays(6))
+						.tags(new HashSet<>())
+						.managers(new HashSet<>()).build();
+
+			event.publish();
+			Event newEvent = this.createNewEvent(event, account);
+			Tag cloud = tagRepository.findByTitle("CLOUD");
+			newEvent.getTags().add(cloud);
+
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			String randomString = RandomString.make(6);
+			Event event = Event.builder()
+						.title("AWS Event " + i + randomString)
+						.path("aws-" + i + randomString)
+						.shortDescription("test")
+						.fullDescription("testtesttest")
+						.registrationType(RegistrationType.FCFS)
+						.limitOfRegistrations(5)
+						.startRegistrationDateTime(LocalDateTime.now())
+						.endRegistrationDateTime(LocalDateTime.now().plusDays(3))
+						.eventStartDateTime(LocalDateTime.now().plusDays(5))
+						.eventEndDateTime(LocalDateTime.now().plusDays(6))
+						.tags(new HashSet<>())
+						.managers(new HashSet<>()).build();
+
+			event.publish();
+			Event newEvent = this.createNewEvent(event, account);
+			Tag aws = tagRepository.findByTitle("AWS");
+			newEvent.getTags().add(aws);
+
+		}
+		
+		
+		
+	}
 
 	/*
 	 * public void updateEvent(event event, eventForm eventForm) {
@@ -243,10 +297,9 @@ public class EventService {
 	 * appEventPublisher.publishEvent(new EventUpdated(event.getEvent(), "'" +
 	 * event.getTitle() + "' event has been updated.")); }
 	 * 
-	 * public void deleteEvent(event event) {
-	 * eventRepository.delete(event); appEventPublisher.publishEvent(new
-	 * EventUpdated(event.getEvent(), "'" + event.getTitle() +
-	 * "' event has been deleted."));
+	 * public void deleteEvent(event event) { eventRepository.delete(event);
+	 * appEventPublisher.publishEvent(new EventUpdated(event.getEvent(), "'" +
+	 * event.getTitle() + "' event has been deleted."));
 	 * 
 	 * }
 	 *
