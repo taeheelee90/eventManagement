@@ -94,14 +94,9 @@ public class EventService {
 		return event;
 	}
 
-	public void publish(Event event) {
-		event.isRegistration();
-		this.appEventPublisher.publishEvent(new EventCreated(event));
-
-	}
-
+	
 	public void close(Event event) {
-		event.isRegistration();
+		event.close();
 		appEventPublisher.publishEvent(new EventUpdated(event, "Event is closed."));
 	}
 
@@ -125,15 +120,6 @@ public class EventService {
 
 	public void updateEventTitle(Event event, String newTitle) {
 		event.setTitle(newTitle);
-
-	}
-
-	public void remove(Event event) {
-		if (event.isRemovable()) {
-			eventRepository.delete(event);
-		} else {
-			throw new IllegalArgumentException("Can not delete event.");
-		}
 
 	}
 

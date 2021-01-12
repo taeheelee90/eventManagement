@@ -119,14 +119,7 @@ public class EventSettingController {
 		return "event/settings/event";
 	}
 
-	@PostMapping("/event/publish")
-	public String publishEvent(@CurrentUser Account account, @PathVariable String path, RedirectAttributes attributes) {
-		Event event = eventService.getEventToUpdateStatus(account, path);
-		eventService.publish(event);
-		attributes.addFlashAttribute("message", "Published event.");
-		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
-	}
-
+	
 	@PostMapping("/event/close")
 	public String closeEvent(@CurrentUser Account account, @PathVariable String path, RedirectAttributes attributes) {
 		Event event = eventService.getEventToUpdateStatus(account, path);
@@ -168,10 +161,4 @@ public class EventSettingController {
 		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
 
-	@PostMapping("/event/remove")
-	public String removeEvent(@CurrentUser Account account, @PathVariable String path, Model model) {
-		Event event = eventService.getEventToUpdateStatus(account, path);
-		eventService.remove(event);
-		return "redirect:/";
-	}
 }

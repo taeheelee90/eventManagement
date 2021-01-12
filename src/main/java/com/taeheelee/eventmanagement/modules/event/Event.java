@@ -65,30 +65,29 @@ public class Event {
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<>();
 
-	@Column(nullable = false)
-	private LocalDateTime endRegistrationDateTime;
-
-	@Column(nullable = false)
-	private LocalDateTime eventStartDateTime;
-
-	@Column(nullable = false)
-	private LocalDateTime eventEndDateTime;
-
 	@Column
 	private Integer limitOfRegistrations;
 
+	private int memberCount;
+
 	private boolean registration; // Check if it is registration period
 
-	private int memberCount;
+	private LocalDateTime endRegistrationDateTime;
+
+	private LocalDateTime eventStartDateTime;
+
+	private LocalDateTime eventEndDateTime;
+
+	private boolean closed;
+
+	private LocalDateTime closedDateTime;
 
 	@OneToMany(mappedBy = "event")
 	private List<Registration> registrations = new ArrayList<>();
 
-
 	public boolean isJoinable(UserAccount userAccount) {
 		Account account = userAccount.getAccount();
-		return this.isRegistration() && !this.members.contains(account)
-				&& !this.manager.equals(account);
+		return this.isRegistration() && !this.members.contains(account) && !this.manager.equals(account);
 	}
 
 	public boolean isMember(UserAccount userAccount) {
@@ -104,12 +103,8 @@ public class Event {
 	}
 
 	public String getEncodedPath() {
-	
-		return URLEncoder.encode(this.path);
-	}
 
-	public boolean isRemovable() {
-		return !this.registration;
+		return URLEncoder.encode(this.path);
 	}
 
 	public void addMember(Account account) {
@@ -177,7 +172,6 @@ public class Event {
 		return this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
 	}
 
-
 	public List<Registration> getWaitingList() {
 		return this.registrations.stream().filter(registration -> !registration.isAccepted())
 				.collect(Collectors.toList());
@@ -210,5 +204,15 @@ public class Event {
 		return null;
 	}
 
+	public void close() {
+		if (this.registration && !this.closed) {
+			this.registration = false;
+			this.closed = true;
+			this.closedDateTime = LocalDateTime.now();
+		} else {
+			throw new RuntimeException("Cannot close this event.");
+		}
+
+	}
 
 }

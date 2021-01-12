@@ -19,21 +19,9 @@
                
                <!-- Publish Form -->
                 <div class="row">
-                    <h5 th:if="${!event.published && !event.closed}"  class="col-sm-12">Publish Event</h5>
-                    <form th:if="${!event.published && !event.closed}" class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/event/publish'}" method="post" novalidate>
-                        <div class="alert alert-info" role="alert">
-                         Publish event after adding tags, zones and description.<br/>
-                         Published event can be searched by other users. 
-                         Published event will send notifications to users have same tags and zones. 
-                         After publishing event, you can start recruitment by allowing it on this page. 
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Publish event</button>
-                        </div>
-                    </form>
                     
-                     <h5 th:if="${event.published && !event.closed}"  class="col-sm-12">Close Event</h5>
-                    <form th:if="${event.published && !event.closed}" class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/event/close'}" method="post" novalidate>
+                     <h5 th:if="${event.registration && !event.closed}"  class="col-sm-12">Close Event</h5>
+                    <form th:if="${event.registration && !event.closed}" class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/event/close'}" method="post" novalidate>
                         <div class="alert alert-warning" role="alert">
                            Close event if event is over.<br/>
                            Closed event can not receive more members, modify path nor title.<br/>
@@ -50,38 +38,10 @@
                     </div>
                 </div>
 
-				<!--  Allow recruiting members : Only after publication -->
-                <hr th:if="${!event.closed && !event.registration && event.published}"/>
-                <div class="row" th:if="${!event.closed && !event.registration && event.published}">
-                    <h5 class="col-sm-12">Recruit members</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/register/start'}" method="post" novalidate>
-                        <div class="alert alert-info" role="alert">
-                            By clicking 'start registration' button, event will start to recruit members.<br/>
-                            You can stop registration after one hour from starting. <br/>
-                            <small>Registration status can only be changed once in an hour.	</small>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Start registration</button>
-                        </div>
-                    </form>
-                </div>
+				
 
 			
-				<!-- Stop recruiting members -->
-                <hr th:if="${!event.closed && event.registration && event.published}"/>
-                <div class="row" th:if="${!event.closed && event.registration && event.published}">
-                    <h5 class="col-sm-12">Stop recruiting members</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/register/stop'}" method="post" novalidate>
-                        <div class="alert alert-primary" role="alert">
-                         By clicking 'stop registration' button, event will stop to recruit members.<br/>
-                         You can start registration again after one hour from stop. <br/>
-                         <small>Registration status can only be changed once in an hour.	</small>	
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Stop registration</button>
-                        </div>
-                    </form>
-                </div>
+				
 
 				<!-- Change path -->
                 <hr th:if="${!event.closed}"/>
@@ -134,34 +94,7 @@
 
                 <hr/>
                 
-                <!-- Delete event: Success -->
-                <div class="row" th:if="${event.isRemovable()}">
-                    <h5 class="col-sm-12 text-danger">Delete Event</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/event/remove'}" method="post" novalidate>
-                        <div class="alert alert-danger" role="alert">
-                           	By clicking 'Delete' button, all records about this event will be permanently removed. <br/>
-                            Deleted events can not be searched by manger nor members. 
-                            You should close event and relevant activities to delete event.
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">Delete</button>
-                        </div>
-                    </form>
-                </div>
-                
-                
-                 <!-- Delete event: Fail -->
-                <div class="row" th:if="${!event.isRemovable()}">
-                    <h5 class="col-sm-12 text-danger">Delete event</h5>
-                    <form class="col-sm-12" action="#" th:action="@{'/event/' + ${event.getPath()} + '/settings/event/remove'}" method="post" novalidate>
-                        <div class="alert alert-danger" role="alert">
-                            	Cannot delete event. Event or relevant activities are not yet closed.  
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp" disabled>Delete</button>
-                        </div>
-                    </form>
-                </div>
+               
             </div>
         </div>
         <div th:replace="fragments.html :: footer"></div>
