@@ -228,21 +228,16 @@ Event
 			</a>
 		</div>
 		<div class="col-4 text-right justify-content-end">
-			<span th:if="${!event.published}" class="d-inline-block" tabindex="0"
+			<span th:if="${!event.registration}" class="d-inline-block" tabindex="0"
 				data-toggle="tooltip" data-placement="bottom"
-				title="Not yet published">
-				<button class="btn btn-primary btn-sm" style="pointer-events: none;"
-					type="button" disabled>DRAFT</button>
-			</span> <span th:if="${event.closed}" class="d-inline-block" tabindex="0"
-				data-toggle="tooltip" data-placement="bottom" title="Closed event">
-				<button class="btn btn-primary btn-sm" style="pointer-events: none;"
-					type="button" disabled>CLOSED</button>
-			</span> <span th:if="${!event.registration}" class="d-inline-block ml-1"
-				tabindex="0" data-toggle="tooltip" data-placement="bottom"
 				title="Registration closed">
 				<button class="btn btn-primary btn-sm" style="pointer-events: none;"
-					type="button" disabled>NOT RECRUITING</button>
-					
+					type="button" disabled>Not recruiting</button>
+			</span> <span th:if="${event.registration}" class="d-inline-block" tabindex="0"
+				data-toggle="tooltip" data-placement="bottom" title="Registartion ongoing">
+				<button class="btn btn-primary btn-sm" style="pointer-events: none;"
+					type="button" disabled>Recruiting</button>
+			
 			</span> <span sec:authorize="isAuthenticated()"
 				th:if="${event.isJoinable(#authentication.principal)}"
 				class="btn-group" role="group" aria-label="Basic example"> <a
@@ -252,7 +247,7 @@ Event
 				th:href="@{'/event/' + ${event.path} + '/members'}"
 				th:text="${event.members.size()}">1</a>
 			</span> <span sec:authorize="isAuthenticated()"
-				th:if="${!event.closed && event.isMember(#authentication.principal)}"
+				th:if="${!event.registration && event.isMember(#authentication.principal)}"
 				class="btn-group" role="group"> <a
 				class="btn btn-outline-warning"
 				th:href="@{'/event/' + ${event.path} + '/leave'}"> Cancel registration </a> 

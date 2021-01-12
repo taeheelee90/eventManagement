@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Table(name = "registration")
+@Entity
 public class Registration {
 	
 	@Id

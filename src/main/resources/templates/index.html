@@ -34,11 +34,7 @@
          								<i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
          							</a>
          						</span>
-         						<span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary">
-         							<a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
-         								<i class="fa fa-tag"></i> <span th:text="${zone.city}" class="text-white">Zone</span>
-         							</a>
-         						</span>       						
+         						     						
          					</p>
          					
          					<div class="d-flex justify-content-between alighn-items-center">
@@ -48,7 +44,7 @@
          						</small>
          						
          				
-         						<small class="text-muted date" th:text="'published: ' + ${#temporals.format(event.publishedDateTime, 'yyyy-MM-dd')}"></small>
+         						<small class="text-muted date" th:text="'published: ' + ${#temporals.format(event.eventStartDateTime, 'yyyy-MM-dd')}"></small>
          					</div>         					         					
          				</div>         			
          			</div>       		

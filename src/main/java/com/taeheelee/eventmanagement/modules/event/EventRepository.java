@@ -13,14 +13,12 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
 	boolean existsByPath(String path);
 
-	@EntityGraph(attributePaths = {"tags", "zones", "manager", "members"}, type = EntityGraph.EntityGraphType.LOAD)
+	@EntityGraph(attributePaths = {"tags", "manager", "members"}, type = EntityGraph.EntityGraphType.LOAD)
 	Event findByPath(String path);
 
 	@EntityGraph(attributePaths = {"tags", "manager"})
 	Event findEventWithTagsByPath(String path);
 
-	@EntityGraph(attributePaths = {"zones", "manager"})
-	Event findEventWithZonesByPath(String path);
 
 	@EntityGraph(attributePaths = {"manager"})
 	Event findEventWithManagerByPath(String path);
@@ -30,8 +28,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
 	Event findEventOnlyByPath(String path);
 	
-	@EntityGraph(attributePaths = {"zones", "tags"})
-	Event findEventWithTagsAndZonesById(Long id);
+	@EntityGraph(attributePaths = {"tags"})
+	Event findEventWithTagsById(Long id);
 
 	@EntityGraph(attributePaths = {"members", "manager"})
 	Event findEventWithManagerAndMembersById(Long id);

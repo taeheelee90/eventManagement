@@ -42,7 +42,7 @@ public class EventPublisherListner {
 
 	@EventListener
 	public void listenEventCreated(EventCreated eventCreated) {
-		Event event = eventRepository.findEventWithTagsAndZonesById(eventCreated.getEvent().getId());
+		Event event = eventRepository.findEventWithTagsById(eventCreated.getEvent().getId());
 		Iterable<Account> accounts = accountRepository
 				.findAll(AccountPredicates.findByTags(event.getTags()));
 		accounts.forEach(account -> {

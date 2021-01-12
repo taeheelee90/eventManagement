@@ -26,14 +26,14 @@
                 
                
                 <div class="form-group">
-                    <label for="eventTitle">Event Title</label>
-                    <input id="eventTitle" type="text" th:field="*{eventTitle}" class="form-control"
-                           placeholder="Event Title" aria-describedby="eventTitleHelp" required max="50">
-                    <small id="eventTitleHelp" class="form-text text-muted">
+                    <label for="title">Event Title</label>
+                    <input id="title" type="text" th:field="*{title}" class="form-control"
+                           placeholder="title" aria-describedby="titleHelp" required max="50">
+                    <small id="titleHelp" class="form-text text-muted">
                        	Less than 50 characters.
                     </small>
                     <small class="invalid-feedback">Please enter study title.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('eventTitle')}" th:errors="*{eventTitle}">Event Title Error</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Event Title Error</small>
                 </div>
 
                 <div class="form-group">

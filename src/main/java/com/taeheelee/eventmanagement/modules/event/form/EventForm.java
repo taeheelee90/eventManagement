@@ -20,7 +20,7 @@ public class EventForm {
 
 	@NotBlank
 	@Length(max = 50)
-	private String eventTitle;
+	private String title;
 
 	@NotBlank
 	@Length(max = 100)
