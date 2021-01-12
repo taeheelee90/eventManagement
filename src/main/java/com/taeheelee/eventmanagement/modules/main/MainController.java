@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
-import com.taeheelee.eventmanagement.modules.account.AccountRepository;
 import com.taeheelee.eventmanagement.modules.account.CurrentUser;
 import com.taeheelee.eventmanagement.modules.event.Event;
 import com.taeheelee.eventmanagement.modules.event.EventRepository;
@@ -29,7 +28,7 @@ public class MainController {
 			model.addAttribute(account);
 		
 		}
-		model.addAttribute("eventList", eventRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false));
+		model.addAttribute("eventList", eventRepository.findFirst9ByRegistrationOrderByEventStartDateTimeDesc(true));
 		return "index";
 		
 	}

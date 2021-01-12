@@ -26,14 +26,14 @@
                 
                
                 <div class="form-group">
-                    <label for="title">Event Title</label>
-                    <input id="title" type="text" th:field="*{title}" class="form-control"
-                           placeholder="Title" aria-describedby="titleHelp" required max="50">
-                    <small id="titleHelp" class="form-text text-muted">
+                    <label for="eventTitle">Event Title</label>
+                    <input id="eventTitle" type="text" th:field="*{eventTitle}" class="form-control"
+                           placeholder="Event Title" aria-describedby="eventTitleHelp" required max="50">
+                    <small id="eventTitleHelp" class="form-text text-muted">
                        	Less than 50 characters.
                     </small>
                     <small class="invalid-feedback">Please enter study title.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('eventTitle')}" th:errors="*{eventTitle}">Event Title Error</small>
                 </div>
 
                 <div class="form-group">
@@ -47,21 +47,13 @@
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">ShortDescription Error</small>
                 </div>
                 <div class="form-row">
-                <div class="form-group col-md-6">
-                <label for="registrationType">Registration  Type</label>
-                <select th:field="*{registrationType}"  class="custom-select mr-sm-2" id="registrationType" aria-describedby="registrationTypeHelp">
-                    <option th:value="FCFS">First comes first served</option>
-                    <option th:value="CONFIRMATIVE">Administrator's confirmation</option>
-                </select>
-                <small id="registrationTypeHelp" class="form-text text-muted">
-                    There are two types of registration.<br/>
-                    <strong>FCFS</strong>: First comes, first served. Waiting list is available before the deadline. <br/>
-                    <strong>CONFIRMATIVE</strong>:  Event manager's confirmation is required before the deadline.
-                </small>
-            	</div>
+                        
                 
                 
-                <div class="form-group col-md-6">
+                
+                <div class="form-row">
+                     
+                <div class="form-group col-md-3">
                     <label for="limitOfRegistrations">Limit of members</label>
                     <input id="limitOfRegistrations" type="number" th:field="*{limitOfRegistrations}" class="form-control" placeholder="0"
                            aria-describedby="limitOfRegistrationsHelp">
@@ -72,9 +64,7 @@
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfRegistrations')}" th:errors="*{limitOfRegistrations}">Error</small>
                 </div>
                 
-                <div class="form-row">
-                     
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="endRegistrationDateTime">Registration Due Date</label>
                     <input id="endRegistrationDateTime" type="datetime-local" th:field="*{endRegistrationDateTime}" class="form-control"
                            aria-describedby="endRegistrationDateTimeHelp" required>
@@ -86,7 +76,7 @@
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('endRegistrationDateTime')}" th:errors="*{endRegistrationDateTime}">Error</small>
                 </div>
                 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="startDateTime">Event Start Date</label>
                     <input id="eventStartDateTime" type="datetime-local" th:field="*{eventStartDateTime}" class="form-control"
                            aria-describedby="eventStartDateTimeHelp" required>
@@ -96,7 +86,7 @@
                     <small class="invalid-feedback">Please enter the event start date.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('eventStartDateTime')}" th:errors="*{eventStartDateTime}">Error</small>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="eventEndDateTime">Event End Date</label>
                     <input id="eventEndDateTime" type="datetime-local" th:field="*{eventEndDateTime}" class="form-control"
                            aria-describedby="eventEndDateTimeHelp" required>
@@ -119,13 +109,17 @@
                     <small class="invalid-feedback">Please enter full description.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">FullDescription Error</small>
                 </div>
-
+                
+                
+                
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit"
                             aria-describedby="submitHelp">Create Event</button>
                 </div>
             </form>
-            </div>
+</div>
+            
+            
 		<div th:replace="fragments.html :: footer"></div>
     <script th:replace="fragments.html :: form-validation"></script>
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>

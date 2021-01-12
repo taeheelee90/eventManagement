@@ -184,10 +184,7 @@
 		th:href="@{/settings/notifications}">Notification</a> <a
 		class="list-group-item list-group-item-action"
 		th:classappend="${currentMenu == 'tags'}? active" href="#"
-		th:href="@{/settings/tags}">Tag</a> <a
-		class="list-group-item list-group-item-action"
-		th:classappend="${currentMenu == 'zones'}? active" href="#"
-		th:href="@{/settings/zones}">Zone</a> <a
+		th:href="@{/settings/tags}">Tag</a>  <a
 		class="list-group-item list-group-item-action list-group-item-danger"
 		th:classappend="${currentMenu == 'account'}? active" href="#"
 		th:href="@{/settings/account}">Account</a>
@@ -280,13 +277,7 @@ Event
 					class="text-decoration-none text-white"> <i class="fa fa-tag"></i>
 						<span th:text="${tag.title}">Tag</span>
 				</a>
-				</span> <span th:each="zone: ${event.zones}"
-					class="font-weight-light text-monospace badge badge-primary mr-3">
-					<a th:href="@{'/search/zone/' + ${zone.id}}"
-					class="text-decoration-none text-white"> <i class="fa fa-globe"></i>
-						<span th:text="${zone.city}">City</span>
-				</a>
-				</span>
+				
 			</p>
 		</div>
 	</div>
@@ -325,9 +316,7 @@ Event
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/banner'}">Banner Image</a> -->
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active"
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/tags'}">Edit Tags</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
-       href="#" th:href="@{'/event/' + ${event.path} + '/settings/zones'}">Edit Zones</a>
-  
+    
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'event'}? active"
        href="#" th:href="@{'/event/' + ${event.path} + '/settings/event'}">Setting
     </a>
@@ -598,56 +587,6 @@ Java Script
    </script>
 </div>
 
-<!-- update zones -->
-<div th:fragment="update-zones (baseUrl)">
-    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
-    <script type="application/javascript">
-        $(function () {
-            function tagRequest(url, zoneName) {
-                $.ajax({
-                    dataType: "json",
-                    autocomplete: {
-                        enabled: true,
-                        rightKey: true,
-                    },
-                    contentType: "application/json; charset=utf-8",
-                    method: "POST",
-                    url: "[(${baseUrl})]" + url,
-                    data: JSON.stringify({'zoneName': zoneName})
-                }).done(function (data, status) {
-                    console.log("${data} and status is ${status}");
-                });
-            }
-
-            function onAdd(e) {
-                tagRequest("/add", e.detail.data.value);
-            }
-
-            function onRemove(e) {
-                tagRequest("/remove", e.detail.data.value);
-            }
-
-            var tagInput = document.querySelector("#tags");
-
-            var tagify = new Tagify(tagInput, {
-                enforceWhitelist: true,
-                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
-                dropdown : {
-                    enabled: 1, // suggest tags after a single character input
-                    position: "text",
-                } // map tags
-            });
-
-            tagify.on("add", onAdd);
-            tagify.on("remove", onRemove);
-
-            // add a class to Tagify's input element
-            tagify.DOM.input.classList.add('form-control');
-            // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
-            tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
-        });
-    </script>
-</div>
 
 <!-- moment.js date and time -->
 <div th:fragment="date-time">

@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.taeheelee.eventmanagement.modules.event.RegistrationType;
 
 import lombok.Data;
 
@@ -21,7 +20,7 @@ public class EventForm {
 
 	@NotBlank
 	@Length(max = 50)
-	private String title;
+	private String eventTitle;
 
 	@NotBlank
 	@Length(max = 100)
@@ -29,8 +28,6 @@ public class EventForm {
 	
 	@NotBlank
 	private String fullDescription;
-	
-	private RegistrationType registrationType = RegistrationType.FCFS;
 	
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDateTime endRegistrationDateTime;

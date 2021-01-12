@@ -29,7 +29,6 @@ class EventTest {
 	@DisplayName("Published, Recuriting, Not a member nor manager - can join")
 	@Test
 	void canJoin() {
-		event.setPublished(true);
 		event.setRegistration(true);
 
 		assertTrue(event.isJoinable(userAccount));
@@ -38,9 +37,9 @@ class EventTest {
 	@DisplayName("Published, Recruiting, Manager - cannot join")
 	@Test
 	void cannotJoin_manager() {
-		event.setPublished(true);
+
 		event.setRegistration(true);
-		event.addManager(account);
+		event.setManager(account);
 
 		assertFalse(event.isJoinable(userAccount));
 	}
@@ -48,7 +47,7 @@ class EventTest {
 	@DisplayName("Published, Recruting, Member - cannot join again")
 	@Test
 	void cannotJoin_member() {
-		event.setPublished(true);
+
 		event.setRegistration(true);
 		event.addMember(account);
 
@@ -58,12 +57,11 @@ class EventTest {
 	@DisplayName("Not published, Not recruting - cannot join")
 	@Test
 	void cannotJoin_not_published_not_recruting() {
-		event.setPublished(false);
+
 		event.setRegistration(false);
 
 		assertFalse(event.isJoinable(userAccount));
 
-		event.setPublished(false);
 		event.setRegistration(true);
 
 		assertFalse(event.isJoinable(userAccount));
@@ -72,7 +70,7 @@ class EventTest {
 	@DisplayName("Check isManager")
 	@Test
 	void isManager() {
-		event.addManager(account);
+		event.setManager(account);
 		assertTrue(event.isManager(userAccount));
 	}
 

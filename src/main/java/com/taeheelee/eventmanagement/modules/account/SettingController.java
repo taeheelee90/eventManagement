@@ -26,14 +26,13 @@ import com.taeheelee.eventmanagement.modules.account.form.Notifications;
 import com.taeheelee.eventmanagement.modules.account.form.PasswordForm;
 import com.taeheelee.eventmanagement.modules.account.form.Profile;
 import com.taeheelee.eventmanagement.modules.account.form.TagForm;
-import com.taeheelee.eventmanagement.modules.account.form.ZoneForm;
+
 import com.taeheelee.eventmanagement.modules.account.validator.NicknameFormValidator;
 import com.taeheelee.eventmanagement.modules.account.validator.PasswordFormValidatort;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
 import com.taeheelee.eventmanagement.modules.tag.TagRepository;
 import com.taeheelee.eventmanagement.modules.tag.TagService;
-import com.taeheelee.eventmanagement.modules.zone.Zone;
-import com.taeheelee.eventmanagement.modules.zone.ZoneRepository;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,8 +44,7 @@ public class SettingController {
 	private final TagService tagService;
 	private final ModelMapper modelMapper;
 	private final NicknameFormValidator nicknameFormValidator;
-	private final TagRepository tagRepository;
-	private final ZoneRepository zoneRepository;
+	private final TagRepository tagRepository;	
 	private final ObjectMapper objectMapper;
 
 	@InitBinder("passwordForm")
@@ -73,9 +71,7 @@ public class SettingController {
 
 	public static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
 	public static final String SETTINGS_TAGS_URL = "/settings/tags";
-	
-	public static final String SETTINGS_ZONES_VIEW_NAME = "settings/zones";
-	public static final String SETTINGS_ZONES_URL = "/settings/zones";
+
 
 	@GetMapping(SETTINGS_PROFILE_URL)
 	public String profileUpdateForm(@CurrentUser Account account, Model model) {
@@ -196,42 +192,5 @@ public class SettingController {
 	}
 	
 	
-	@GetMapping(SETTINGS_ZONES_URL)
-	public String updateZonesForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
-		model.addAttribute(account);
-		
-		Set<Zone> zones = accountService.getZones(account);
-		model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
-		
-		List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-		model.addAttribute("whiteList", objectMapper.writeValueAsString(allZones));
-		
-		return SETTINGS_ZONES_VIEW_NAME;
-	}
 	
-	@PostMapping(SETTINGS_ZONES_URL + "/add")
-	@ResponseBody
-	public ResponseEntity addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
-		Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-		
-		if(zone == null) {
-			return ResponseEntity.badRequest().build();
-		}
-		
-		accountService.addZone(account,zone);
-		return ResponseEntity.ok().build();
-	}
-
-	
-	@PostMapping(SETTINGS_ZONES_URL + "/remove")
-	@ResponseBody
-	public ResponseEntity removeZone (@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
-		Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-		if(zone == null) {
-			return ResponseEntity.badRequest().build();
-		}
-		
-		accountService.removeZone(account, zone);
-		return ResponseEntity.ok().build();
-	}
 }

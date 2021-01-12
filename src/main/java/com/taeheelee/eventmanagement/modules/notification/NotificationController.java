@@ -57,7 +57,6 @@ public class NotificationController {
 		for(Notification n : notifications) {
 			switch(n.getNotificationType()) {
 				case EVENT_CREATED: createdEventNotifications.add(n); break;
-				case ACTIVITY_ENROLLMENT: activityEnrollmentNotifications.add(n); break;
 				case EVENT_UPDATED: updatedEventNotifications.add(n); break;
 			}
 		}

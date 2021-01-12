@@ -13,17 +13,17 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
 	boolean existsByPath(String path);
 
-	@EntityGraph(attributePaths = {"tags", "zones", "managers", "members"}, type = EntityGraph.EntityGraphType.LOAD)
+	@EntityGraph(attributePaths = {"tags", "zones", "manager", "members"}, type = EntityGraph.EntityGraphType.LOAD)
 	Event findByPath(String path);
 
-	@EntityGraph(attributePaths = {"tags", "managers"})
+	@EntityGraph(attributePaths = {"tags", "manager"})
 	Event findEventWithTagsByPath(String path);
 
-	@EntityGraph(attributePaths = {"zones", "managers"})
+	@EntityGraph(attributePaths = {"zones", "manager"})
 	Event findEventWithZonesByPath(String path);
 
-	@EntityGraph(attributePaths = {"managers"})
-	Event findEventWithManagersByPath(String path);
+	@EntityGraph(attributePaths = {"manager"})
+	Event findEventWithManagerByPath(String path);
 
 	@EntityGraph(attributePaths = {"members"})
 	Event findEventWithMembersByPath(String path);
@@ -33,10 +33,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 	@EntityGraph(attributePaths = {"zones", "tags"})
 	Event findEventWithTagsAndZonesById(Long id);
 
-	@EntityGraph(attributePaths = {"members", "managers"})
-	Event findEventWithManagersAndMembersById(Long id);
+	@EntityGraph(attributePaths = {"members", "manager"})
+	Event findEventWithManagerAndMembersById(Long id);
 
-	List<Event> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
+	List<Event> findFirst9ByRegistrationOrderByEventStartDateTimeDesc(boolean registration);
 
 	@EntityGraph(value = "Event.withRegistrations", type = EntityGraph.EntityGraphType.LOAD)
 	//List<Event> findByEventOrderByStartDateTime(Event event);

@@ -1,8 +1,7 @@
 package com.taeheelee.eventmanagement.modules.event.eventPublisher;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+
 
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -45,7 +44,7 @@ public class EventPublisherListner {
 	public void listenEventCreated(EventCreated eventCreated) {
 		Event event = eventRepository.findEventWithTagsAndZonesById(eventCreated.getEvent().getId());
 		Iterable<Account> accounts = accountRepository
-				.findAll(AccountPredicates.findByTagsAndZones(event.getTags(), event.getZones()));
+				.findAll(AccountPredicates.findByTags(event.getTags()));
 		accounts.forEach(account -> {
 			if (account.isEventCreatedByEmail()) {
 				sendEventCreatedEmail(event, account, "New event created",
@@ -57,12 +56,12 @@ public class EventPublisherListner {
 			}
 		});
 	}
-	
+	/*
 	@EventListener
 	public void listenEventUpdated(EventUpdated eventUpdated) {
-		Event event = eventRepository.findEventWithManagersAndMembersById(eventUpdated.getEvent().getId());
+		Event event = eventRepository.findEventWithManagerAndMembersById(eventUpdated.getEvent().getId());
 		Set<Account> accounts = new HashSet<>();
-		accounts.addAll(event.getManagers());
+		accounts.setManager = event.getManager();
 		accounts.addAll(event.getMembers());
 		
 		accounts.forEach(a -> {
@@ -75,7 +74,7 @@ public class EventPublisherListner {
 			}
 		});
 		
-	}
+	}*/
 
 	private void sendNotification(Event event, Account account, String msg, NotificationType type) {
 		Notification notification = new Notification();

@@ -29,7 +29,7 @@ import com.taeheelee.eventmanagement.modules.account.form.Notifications;
 import com.taeheelee.eventmanagement.modules.account.form.Profile;
 import com.taeheelee.eventmanagement.modules.account.form.SignUpForm;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
-import com.taeheelee.eventmanagement.modules.zone.Zone;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -185,24 +185,4 @@ public class AccountService implements UserDetailsService {
 		
 	}
 
-	public Set<Zone> getZones(Account account) {
-		Optional<Account> byId = accountRepository.findById(account.getId());
-		if (byId == null) {
-			throw new NoSuchElementException();
-		}
-		
-		return byId.get().getZones();
-	}
-
-	public void addZone(Account account, Zone zone) {
-		Optional<Account> byId = accountRepository.findById(account.getId());
-		byId.ifPresent(a -> a.getZones().add(zone));
-		
-	}
-
-	public void removeZone(Account account, Zone zone) {
-		Optional<Account> byId = accountRepository.findById(account.getId());
-		byId.ifPresent(a -> a.getZones().remove(zone));
-		
-	}
 }

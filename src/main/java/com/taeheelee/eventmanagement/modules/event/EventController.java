@@ -51,7 +51,7 @@ public class EventController {
 		
 		Event newEvent = eventService.createNewEvent(modelMapper.map(eventForm, Event.class), account);
 		
-		return "redirect:/event/" + newEvent.getPath() + "/settings/event";
+		return "redirect:/event/" + newEvent.getPath() + "/settings/tags";
 	}
 	
 	@GetMapping("/event/{path}")
@@ -85,10 +85,10 @@ public class EventController {
 		return "redirect:/event/" + event.getEncodedPath() + "/members";
 	}
 	/*enroll, disenroll, acceptRegistration, rejectRegistration, cancelRegistration*/
-	/* Creating random data*/
+	/* Creating random data
 	@GetMapping("/event/data")
 	public String generateTestData(@CurrentUser Account account) {
 		eventService.generateTestData(account);
 		return "redirect:/";
-	}
+	}*/
 }

@@ -21,9 +21,7 @@
                 <div class="row mt-3" th:fragment="profile-form">
                     <form class="col-12" action="#" th:action="@{/settings/notifications}" th:object="${notifications}" method="post" novalidate>
                         <div class="alert alert-light" role="alert">
-                            Please select the way to get notifications when events for 
-                        	<a href="#" th:href="@{/settings/keywords}"> <strong> interested topic</strong> </a> are created in 
-                            <strong><a href="#" th:href="@{/settings/locations}">your location</a>. 
+                            Please select the way to get notifications </a>. 
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-switch custom-control-inline">
@@ -35,32 +33,8 @@
                                 <label class="custom-control-label" for="eventCreatedByWeb">Web</label>
                             </div>
                         </div>
-                        <div class="alert alert-light" role="alert">
-                            Please select the way to get notifications about <strong>event enrollment results</strong>.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{eventEnrollmentByEmail}" class="custom-control-input" id="eventEnrollmenttByEmail">
-                                <label class="custom-control-label" for="eventEnrollmentByEmail">Email</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{eventEnrollmentByWeb}" class="custom-control-input" id="eventEnrollmentByWeb">
-                                <label class="custom-control-label" for="eventEnrollmentByWeb">Web</label>
-                            </div>
-                        </div>
-                        <div class="alert alert-light" role="alert">
-                             Please select the way to get notifications about <strong>participating events</strong>.
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{eventUpdateByEmail}" class="custom-control-input" id="eventUpdateByEmail">
-                                <label class="custom-control-label" for="eventUpdateByEmail">Email</label>
-                            </div>
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" th:field="*{eventUpdateByWeb}" class="custom-control-input" id="eventUpdateByWeb">
-                                <label class="custom-control-label" for="eventUpdateByWeb">Web</label>
-                            </div>
-                        </div>
+                        
+                       
                         <div class="form-group">
                             <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Save</button>
                         </div>

@@ -1,12 +1,10 @@
 package com.taeheelee.eventmanagement.modules.event;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -18,8 +16,7 @@ import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventCreated;
 import com.taeheelee.eventmanagement.modules.event.eventPublisher.EventUpdated;
 import com.taeheelee.eventmanagement.modules.event.form.EventDescriptionForm;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
-import com.taeheelee.eventmanagement.modules.tag.TagRepository;
-import com.taeheelee.eventmanagement.modules.zone.Zone;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventService {
 
-	private final TagRepository tagRepository;
 	private final EventRepository eventRepository;
 	private final RegistrationRepository registrationRepository;
 	private final ModelMapper modelMapper;
@@ -37,10 +33,7 @@ public class EventService {
 	public com.taeheelee.eventmanagement.modules.event.Event createNewEvent(
 			com.taeheelee.eventmanagement.modules.event.Event event, Account account) {
 		com.taeheelee.eventmanagement.modules.event.Event newEvent = eventRepository.save(event);
-		newEvent.addManager(account);
-		newEvent.setPublishedDateTime(LocalDateTime.now());
-		newEvent.setStartRegistrationDateTime(LocalDateTime.now());
-		newEvent.setPublished(true);
+		newEvent.setManager(account);
 		newEvent.setRegistration(true);
 		return newEvent;
 	}
@@ -72,14 +65,6 @@ public class EventService {
 
 	}
 
-	public void addZone(Event event, Zone zone) {
-		event.getZones().add(zone);
-	}
-
-	public void removeZone(Event event, Zone zone) {
-		event.getZones().remove(zone);
-	}
-
 	public Event getEventToUpdateTag(Account account, String path) {
 		Event event = eventRepository.findEventWithTagsByPath(path);
 		checkIfExistingEvent(path, event);
@@ -87,12 +72,6 @@ public class EventService {
 		return event;
 	}
 
-	public Event getEventToUpdateZone(Account account, String path) {
-		Event event = eventRepository.findEventWithZonesByPath(path);
-		checkIfExistingEvent(path, event);
-		checkIfManager(account, event);
-		return event;
-	}
 
 	private void checkIfManager(Account account, Event event) {
 		if (!event.isMagedBy(account)) {
@@ -109,33 +88,23 @@ public class EventService {
 	}
 
 	public Event getEventToUpdateStatus(Account account, String path) {
-		Event event = eventRepository.findEventWithManagersByPath(path);
+		Event event = eventRepository.findEventWithManagerByPath(path);
 		checkIfExistingEvent(path, event);
 		checkIfManager(account, event);
 		return event;
 	}
 
 	public void publish(Event event) {
-		event.publish();
+		event.isRegistration();
 		this.appEventPublisher.publishEvent(new EventCreated(event));
 
 	}
 
 	public void close(Event event) {
-		event.close();
+		event.isRegistration();
 		appEventPublisher.publishEvent(new EventUpdated(event, "Event is closed."));
 	}
 
-	public void startRegistration(Event event) {
-		event.startRegistration();
-		appEventPublisher.publishEvent(new EventUpdated(event, "Event started recruiting members."));
-	}
-
-	public void stopRegistration(Event event) {
-		event.stopRegistration();
-		appEventPublisher.publishEvent(new EventUpdated(event, "Event finished recruiting members."));
-
-	}
 
 	public boolean isValidPath(String newPath) {
 		if (!(newPath.length() >= 0 && newPath.length() <= 20)) {
@@ -205,28 +174,20 @@ public class EventService {
 
 	}
 
-	public void acceptregistration(Event event, Registration registration) {
-		event.accept(registration);
-
-	}
-
-	public void rejectregistration(Event event, Registration registration) {
-		event.reject(registration);
-	}
-
-	public void checkinregistration(Registration registration) {
+	
+	public void checkinRegistration(Registration registration) {
 		registration.setAttended(true);
 
 	}
 
-	public void cancelCheckinregistration(Registration registration) {
+	public void cancelCheckinRegistration(Registration registration) {
 		registration.setAttended(false);
 
 	}
 
 	/*
 	 * creating random data
-	 */
+	 
 	public void generateTestData(Account account) {
 		for (int i = 0; i < 10; i++) {
 			String randomString = RandomString.make(6);
@@ -234,7 +195,7 @@ public class EventService {
 					.shortDescription("test").fullDescription("testtesttest").tags(new HashSet<>())
 					.managers(new HashSet<>()).build();
 
-			event.publish();
+		
 			Event newEvent = this.createNewEvent(event, account);
 			Tag web = tagRepository.findByTitle("WEB");
 			newEvent.getTags().add(web);
@@ -289,7 +250,7 @@ public class EventService {
 		
 		
 		
-	}
+	}*/
 
 	/*
 	 * public void updateEvent(event event, eventForm eventForm) {

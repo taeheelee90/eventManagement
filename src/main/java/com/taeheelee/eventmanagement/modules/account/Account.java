@@ -16,7 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.tag.Tag;
-import com.taeheelee.eventmanagement.modules.zone.Zone;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -82,8 +82,6 @@ public class Account {
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<>();
 
-	@ManyToMany
-	private Set<Zone> zones = new HashSet<>();
 
 	public void generateEmailCheckToken() {
 		this.emailCheckToken = UUID.randomUUID().toString();

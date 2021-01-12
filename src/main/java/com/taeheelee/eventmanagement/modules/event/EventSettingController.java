@@ -25,13 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.CurrentUser;
 import com.taeheelee.eventmanagement.modules.account.form.TagForm;
-import com.taeheelee.eventmanagement.modules.account.form.ZoneForm;
+
 import com.taeheelee.eventmanagement.modules.event.form.EventDescriptionForm;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
 import com.taeheelee.eventmanagement.modules.tag.TagRepository;
 import com.taeheelee.eventmanagement.modules.tag.TagService;
-import com.taeheelee.eventmanagement.modules.zone.Zone;
-import com.taeheelee.eventmanagement.modules.zone.ZoneRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 public class EventSettingController {
 
 	private final TagRepository tagRepository;
-	private final ZoneRepository zoneRepository;
 	private final TagService tagService;
 	private final EventService eventService;
 	private final ModelMapper modelMapper;
@@ -75,7 +72,7 @@ public class EventSettingController {
 		return "redirect:/event/" + event.getEncodedPath() + "/settings/description";
 
 	}
-	
+
 	@GetMapping("/tags")
 	public String eventTagsForm(@CurrentUser Account account, @PathVariable String path, Model model)
 			throws JsonProcessingException {
@@ -113,49 +110,7 @@ public class EventSettingController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/zones")
-	public String eventZonesForm(@CurrentUser Account account, @PathVariable String path, Model model)
-			throws JsonProcessingException {
-		Event event = eventService.getEventToUpdate(account, path);
-		model.addAttribute(account);
-		model.addAttribute(event);
-		model.addAttribute("zones", event.getZones().stream().map(Zone::toString).collect(Collectors.toList()));
-		List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-		model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
-
-		return "event/settings/zones";
-	}
-
-	@PostMapping("/zones/add")
-	@ResponseBody
-	public ResponseEntity addZone(@CurrentUser Account account, @PathVariable String path,
-			@RequestBody ZoneForm zoneForm) {
-		Event event = eventService.getEventToUpdateZone(account, path);
-		Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-
-		if (zone == null) {
-			return ResponseEntity.badRequest().build();
-		}
-
-		eventService.addZone(event, zone);
-		return ResponseEntity.ok().build();
-	}
-
-	@PostMapping("/zones/remove")
-	@ResponseBody
-	public ResponseEntity removeZone(@CurrentUser Account account, @PathVariable String path,
-			@RequestBody ZoneForm zoneForm) {
-
-		Event event = eventService.getEventToUpdateZone(account, path);
-		Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-		if (zone == null) {
-			return ResponseEntity.badRequest().build();
-		}
-
-		eventService.removeZone(event, zone);
-		return ResponseEntity.ok().build();
-	}
-
+	
 	@GetMapping("/event")
 	public String eventStatusForm(@CurrentUser Account account, @PathVariable String path, Model model) {
 		Event event = eventService.getEventToUpdate(account, path);
@@ -180,35 +135,7 @@ public class EventSettingController {
 		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
 	}
 
-	@PostMapping("/register/start")
-	public String startRegister(@CurrentUser Account account, @PathVariable String path, Model model,
-			RedirectAttributes attributes) {
-
-		Event event = eventService.getEventToUpdateStatus(account, path);
-		if (!event.canUpdateRegistration()) {
-			attributes.addFlashAttribute("message", "Registration status can be changed only once in an hour.");
-			return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
-		}
-
-		eventService.startRegistration(event);
-		attributes.addFlashAttribute("message", "Start registration.");
-		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
-	}
-
-	@PostMapping("/register/stop")
-	public String stopRegister(@CurrentUser Account account, @PathVariable String path, Model model,
-			RedirectAttributes attributes) {
-		Event event = eventService.getEventToUpdate(account, path);
-		if (!event.canUpdateRegistration()) {
-			attributes.addFlashAttribute("message", "Registration status can be changed only once in an hour.");
-			return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
-		}
-
-		eventService.stopRegistration(event);
-		attributes.addFlashAttribute("message", "Stop registration.");
-		return "redirect:/event/" + event.getEncodedPath() + "/settings/event";
-	}
-
+	
 	@PostMapping("/event/path")
 	public String updateEventPath(@CurrentUser Account account, @PathVariable String path, String newPath, Model model,
 			RedirectAttributes attributes) {

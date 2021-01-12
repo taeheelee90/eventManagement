@@ -11,20 +11,18 @@ import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.account.Account;
 import com.taeheelee.eventmanagement.modules.account.UserAccount;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
-import com.taeheelee.eventmanagement.modules.zone.Zone;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,8 +45,8 @@ public class Event {
 	@GeneratedValue
 	private Long id;
 
-	@ManyToMany
-	private Set<Account> managers = new HashSet<>();
+	@ManyToOne
+	private Account manager;
 
 	@ManyToMany
 	private Set<Account> members = new HashSet<>();
@@ -67,18 +65,6 @@ public class Event {
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<>();
 
-	@ManyToMany
-	private Set<Zone> zones = new HashSet<>();
-
-	private LocalDateTime publishedDateTime; // Publish event
-
-	private LocalDateTime closedDateTime; // Close event
-
-	private LocalDateTime registrationUpdatedDateTime; // will delete
-
-	//@Column(nullable = false)
-	private LocalDateTime startRegistrationDateTime;
-
 	@Column(nullable = false)
 	private LocalDateTime endRegistrationDateTime;
 
@@ -91,28 +77,18 @@ public class Event {
 	@Column
 	private Integer limitOfRegistrations;
 
-	private boolean registration;
-
-	private boolean published;
-
-	private boolean closed;
+	private boolean registration; // Check if it is registration period
 
 	private int memberCount;
 
 	@OneToMany(mappedBy = "event")
 	private List<Registration> registrations = new ArrayList<>();
 
-	@Enumerated(EnumType.STRING)
-	private RegistrationType registrationType;
-
-	public void addManager(Account account) {
-		this.managers.add(account);
-	}
 
 	public boolean isJoinable(UserAccount userAccount) {
 		Account account = userAccount.getAccount();
-		return this.isPublished() && this.isRegistration() && !this.members.contains(account)
-				&& !this.managers.contains(account);
+		return this.isRegistration() && !this.members.contains(account)
+				&& !this.manager.equals(account);
 	}
 
 	public boolean isMember(UserAccount userAccount) {
@@ -120,63 +96,20 @@ public class Event {
 	}
 
 	public boolean isManager(UserAccount userAccount) {
-		return this.managers.contains(userAccount.getAccount());
+		return this.manager.equals(userAccount.getAccount());
 	}
 
 	public boolean isMagedBy(Account account) {
-		return this.getManagers().contains(account);
-	}
-
-	public void publish() {
-		if (!this.closed && !this.published) {
-			this.published = true;
-			this.publishedDateTime = LocalDateTime.now();
-		} else {
-			throw new RuntimeException("Can not publish this event.");
-		}
-
-	}
-
-	public void close() {
-		if (this.published && !this.closed) {
-			this.closed = true;
-			this.closedDateTime = LocalDateTime.now();
-		} else {
-			throw new RuntimeException("Can not close this event.");
-		}
-	}
-
-	public boolean canUpdateRegistration() {
-		return this.published && this.registrationUpdatedDateTime == null
-				|| this.registrationUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
-	}
-
-	public void startRegistration() {
-		if (canUpdateRegistration()) {
-			this.registration = true;
-			this.registrationUpdatedDateTime = LocalDateTime.now();
-		} else {
-			throw new RuntimeException("Can not start registration.");
-		}
-	}
-
-	public void stopRegistration() {
-		if (canUpdateRegistration()) {
-			this.registration = false;
-			this.registrationUpdatedDateTime = LocalDateTime.now();
-		} else {
-			throw new RuntimeException("Can not stop registration now.");
-		}
+		return this.getManager().equals(account);
 	}
 
 	public String getEncodedPath() {
-		// URLEncoder.encode(this.path, StandardCharsets.US_ASCII);
-
+	
 		return URLEncoder.encode(this.path);
 	}
 
 	public boolean isRemovable() {
-		return !this.published;
+		return !this.registration;
 	}
 
 	public void addMember(Account account) {
@@ -219,7 +152,7 @@ public class Event {
 	}
 
 	public boolean isNotClosed() {
-		return this.startRegistrationDateTime.isAfter(LocalDateTime.now());
+		return this.endRegistrationDateTime.isAfter(LocalDateTime.now());
 	}
 
 	public int numberOfRemainSpots() {
@@ -241,20 +174,9 @@ public class Event {
 	}
 
 	public boolean isAbleToAcceptWaitingRegistration() {
-		return this.registrationType == RegistrationType.FCFS
-				&& this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
+		return this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
 	}
 
-	public boolean canAccept(Registration registration) {
-		return this.registrationType == RegistrationType.COMFIRMATIVE && this.registrations.contains(registration)
-				&& this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations() && !registration.isAttended()
-				&& !registration.isAccepted();
-	}
-
-	public boolean canReject(Registration registration) {
-		return this.registrationType == RegistrationType.COMFIRMATIVE && this.registrations.contains(registration)
-				&& !registration.isAttended() && registration.isAccepted();
-	}
 
 	public List<Registration> getWaitingList() {
 		return this.registrations.stream().filter(registration -> !registration.isAccepted())
@@ -288,17 +210,5 @@ public class Event {
 		return null;
 	}
 
-	public void accept(Registration registration) {
-		if (this.registrationType == RegistrationType.COMFIRMATIVE
-				&& this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations()) {
-			registration.setAccepted(true);
-		}
-	}
-
-	public void reject(Registration registration) {
-		if (this.registrationType == RegistrationType.COMFIRMATIVE) {
-			registration.setAccepted(false);
-		}
-	}
 
 }
