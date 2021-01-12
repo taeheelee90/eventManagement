@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,6 +66,8 @@ public class Event {
 	@Column
 	private Integer limitOfRegistrations;
 
+	private boolean isFull;
+
 	private boolean registration; // Check if it is registration period
 
 	private LocalDateTime endRegistrationDateTime;
@@ -92,20 +92,34 @@ public class Event {
 	}
 
 	public void addMember(Account account, Registration registration) {
-		if (this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations()) {
+		if (hasSeats()) {
 			this.getMembers().add(account);
 			this.addRegistration(registration);
 		}
 
 		else {
+			this.isFull = true;
+			this.registration = false;
 			throw new RuntimeException("Cannot register.");
 		}
 
 	}
 
 	public void removeMember(Account account, Registration registration) {
-		this.getMembers().remove(account);
-		this.removeregistration(registration);
+
+		if (this.endRegistrationDateTime.isBefore(LocalDateTime.now())) {
+			this.getMembers().remove(account);
+			this.removeregistration(registration);
+			
+			if (hasSeats()) {
+				this.isFull = false;
+				this.registration = true;
+			}
+		}
+		
+		else {
+			throw new RuntimeException ("Cannot cancel registration now.");
+		}
 
 	}
 
@@ -125,15 +139,6 @@ public class Event {
 	 * 
 	 */
 
-	public List<Registration> getWaitingList() {
-		return this.registrations.stream().filter(registration -> !registration.isAccepted())
-				.collect(Collectors.toList());
-	}
-
-	public int numberOfRemainSpots() {
-		return this.limitOfRegistrations - (int) this.registrations.stream().filter(Registration::isAccepted).count();
-	}
-
 	public long getNumberOfAcceptedRegistrations() {
 		return this.registrations.stream().filter(Registration::isAccepted).count();
 	}
@@ -148,33 +153,7 @@ public class Event {
 		registration.setEvent(null);
 	}
 
-	private Registration getTheFirstWaitingRegistration() {
-		for (Registration e : this.registrations) {
-			if (!e.isAccepted()) {
-				return e;
-			}
-		}
-		return null;
-	}
-
-	public void acceptWaitingList() {
-		if (this.isAbleToAcceptWaitingRegistration()) {
-			List<Registration> waitingList = getWaitingList();
-			int numberToAccept = (int) Math.min(this.limitOfRegistrations - this.getNumberOfAcceptedRegistrations(),
-					waitingList.size());
-			waitingList.subList(0, numberToAccept).forEach(e -> e.setAccepted(true));
-		}
-	}
-
-	public void acceptNextWaitingregistration() {
-		if (this.isAbleToAcceptWaitingRegistration()) {
-			Registration registrationToAccept = this.getTheFirstWaitingRegistration();
-			if (registrationToAccept != null) {
-				registrationToAccept.setAccepted(true);
-			}
-		}
-	}
-
+	
 	/*
 	 * Check if..
 	 */
@@ -218,7 +197,7 @@ public class Event {
 		return this.endRegistrationDateTime.isAfter(LocalDateTime.now());
 	}
 
-	public boolean isAbleToAcceptWaitingRegistration() {
+	public boolean hasSeats() {
 		return this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
 	}
 

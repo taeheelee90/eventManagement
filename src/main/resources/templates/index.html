@@ -37,13 +37,13 @@
          						     						
          					</p>
          					
-         					<!--<div class="d-flex justify-content-between alighn-items-center">
+         					<div class="d-flex justify-content-between alighn-items-center">
          						<small class="text-muted">
-         							<i class="fa fa-user-circle"></i>
-         							<span th:if="${!event.isAbleToAcceptWaitingRegistration()}" th:text="'Fully booked'"></span>
+         							<i class="fas fa-chair"></i>
+         							<span th:if="${!event.hasSeats()}" th:text="'Fully booked'"></span>
          						</small>
          						
-         						 th:if="${createdEventNotifications.size() > 0}" -->
+         						 <!-- th:if="${createdEventNotifications.size() > 0}" -->
          						
          				
          						<small class="text-muted date" th:text="'start date: ' + ${#temporals.format(event.eventStartDateTime, 'yyyy-MM-dd')}"></small>

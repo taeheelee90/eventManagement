@@ -103,7 +103,7 @@ public class EventService {
 
 			Registration registration = new Registration();
 			registration.setEnrolledAt(LocalDateTime.now());
-			registration.setAccepted(event.isAbleToAcceptWaitingRegistration());
+			registration.setAccepted(event.hasSeats());
 			registration.setAccount(account);	
 			event.addMember(account, registration);
 			
@@ -117,7 +117,7 @@ public class EventService {
 		Registration registration = registrationRepository.findByEventAndAccount(event, account);
 		event.removeMember(account, registration);
 		registrationRepository.delete(registration);
-		event.acceptNextWaitingregistration();
+		
 	}
 
 	public void close(Event event) {
@@ -231,19 +231,6 @@ public class EventService {
 	 * }
 	 */
 
-	/*
-	 * public void updateEvent(event event, eventForm eventForm) {
-	 * modelMapper.map(eventForm, event); event.acceptWaitingList();
-	 * appEventPublisher.publishEvent(new EventUpdated(event.getEvent(), "'" +
-	 * event.getTitle() + "' event has been updated.")); }
-	 * 
-	 * public void deleteEvent(event event) { eventRepository.delete(event);
-	 * appEventPublisher.publishEvent(new EventUpdated(event.getEvent(), "'" +
-	 * event.getTitle() + "' event has been deleted."));
-	 * 
-	 * }
-	 *
-	 * 
-	 */
+	
 
 }
