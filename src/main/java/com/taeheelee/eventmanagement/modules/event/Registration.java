@@ -36,5 +36,4 @@ public class Registration {
 
 	private boolean accepted;
 
-	private boolean attended;
 }

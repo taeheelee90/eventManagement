@@ -68,8 +68,6 @@ public class Event {
 	@Column
 	private Integer limitOfRegistrations;
 
-	private int memberCount;
-
 	private boolean registration; // Check if it is registration period
 
 	private LocalDateTime endRegistrationDateTime;
@@ -85,69 +83,51 @@ public class Event {
 	@OneToMany(mappedBy = "event")
 	private List<Registration> registrations = new ArrayList<>();
 
-	public boolean isJoinable(UserAccount userAccount) {
-		Account account = userAccount.getAccount();
-		return this.isRegistration() && !this.members.contains(account) && !this.manager.equals(account);
-	}
-
-	public boolean isMember(UserAccount userAccount) {
-		return this.members.contains(userAccount.getAccount());
-	}
-
-	public boolean isManager(UserAccount userAccount) {
-		return this.manager.equals(userAccount.getAccount());
-	}
-
-	public boolean isMagedBy(Account account) {
-		return this.getManager().equals(account);
-	}
-
+	/*
+	 * Processing event
+	 */
 	public String getEncodedPath() {
 
 		return URLEncoder.encode(this.path);
 	}
 
-	public void addMember(Account account) {
-		this.getMembers().add(account);
-		this.memberCount++;
+	public void addMember(Account account, Registration registration) {
+		if (this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations()) {
+			this.getMembers().add(account);
+			this.addRegistration(registration);
+		}
+
+		else {
+			throw new RuntimeException("Cannot register.");
+		}
+
 	}
 
-	public void removeMember(Account account) {
+	public void removeMember(Account account, Registration registration) {
 		this.getMembers().remove(account);
-		this.memberCount--;
+		this.removeregistration(registration);
+
 	}
 
-	public boolean canRegister(UserAccount userAccount) {
-		return isNotClosed() && !isAttended(userAccount) && !isAlreadyRegistered(userAccount);
-	}
-
-	public boolean isAttended(UserAccount userAccount) {
-		Account account = userAccount.getAccount();
-		for (Registration e : this.registrations) {
-			if (e.getAccount().equals(account) && e.isAttended()) {
-				return true;
-			}
-
+	public void close() {
+		if (this.registration && !this.closed) {
+			this.registration = false;
+			this.closed = true;
+			this.closedDateTime = LocalDateTime.now();
+		} else {
+			throw new RuntimeException("Cannot close this event.");
 		}
-		return false;
+
 	}
 
-	public boolean cannotRegister(UserAccount userAccount) {
-		return isNotClosed() && !isAttended(userAccount) && isAlreadyRegistered(userAccount);
-	}
+	/*
+	 * Processing registration
+	 * 
+	 */
 
-	public boolean isAlreadyRegistered(UserAccount userAccount) {
-		Account account = userAccount.getAccount();
-		for (Registration e : this.registrations) {
-			if (e.getAccount().equals(account)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isNotClosed() {
-		return this.endRegistrationDateTime.isAfter(LocalDateTime.now());
+	public List<Registration> getWaitingList() {
+		return this.registrations.stream().filter(registration -> !registration.isAccepted())
+				.collect(Collectors.toList());
 	}
 
 	public int numberOfRemainSpots() {
@@ -168,13 +148,13 @@ public class Event {
 		registration.setEvent(null);
 	}
 
-	public boolean isAbleToAcceptWaitingRegistration() {
-		return this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
-	}
-
-	public List<Registration> getWaitingList() {
-		return this.registrations.stream().filter(registration -> !registration.isAccepted())
-				.collect(Collectors.toList());
+	private Registration getTheFirstWaitingRegistration() {
+		for (Registration e : this.registrations) {
+			if (!e.isAccepted()) {
+				return e;
+			}
+		}
+		return null;
 	}
 
 	public void acceptWaitingList() {
@@ -195,24 +175,51 @@ public class Event {
 		}
 	}
 
-	private Registration getTheFirstWaitingRegistration() {
-		for (Registration e : this.registrations) {
-			if (!e.isAccepted()) {
-				return e;
-			}
-		}
-		return null;
+	/*
+	 * Check if..
+	 */
+
+	public boolean isMember(UserAccount userAccount) {
+		return this.members.contains(userAccount.getAccount());
 	}
 
-	public void close() {
-		if (this.registration && !this.closed) {
-			this.registration = false;
-			this.closed = true;
-			this.closedDateTime = LocalDateTime.now();
-		} else {
-			throw new RuntimeException("Cannot close this event.");
-		}
+	public boolean isManager(UserAccount userAccount) {
+		return this.manager.equals(userAccount.getAccount());
+	}
 
+	public boolean isMagedBy(Account account) {
+		return this.getManager().equals(account);
+	}
+
+	public boolean isJoinable(UserAccount userAccount) {
+		Account account = userAccount.getAccount();
+		return this.isRegistration() && !this.members.contains(account) && !this.manager.equals(account);
+	}
+
+	public boolean canRegister(UserAccount userAccount) {
+		return isNotClosed() && !isAlreadyRegistered(userAccount);
+	}
+
+	public boolean cannotRegister(UserAccount userAccount) {
+		return isNotClosed() && isAlreadyRegistered(userAccount);
+	}
+
+	public boolean isAlreadyRegistered(UserAccount userAccount) {
+		Account account = userAccount.getAccount();
+		for (Registration e : this.registrations) {
+			if (e.getAccount().equals(account)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isNotClosed() {
+		return this.endRegistrationDateTime.isAfter(LocalDateTime.now());
+	}
+
+	public boolean isAbleToAcceptWaitingRegistration() {
+		return this.limitOfRegistrations > this.getNumberOfAcceptedRegistrations();
 	}
 
 }

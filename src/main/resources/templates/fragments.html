@@ -248,7 +248,7 @@ Event
 				th:href="@{'/event/' + ${event.path} + '/members'}"
 				th:text="${event.members.size()}">1</a>
 			</span> <span sec:authorize="isAuthenticated()"
-				th:if="${!event.registration && event.isMember(#authentication.principal)}"
+				th:if="${!event.closed && event.isMember(#authentication.principal)}"
 				class="btn-group" role="group"> <a
 				class="btn btn-outline-warning"
 				th:href="@{'/event/' + ${event.path} + '/leave'}"> Cancel registration </a> 

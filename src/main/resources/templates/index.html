@@ -30,21 +30,23 @@
          					<p class="card-text" th:text="${event.shortDescription}">Short description</p>
          					<p class="card-text context">
          						<span th:each="tag: ${event.tags}" class="font-weight-light text-monospace badge badge-pill badge-primary">
-         							<a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+         							
          								<i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
          							</a>
          						</span>
          						     						
          					</p>
          					
-         					<div class="d-flex justify-content-between alighn-items-center">
+         					<!--<div class="d-flex justify-content-between alighn-items-center">
          						<small class="text-muted">
          							<i class="fa fa-user-circle"></i>
-         							<span th:text="'members: ' + ${event.members.size()}"></span>
+         							<span th:if="${!event.isAbleToAcceptWaitingRegistration()}" th:text="'Fully booked'"></span>
          						</small>
          						
+         						 th:if="${createdEventNotifications.size() > 0}" -->
+         						
          				
-         						<small class="text-muted date" th:text="'published: ' + ${#temporals.format(event.eventStartDateTime, 'yyyy-MM-dd')}"></small>
+         						<small class="text-muted date" th:text="'start date: ' + ${#temporals.format(event.eventStartDateTime, 'yyyy-MM-dd')}"></small>
          					</div>         					         					
          				</div>         			
          			</div>       		
