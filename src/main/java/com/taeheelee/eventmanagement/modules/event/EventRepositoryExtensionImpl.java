@@ -13,7 +13,6 @@ import com.querydsl.jpa.JPQLQuery;
 import com.taeheelee.eventmanagement.modules.tag.QTag;
 import com.taeheelee.eventmanagement.modules.tag.Tag;
 
-
 public class EventRepositoryExtensionImpl extends QuerydslRepositorySupport implements EventRepositoryExtension {
 
 	public EventRepositoryExtensionImpl() {
@@ -26,8 +25,7 @@ public class EventRepositoryExtensionImpl extends QuerydslRepositorySupport impl
 		QEvent event = QEvent.event;
 		JPQLQuery<Event> query = from(event)
 				.where(event.registration.isTrue().and(event.title.containsIgnoreCase(keyword))
-						.or(event.tags.any().title.containsIgnoreCase(keyword)))
-						
+						.or(event.tags.any().title.containsIgnoreCase(keyword))) 
 				.leftJoin(event.tags, QTag.tag).fetchJoin().distinct();
 
 		JPQLQuery<Event> pageableQuery = getQuerydsl().applyPagination(pageable, query);
@@ -38,10 +36,9 @@ public class EventRepositoryExtensionImpl extends QuerydslRepositorySupport impl
 	@Override
 	public List<Event> findByAccount(Set<Tag> tags) {
 		QEvent event = QEvent.event;
-		JPQLQuery<Event> query = from(event)
-				.where(event.registration.isTrue().and(event.tags.any().in(tags)))
-				.leftJoin(event.tags, QTag.tag).fetchJoin()
-				.orderBy(event.eventStartDateTime.desc()).distinct().limit(9);
+		JPQLQuery<Event> query = from(event).where(event.registration.isTrue().and(event.tags.any().in(tags)))
+				.leftJoin(event.tags, QTag.tag).fetchJoin().orderBy(event.eventStartDateTime.desc()).distinct()
+				.limit(9);
 
 		return query.fetch();
 

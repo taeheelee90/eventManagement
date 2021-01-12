@@ -37,7 +37,5 @@ public class Notification {
 	private Account account;
 	
 	private LocalDateTime createdAt;
-	
-	@Enumerated(EnumType.STRING)
-	private NotificationType notificationType;
+
 }

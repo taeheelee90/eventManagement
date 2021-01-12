@@ -1,7 +1,8 @@
 package com.taeheelee.eventmanagement.modules.event.eventPublisher;
 
 import java.time.LocalDateTime;
-
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -20,8 +21,6 @@ import com.taeheelee.eventmanagement.modules.event.Event;
 import com.taeheelee.eventmanagement.modules.event.EventRepository;
 import com.taeheelee.eventmanagement.modules.notification.Notification;
 import com.taeheelee.eventmanagement.modules.notification.NotificationRepository;
-import com.taeheelee.eventmanagement.modules.notification.NotificationType;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,16 +51,16 @@ public class EventPublisherListner {
 			}
 
 			if (account.isEventCreatedByWeb()) {
-				sendNotification(event, account, event.getShortDescription(), NotificationType.EVENT_CREATED);
+				sendNotification(event, account, event.getShortDescription());
 			}
 		});
 	}
-	/*
+	
 	@EventListener
 	public void listenEventUpdated(EventUpdated eventUpdated) {
 		Event event = eventRepository.findEventWithManagerAndMembersById(eventUpdated.getEvent().getId());
 		Set<Account> accounts = new HashSet<>();
-		accounts.setManager = event.getManager();
+		accounts.add(event.getManager());
 		accounts.addAll(event.getMembers());
 		
 		accounts.forEach(a -> {
@@ -70,13 +69,13 @@ public class EventPublisherListner {
 			}
 			
 			if(a.isEventUpdateByWeb()) {
-				sendNotification(event, a, eventUpdated.getMessage(), NotificationType.EVENT_UPDATED);
+				sendNotification(event, a, eventUpdated.getMessage());
 			}
 		});
 		
-	}*/
+	}
 
-	private void sendNotification(Event event, Account account, String msg, NotificationType type) {
+	private void sendNotification(Event event, Account account, String msg) {
 		Notification notification = new Notification();
 		notification.setTitle(event.getTitle());
 		notification.setLink("/event/" + event.getEncodedPath());
@@ -84,7 +83,6 @@ public class EventPublisherListner {
 		notification.setCreatedAt(LocalDateTime.now());
 		notification.setMessage(msg);
 		notification.setAccount(account);
-		notification.setNotificationType(type);
 		notificationRepository.save(notification);
 
 	}

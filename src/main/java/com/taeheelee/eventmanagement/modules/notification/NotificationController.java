@@ -50,23 +50,17 @@ public class NotificationController {
 
 	private void categorizeNotifications(Model model, List<Notification> notifications, long numberOfChecked,
 			long numberOfNotChecked) {
-		List<Notification> createdEventNotifications = new ArrayList<>();
-		List<Notification> activityEnrollmentNotifications = new ArrayList<>();
-		List<Notification> updatedEventNotifications = new ArrayList<>();
+		List<Notification> eventNotifications = new ArrayList<>();
+
 		
 		for(Notification n : notifications) {
-			switch(n.getNotificationType()) {
-				case EVENT_CREATED: createdEventNotifications.add(n); break;
-				case EVENT_UPDATED: updatedEventNotifications.add(n); break;
-			}
+			eventNotifications.add(n);
 		}
 		
 		model.addAttribute("numberOfNotChecked", numberOfNotChecked);
 		model.addAttribute("numberOfChecked", numberOfChecked);
 		model.addAttribute("notifications", notifications);
-		model.addAttribute("createdEventNotifications", createdEventNotifications);
-		model.addAttribute("activityEnrollmentNotifications", activityEnrollmentNotifications);
-		model.addAttribute("updatedEventNotifications", updatedEventNotifications);
-		
+		model.addAttribute("eventNotifications", eventNotifications);
+	
 	}
 }
