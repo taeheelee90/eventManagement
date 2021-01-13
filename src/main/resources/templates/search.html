@@ -19,13 +19,13 @@
                   Order By
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" th:classappend="${#strings.equals(sortProperty, 'publishedDateTime')}? active"
-                       th:href="@{'/search/event?sort=publishedDateTime,desc&keyword=' + ${keyword}}">
-                        Published date and time
+                    <a class="dropdown-item" th:classappend="${#strings.equals(sortProperty, 'eventStartDateTime')}? active"
+                       th:href="@{'/search/event?sort=eventStartDateTime,desc&keyword=' + ${keyword}}">
+                        Event Start Date Time
                     </a>
-                    <a class="dropdown-item" th:classappend="${#strings.equals(sortProperty, 'memberCount')}? active"
-                       th:href="@{'/search/event?sort=memberCount,desc&keyword=' + ${keyword}}">
-                        Number of members
+                    <a class="dropdown-item" th:classappend="${#strings.equals(sortProperty, 'endRegistrationDateTime')}? active"
+                       th:href="@{'/search/event?sort=endRegistrationDateTime,desc&keyword=' + ${keyword}}">
+                       Registration End Date Time
                     </a>
                 </div>
             </div>
@@ -50,27 +50,23 @@
          								<i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
          							</a>
          						</span>
-         						<span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary">
-         							<a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
-         								<i class="fa fa-tag"></i> <span th:text="${zone.city}" class="text-white">Zone</span>
-         							</a>
-         						</span>       						
+         						    						
          					</p>
          					
          					<div class="d-flex justify-content-between alighn-items-center">
-         						<small class="text-muted">
-         							<i class="fa fa-user-circle"></i>
-         							<span th:text="${event.members.size()}"></span>
+         						<!--<small class="text-muted">
+         							<i class="fas fa-chair"></i>
+         							 <span th:if="${!event.hasSeats()}" th:text="'Fully booked'"></span> 
+         							<span th:if="${event.hasSeats()}" th:text="'Limit of Members: ' + ${event.limitOfRegistrations}"></span> 
          						</small>
-         						
-         						<small class="text-muted date" th:text="${event.publishedDateTime}"></small>
+         						-->
+         						<small class="text-muted date" th:text="${event.eventStartDateTime}"></small>
          					</div>         					         					
          				</div>         			
          			</div>       		
          		</div>
          	</div>
-            
-        </div>
+         
         
         <!-- Pagination -->
         <div class="row justify-content-center">
@@ -98,7 +94,7 @@
                 </nav>
             </div>
         </div>
-    </div>
+    
     <div th:replace="fragments.html :: footer"></div>
     <script th:replace="fragments.html :: date-time"></script>
     <script src="/node_modules/mark.js/dist/jquery.mark.min.js"></script>

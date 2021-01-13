@@ -39,11 +39,11 @@ public class MainController {
 	}
 	
 	@GetMapping("/search/event")
-	public String searchEvent(@PageableDefault(size=9, sort="publishedDateTime", direction=Sort.Direction.DESC) Pageable pageable, String keyword, Model model) {
+	public String searchEvent(@PageableDefault(size=9, sort="eventStartDateTime", direction=Sort.Direction.DESC) Pageable pageable, String keyword, Model model) {
 		Page<Event> eventPage = eventRepository.findByKeyword(keyword, pageable);
 		model.addAttribute("eventPage", eventPage);
 		model.addAttribute("keyword", keyword);
-		model.addAttribute("sortProperty", pageable.getSort().toString().contains("publishedDateTime") ? "publishedDateTime" : "memberCount");
+		model.addAttribute("sortProperty", pageable.getSort().toString().contains("eventStartDateTime") ? "eventStartDateTime" : "endRegistrationDateTime");
 		return "search";
 		
 	}

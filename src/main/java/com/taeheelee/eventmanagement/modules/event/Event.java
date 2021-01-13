@@ -68,7 +68,7 @@ public class Event {
 
 	private boolean isFull;
 
-	private boolean registration; // Check if it is registration period
+	private boolean registration; // Check if registartion opend
 
 	private LocalDateTime endRegistrationDateTime;
 
@@ -95,30 +95,35 @@ public class Event {
 		if (hasSeats()) {
 			this.getMembers().add(account);
 			this.addRegistration(registration);
+			
 		}
 
 		else {
+
+			throw new RuntimeException("Cannot register.");
+		}
+		
+		if (!hasSeats()) {
 			this.isFull = true;
 			this.registration = false;
-			throw new RuntimeException("Cannot register.");
 		}
 
 	}
 
 	public void removeMember(Account account, Registration registration) {
 
-		if (this.endRegistrationDateTime.isBefore(LocalDateTime.now())) {
+		if (this.endRegistrationDateTime.isAfter(LocalDateTime.now())) {
 			this.getMembers().remove(account);
 			this.removeregistration(registration);
-			
+
 			if (hasSeats()) {
 				this.isFull = false;
 				this.registration = true;
 			}
 		}
-		
+
 		else {
-			throw new RuntimeException ("Cannot cancel registration now.");
+			throw new RuntimeException("Cannot cancel registration now.");
 		}
 
 	}
@@ -153,7 +158,6 @@ public class Event {
 		registration.setEvent(null);
 	}
 
-	
 	/*
 	 * Check if..
 	 */

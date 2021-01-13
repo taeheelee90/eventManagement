@@ -9,10 +9,12 @@
 
 		<div th:replace="fragments.html :: event-information"> </div>
 		<div th:replace="fragments.html :: event-nav(eventMenu='members')"></div>
-
+		
+		
 		
 		<div th:replace="fragments.html :: member-list(members=${event.manager},isManager=${true})"></div>
-        <div th:replace="fragments.html :: member-list(members=${event.members},isManager=${false})"></div>
+		<div th:replace="fragments.html :: member-total"></div>
+		<div th:replace="fragments.html :: member-list(members=${event.members},isManager=${false})"></div>
 
 		<div th:replace="fragments.html :: footer"></div>
 	</div>

@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import com.taeheelee.eventmanagement.modules.tag.Tag;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -57,31 +56,13 @@ public class Account {
 
 	private String bio;
 
-	private String url;
-
-	private String occupation;
-
-	private String location;
-
 	@Lob
 	@Basic(fetch = FetchType.EAGER)
 	private String profileImage;
 
-	private boolean eventCreatedByEmail;
-
-	private boolean eventCreatedByWeb = true;
-
-	private boolean eventEnrollmentByEmail;
-
-	private boolean eventEnrollmentByWeb = true;
-
-	private boolean eventUpdateByEmail;
-
-	private boolean eventUpdateByWeb = true;
 
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<>();
-
 
 	public void generateEmailCheckToken() {
 		this.emailCheckToken = UUID.randomUUID().toString();

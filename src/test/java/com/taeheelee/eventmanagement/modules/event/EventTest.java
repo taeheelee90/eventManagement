@@ -3,6 +3,8 @@ package com.taeheelee.eventmanagement.modules.event;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +51,11 @@ class EventTest {
 	void cannotJoin_member() {
 
 		event.setRegistration(true);
-		event.addMember(account);
+		Registration registration = new Registration();
+		registration.setEnrolledAt(LocalDateTime.now());
+		registration.setAccepted(event.hasSeats());
+		registration.setAccount(account);	
+		event.addMember(account, registration);
 
 		assertFalse(event.isJoinable(userAccount));
 	}
@@ -77,7 +83,11 @@ class EventTest {
 	@DisplayName("Check isMember")
 	@Test
 	void isMember() {
-		event.addMember(account);
+		Registration registration = new Registration();
+		registration.setEnrolledAt(LocalDateTime.now());
+		registration.setAccepted(event.hasSeats());
+		registration.setAccount(account);	
+		event.addMember(account, registration);
 		assertTrue(event.isMember(userAccount));
 	}
 }

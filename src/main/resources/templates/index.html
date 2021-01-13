@@ -15,6 +15,7 @@
 	<div class="container">
 		<div class="py-5 text-center">
 			<h2>Event Management</h2>
+			<h5>List shows events which still have remaining seats.</h5>
 		</div>
 		
 		<div class="row justify-content-center">
@@ -37,13 +38,13 @@
          						     						
          					</p>
          					
-         					<div class="d-flex justify-content-between alighn-items-center">
+         					<!--  <div class="d-flex justify-content-between alighn-items-center">
          						<small class="text-muted">
          							<i class="fas fa-chair"></i>
          							<span th:if="${!event.hasSeats()}" th:text="'Fully booked'"></span>
-         						</small>
-         						
-         						 <!-- th:if="${createdEventNotifications.size() > 0}" -->
+         							<span th:if="${event.hasSeats()}" th:text="'Limit of Members: ' + ${event.limitOfRegistrations}"></span> 
+         						</small>-->
+         
          						
          				
          						<small class="text-muted date" th:text="'start date: ' + ${#temporals.format(event.eventStartDateTime, 'yyyy-MM-dd')}"></small>
@@ -51,7 +52,7 @@
          				</div>         			
          			</div>       		
          		</div>
-         	</div>
+         	
             
        
 		

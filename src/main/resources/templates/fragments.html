@@ -128,11 +128,7 @@
 				class="nav-link" th:href="@{/login}">Sign in</a></li>
 			<li class="nav-item" sec:authorize="!isAuthenticated()"><a
 				class="nav-link" th:href="@{/sign-up}">Sign up</a></li>
-			<li class="nav-item" sec:authorize="isAuthenticated()"><a
-				class="nav-link" th:href="@{/notifications}"> 
-				<i th:if="${!hasNotification}" class="fa fa-bell-o" aria-hidden="true"></i>
-				<span class="text-info" th:if="${hasNotification}"><i class="fa fa-bell" aria-hidden="true"></i></span>
-			</a></li>
+		
 			<li class="nav-item" sec:authorize="isAuthenticated()"><a
 				class="nav-link btn btn-outline-primary" th:href="@{/new-event}">
 					Create Event <i class="fa fa-plus" aria-hidden="true"></i>
@@ -179,10 +175,7 @@
 		th:href="@{/settings/profile}">Profile</a> <a
 		class="list-group-item list-group-item-action"
 		th:classappend="${currentMenu == 'password'}? active" href="#"
-		th:href="@{/settings/password}">Password</a> <a
-		class="list-group-item list-group-item-action"
-		th:classappend="${currentMenu == 'notifications'}? active" href="#"
-		th:href="@{/settings/notifications}">Notification</a> <a
+		th:href="@{/settings/password}">Password</a>  <a
 		class="list-group-item list-group-item-action"
 		th:classappend="${currentMenu == 'tags'}? active" href="#"
 		th:href="@{/settings/tags}">Tag</a>  <a
@@ -204,7 +197,7 @@
 <!-- Footer -->
 <footer th:fragment="footer">
 	<div class="row justify-content-center">
-		<small class="d-block mb-3 text-muted">&copy; 2020</small>
+		<small class="d-block mb-3 text-muted">&copy; 2021</small>
 	</div>
 </footer>
 
@@ -250,7 +243,7 @@ Event
 				th:text="${event.members.size()}">1</a>
 			</span> 
 			<span sec:authorize="isAuthenticated()"
-				th:if="${!event.closed && event.isMember(#authentication.principal)}"
+				th:if="${event.registration && event.hasSeats && !event.closed && event.isMember(#authentication.principal)}"
 				class="btn-group" role="group"> <a
 				class="btn btn-outline-warning"
 				th:href="@{'/event/' + ${event.path} + '/leave'}"> Cancel registration </a> 
@@ -323,8 +316,16 @@ Event
 
 
 <!-- Event Members -->
+<div th:fragment="member-total" class="row px-3 justify-content-center">
+	<ul class="list-unstyled col-10">
+    <li class="media mt-e"> <p th:text="'Limit of Members: ' + ${event.limitOfRegistrations}"></li>
+    </ul>
+</div>
+
 <div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
+
     <ul class="list-unstyled col-10">
+   
         <li class="media mt-3" th:each="member: ${members}">
             <svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="64" height="64" class="rounded border bg-light mr-3"></svg>
             <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member?.profileImage}" width="64" height="64" class="rounded border mr-3"/>
@@ -441,19 +442,6 @@ Activities
 </div>
 
 
-<!-- 
-Notification
- -->
- <ul th:fragment="notification-list (notifications)" class="list-group list-group-flush">
-    <a href="#" th:href="@{${noti.link}}" th:each="noti: ${notifications}"
-       class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <small class="text-muted" th:text="${noti.title}">Notification title</small>
-            <small class="fromNow text-muted" th:text="${noti.createdAt}">3 days ago</small>
-        </div>
-        <p th:text="${noti.message}" class="text-left mb-0 mt-1">message</p>
-    </a>
-</ul>
 
 
 
