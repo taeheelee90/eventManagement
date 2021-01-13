@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taeheelee.eventmanagement.modules.account.form.NicknameForm;
-import com.taeheelee.eventmanagement.modules.account.form.Notifications;
 import com.taeheelee.eventmanagement.modules.account.form.PasswordForm;
 import com.taeheelee.eventmanagement.modules.account.form.Profile;
 import com.taeheelee.eventmanagement.modules.account.form.TagForm;
@@ -62,9 +61,6 @@ public class SettingController {
 
 	public static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
 	public static final String SETTINGS_PASSWORD_URL = "/settings/password";
-
-	public static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
-	public static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
 
 	public static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
 	public static final String SETTINGS_ACCOUNT_URL = "/settings/account";
@@ -113,28 +109,7 @@ public class SettingController {
 		return "redirect:" + SETTINGS_PASSWORD_URL;
 	}
 
-	@GetMapping(SETTINGS_NOTIFICATIONS_URL)
-	public String updateNotificationForm(@CurrentUser Account account, Model model) {
-		model.addAttribute(account);
-		model.addAttribute(modelMapper.map(account, Notifications.class));
-		return SETTINGS_NOTIFICATIONS_VIEW_NAME;
-	}
-
-	@PostMapping(SETTINGS_NOTIFICATIONS_URL)
-	public String updateNotifications(@CurrentUser Account account, @Valid Notifications notifications, Errors errors,
-			Model model, RedirectAttributes attributes) {
-
-		if (errors.hasErrors()) {
-			model.addAttribute(account);
-			return SETTINGS_NOTIFICATIONS_VIEW_NAME;
-		}
-
-		accountService.updateNotifications(account, notifications);
-		attributes.addFlashAttribute("message", "Updated Notifications.");
-		return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
-
-	}
-
+	
 	@GetMapping(SETTINGS_ACCOUNT_URL)
 	public String updateNicknameForm(@CurrentUser Account account, Model model) {
 		model.addAttribute(account);
